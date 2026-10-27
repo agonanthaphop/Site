@@ -1,0 +1,21 @@
+<!doctype html><html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Windows Server Tips ที่ใช้บ่อยในงาน IT — Auranth</title><meta name="description" content="รวม Tips การใช้งาน Windows Server ที่ช่วยประหยัดเวลาในงานประจำวัน"><meta property="og:title" content="Windows Server Tips ที่ใช้บ่อยในงาน IT — Auranth"><meta property="og:description" content="รวม Tips การใช้งาน Windows Server ที่ช่วยประหยัดเวลาในงานประจำวัน">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+Thai:wght@500;700&family=IBM+Plex+Sans+Thai:wght@400;500&display=swap">
+<link rel="stylesheet" href="../../style.css"></head><body><article><a class="mu" href="../../">← กลับหน้าแรก</a><p class="eb" style="margin-top:40px">IT · 27 มิ.ย. 2569 · 3 นาที</p><h1 class="d" style="font-size:2.6rem;line-height:1.3">Windows Server Tips ที่ใช้บ่อยในงาน IT</h1><p class="mu" style="font-size:1.25rem">รวม Tips การใช้งาน Windows Server ที่ช่วยประหยัดเวลาในงานประจำวัน</p><div class="body"><p>ในฐานะ IT ที่ต้องดูแล Windows Server อยู่ทุกวัน มีหลายคำสั่งและเทคนิคที่ช่วยประหยัดเวลาได้มาก วันนี้เลยรวบรวมมาฝากครับ</p><p>1. เช็ค Event Log ด่วนด้วย PowerShell
+แทนที่จะเปิด Event Viewer ที่ช้า ใช้คำสั่งนี้ได้เลย
+Get-EventLog -LogName System -Newest 20 -EntryType Error
+กรองเฉพาะ Error ล่าสุด 20 รายการ เห็นปัญหาได้ทันที</p><p>2. เช็ค Disk Space ทุก Drive
+Get-PSDrive -PSProvider FileSystem | Select-Object Name, Used, Free
+ดู disk ทุก drive พร้อมกันในครั้งเดียว ไม่ต้องคลิกทีละอัน</p><p>3. Restart Service ที่ค้าง
+Restart-Service -Name &quot;ชื่อ Service&quot; -Force
+ใช้ -Force เพื่อบังคับ restart แม้ service จะค้างอยู่</p><p>4. เช็ค Port ที่เปิดอยู่
+netstat -ano | findstr &quot;LISTENING&quot;
+ดูได้ว่า port ไหนเปิดอยู่ และ Process ID คืออะไร</p><p>5. Remote ไปเครื่องอื่นด้วย PowerShell
+Enter-PSSession -ComputerName SERVERNAME -Credential (Get-Credential)
+เหมือน SSH แต่เป็น Windows style — สะดวกมากเวลาต้องจัดการหลายเครื่อง</p><p>6. ดู User ที่ Login อยู่
+query user /server:SERVERNAME
+เช็คได้เลยว่าใคร login อยู่บน server ตัวไหน</p><p>7. Clear DNS Cache
+Clear-DnsClientCache
+เวลา DNS มีปัญหา ลองคำสั่งนี้ก่อนเลย แก้ได้หลายเคสมาก</p><p>สรุป
+คำสั่ง PowerShell เหล่านี้ช่วยให้งาน Windows Server Admin ง่ายขึ้นมากครับ ไม่ต้องคลิกผ่าน GUI ให้เสียเวลา ลองนำไปใช้ดูได้เลย!
+หากมีคำสั่งไหนที่ใช้บ่อยเพิ่มเติม comment ไว้ได้เลยนะครับ 😊</p></div></article></body></html>
