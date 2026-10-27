@@ -1,0 +1,251 @@
+<!doctype html><html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow">
+<title>Admin — Auranth</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+Thai:wght@500;700&family=IBM+Plex+Sans+Thai:wght@400;500&display=swap">
+<link rel="stylesheet" href="style.css">
+<style>
+.wrap{max-width:1100px;margin:0 auto;padding:32px 24px 96px}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;border-bottom:1px solid #e6dccd;padding-bottom:20px;margin-bottom:32px}
+.bar h1{margin:0;font-size:1.6rem}
+.btn{font:inherit;font-weight:500;border:1px solid #3a2e26;background:transparent;color:#3a2e26;padding:8px 20px;border-radius:999px;cursor:pointer;display:inline-block}
+.btn:hover{background:#3a2e26;color:#faf6ef}
+.btn.p{background:#b0583a;border-color:#b0583a;color:#fff}.btn.p:hover{background:#96472d}
+.btn.x{border-color:#9b2c2c;color:#9b2c2c}.btn.x:hover{background:#9b2c2c;color:#fff}
+.btn:disabled{opacity:.5;cursor:wait}
+.btn:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid #b0583a;outline-offset:2px}
+label{display:block;font-size:.9rem;color:#7a6a5c;margin:16px 0 6px}
+input,select,textarea{width:100%;font:inherit;padding:10px 12px;border:1px solid #e6dccd;border-radius:10px;background:#fffdf9;color:#3a2e26}
+textarea{line-height:1.8;resize:vertical;min-height:320px}
+.row{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.card{background:#fffdf9;border:1px solid #e6dccd;border-radius:18px;padding:28px}
+.login{max-width:520px;margin:48px auto}
+.chk{display:flex;gap:8px;align-items:center;margin-top:16px;font-size:.9rem;color:#7a6a5c}.chk input{width:auto}
+.head{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:8px}
+.item{display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:18px 0;border-top:1px solid #e6dccd}
+.item h3{margin:0 0 4px;font-size:1.2rem}.item p{margin:0;font-size:.9rem}
+.acts{display:flex;gap:8px;flex-wrap:wrap}.acts .btn{padding:6px 16px;font-size:.9rem}
+.edit{display:grid;gap:32px;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start}
+@media(max-width:900px){.edit{grid-template-columns:1fr}}
+#pv{margin:0;padding:0;max-width:none}
+#pv h1{font-size:clamp(1.8rem,4vw,2.4rem);line-height:1.3;margin:12px 0}
+.hint{font-size:.85rem;color:#7a6a5c;margin:6px 0 0}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#3a2e26;color:#faf6ef;padding:12px 22px;border-radius:999px;max-width:90vw;z-index:9}
+.toast.err{background:#9b2c2c}
+[hidden]{display:none!important}
+</style></head><body>
+<div class="wrap">
+
+<section id="vLogin" class="login card" hidden>
+  <p class="eb">Admin</p><h1 class="d" style="margin:8px 0 4px;font-size:1.8rem">เข้าสู่ระบบจัดการบล็อก</h1>
+  <p class="mu" style="margin:0">ใช้ GitHub Token ที่มีสิทธิ์ <b>Contents: Read and write</b> เฉพาะ repo นี้</p>
+  <label for="lOwner">GitHub username / org</label><input id="lOwner" autocomplete="off">
+  <div class="row"><div><label for="lRepo">Repository</label><input id="lRepo" autocomplete="off"></div>
+  <div><label for="lBranch">Branch</label><input id="lBranch" value="main" autocomplete="off"></div></div>
+  <label for="lToken">Personal Access Token</label><input id="lToken" type="password" autocomplete="off" placeholder="github_pat_...">
+  <label class="chk"><input id="lRemember" type="checkbox"> จำไว้ในเบราว์เซอร์เครื่องนี้ (ไม่แนะนำบนเครื่องสาธารณะ)</label>
+  <p style="margin:24px 0 0"><button id="bLogin" class="btn p">เข้าสู่ระบบ</button></p>
+</section>
+
+<div id="vApp" hidden>
+  <div class="bar"><div><h1 class="d">Auranth · Admin</h1><span class="mu" id="repoName" style="font-size:.9rem"></span></div>
+  <div class="acts"><a class="btn" href="./" target="_blank" rel="noopener">ดูหน้าเว็บ</a><button id="bOut" class="btn">ออกจากระบบ</button></div></div>
+
+  <section id="vList">
+    <div class="head"><h2 class="d" style="margin:0;font-size:1.6rem">บทความทั้งหมด</h2><button id="bNew" class="btn p">+ เขียนบทความใหม่</button></div>
+    <div id="list"><p class="mu">กำลังโหลด…</p></div>
+  </section>
+
+  <section id="vEdit" hidden>
+    <div class="head"><h2 class="d" id="eTitle" style="margin:0;font-size:1.6rem"></h2>
+    <div class="acts"><button id="bCancel" class="btn">ยกเลิก</button><button id="bSave" class="btn p">เผยแพร่</button></div></div>
+    <div class="edit">
+      <div>
+        <label for="fTitle">หัวข้อ</label><input id="fTitle">
+        <div class="row">
+          <div><label for="fSlug">Slug (URL)</label><input id="fSlug" placeholder="my-first-post"></div>
+          <div><label for="fCat">หมวด</label><input id="fCat" list="cats" placeholder="IT"><datalist id="cats"></datalist></div>
+        </div>
+        <div class="row">
+          <div><label for="fDate">วันที่</label><input id="fDate" type="date"></div>
+          <div><label for="fMin">เวลาอ่าน (นาที)</label><input id="fMin" type="number" min="1" placeholder="อัตโนมัติ"></div>
+        </div>
+        <label for="fExc">คำโปรยสั้นๆ</label><input id="fExc">
+        <label for="fBody">เนื้อหา</label><textarea id="fBody"></textarea>
+        <p class="hint">เว้นบรรทัดว่างเพื่อขึ้นย่อหน้าใหม่ · ขึ้นต้นบรรทัดด้วย <code>## </code> เพื่อทำหัวข้อย่อย</p>
+      </div>
+      <div><p class="eb" style="margin:16px 0 12px">ตัวอย่าง</p><article id="pv" class="card"></article></div>
+    </div>
+  </section>
+</div>
+</div>
+<div id="toast" class="toast" hidden></div>
+
+<script>
+const $=s=>document.querySelector(s);
+const MON=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+const FONTS='https://fonts.googleapis.com/css2?family=Noto+Serif+Thai:wght@500;700&family=IBM+Plex+Sans+Thai:wght@400;500&display=swap';
+const KEY='auranth-admin';
+let cfg=null, posts=[], editing=null; // editing: slug or null (new)
+
+/* ---------- helpers ---------- */
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const thai=iso=>{const [y,m,d]=iso.split('-').map(Number);return `${d} ${MON[m-1]} ${y+543}`};
+const unThai=t=>{const m=String(t).match(/(\d{1,2})\s+(\S+)\s+(\d{4})/);if(!m)return new Date().toISOString().slice(0,10);const i=MON.indexOf(m[2]);return `${+m[3]-543}-${String((i<0?0:i)+1).padStart(2,'0')}-${m[1].padStart(2,'0')}`};
+const est=t=>Math.max(1,Math.round(t.length/900));
+const today=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
+function toast(msg,err){const t=$('#toast');t.textContent=msg;t.className='toast'+(err?' err':'');t.hidden=false;clearTimeout(toast.h);toast.h=setTimeout(()=>t.hidden=true,err?6000:3500)}
+const busy=(b,on)=>{b.disabled=on};
+
+/* ---------- GitHub API ---------- */
+const rp=()=>`/repos/${cfg.owner}/${cfg.repo}`;
+async function api(path,opt={}){
+  const r=await fetch('https://api.github.com'+path,{cache:'no-store',...opt,headers:{'Accept':'application/vnd.github+json','Authorization':'Bearer '+cfg.token,'X-GitHub-Api-Version':'2022-11-28','Content-Type':'application/json',...(opt.headers||{})}});
+  if(!r.ok){const e=new Error(`${r.status}`);e.status=r.status;try{e.detail=(await r.json()).message}catch{}throw e}
+  return opt.raw?r.text():r.json();
+}
+const getText=async path=>{try{return await api(`${rp()}/contents/${path}?ref=${encodeURIComponent(cfg.branch)}`,{headers:{Accept:'application/vnd.github.raw+json'},raw:true})}catch(e){if(e.status===404)return null;throw e}};
+async function listFiles(dir){const items=await api(`${rp()}/contents/${dir}?ref=${encodeURIComponent(cfg.branch)}`);let out=[];for(const i of items){if(i.type==='dir')out=out.concat(await listFiles(i.path));else out.push(i.path)}return out}
+async function commit(files,message){ // one atomic commit; content:null = delete
+  const ref=await api(`${rp()}/git/ref/heads/${encodeURIComponent(cfg.branch)}`);
+  const base=ref.object.sha, c=await api(`${rp()}/git/commits/${base}`);
+  const tree=await api(`${rp()}/git/trees`,{method:'POST',body:JSON.stringify({base_tree:c.tree.sha,tree:files.map(f=>f.content===null?{path:f.path,mode:'100644',type:'blob',sha:null}:{path:f.path,mode:'100644',type:'blob',content:f.content})})});
+  const nc=await api(`${rp()}/git/commits`,{method:'POST',body:JSON.stringify({message,tree:tree.sha,parents:[base]})});
+  await api(`${rp()}/git/refs/heads/${encodeURIComponent(cfg.branch)}`,{method:'PATCH',body:JSON.stringify({sha:nc.sha})});
+}
+function explain(e){
+  if(e.status===401)return 'Token ไม่ถูกต้องหรือหมดอายุ';
+  if(e.status===403)return 'Token ไม่มีสิทธิ์เขียน หรือเรียกใช้ถี่เกินไป';
+  if(e.status===404)return 'ไม่พบ repo / branch นี้ (หรือ Token ไม่มีสิทธิ์เข้าถึง)';
+  if(e.status===409||e.status===422)return 'บันทึกชนกัน ลองโหลดหน้าใหม่แล้วทำอีกครั้ง';
+  return e.message+(e.detail?' — '+e.detail:'');
+}
+
+/* ---------- page generators ---------- */
+const bodyHtml=t=>t.trim().split(/\n{2,}/).map(p=>/^##\s/.test(p)?`<h3 class="d">${esc(p.replace(/^##\s+/,''))}</h3>`:`<p>${esc(p)}</p>`).join('');
+function postPage(p,body){return `<!doctype html><html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${esc(p.title)} — Auranth</title><meta name="description" content="${esc(p.excerpt)}"><meta property="og:title" content="${esc(p.title)}"><meta property="og:description" content="${esc(p.excerpt)}">
+<link rel="stylesheet" href="${FONTS}">
+<link rel="stylesheet" href="../../style.css"></head><body><article><a class="mu" href="../../">← Auranth</a><p class="eb" style="margin-top:32px">${esc(p.category)} · ${thai(p.date)}</p><h1 class="d" style="font-size:clamp(2rem,5vw,2.8rem);line-height:1.3;margin:12px 0">${esc(p.title)}</h1><p class="mu" style="font-size:1.1rem">${esc(p.excerpt)}</p><div class="body">${bodyHtml(body)}</div></article></body></html>
+`}
+const sortPosts=a=>[...a].sort((x,y)=>y.date.localeCompare(x.date)||x.slug.localeCompare(y.slug));
+function listHtml(ps){
+  ps=sortPosts(ps);if(!ps.length)return '';
+  const [f,...rest]=ps;
+  let h=`<a class="f" href="posts/${f.slug}/"><div class="img"><img src="hero.jpg" alt=""></div><p class="eb" style="margin-top:32px">${esc(f.category)} · ${thai(f.date)}</p><h2 class="d">${esc(f.title)}</h2><p class="mu" style="font-size:1.1rem">${esc(f.excerpt)}</p></a>\n`;
+  if(rest.length)h+=`<div class="grid">${rest.map(p=>`<a href="posts/${p.slug}/"><p class="eb">${esc(p.category)} · ${p.minutes||1} นาที</p><h3 class="d">${esc(p.title)}</h3><p class="mu">${esc(p.excerpt)}</p><p class="mu" style="font-size:.85rem">${thai(p.date)}</p></a>`).join('')}</div>\n`;
+  return h;
+}
+function injectIndex(html,ps){
+  const block=`<!--POSTS:START-->\n${listHtml(ps)}<!--POSTS:END-->`;
+  if(html.includes('<!--POSTS:START-->')&&html.includes('<!--POSTS:END-->'))return html.replace(/<!--POSTS:START-->[\s\S]*?<!--POSTS:END-->/,()=>block);
+  return html.replace(/(<\/section>)[\s\S]*?(<\/main>)/,(_,a,b)=>`${a}\n${block}\n${b}`);
+}
+
+/* ---------- reading existing content ---------- */
+function bodyText(html){
+  const d=new DOMParser().parseFromString(html,'text/html'),b=d.querySelector('.body');if(!b)return '';
+  return [...b.children].map(el=>/^H[1-6]$/.test(el.tagName)?'## '+el.textContent.trim():el.textContent.trim()).filter(Boolean).join('\n\n');
+}
+async function bootstrap(){ // build posts.json from the hand-written index.html (first run only)
+  const idx=await getText('index.html');if(!idx)return [];
+  const d=new DOMParser().parseFromString(idx,'text/html'),out=[];
+  const slugOf=a=>(a.getAttribute('href').match(/posts\/([^/]+)/)||[])[1];
+  const f=d.querySelector('a.f');
+  if(f&&slugOf(f)){const [c,dt]=f.querySelector('.eb').textContent.split('·').map(s=>s.trim());out.push({slug:slugOf(f),title:f.querySelector('h2').textContent.trim(),category:c,date:unThai(dt),excerpt:f.querySelector('p.mu').textContent.trim(),minutes:null})}
+  d.querySelectorAll('.grid a').forEach(a=>{if(!slugOf(a))return;const [c,m]=a.querySelector('.eb').textContent.split('·').map(s=>s.trim());const mu=a.querySelectorAll('p.mu');out.push({slug:slugOf(a),title:a.querySelector('h3').textContent.trim(),category:c,date:unThai(mu[1]?.textContent||''),excerpt:mu[0].textContent.trim(),minutes:parseInt(m)||null})});
+  await Promise.all(out.filter(p=>!p.minutes).map(async p=>{try{const h=await getText(`posts/${p.slug}/index.html`);p.minutes=est(bodyText(h||''))}catch{p.minutes=1}}));
+  return out;
+}
+async function loadPosts(){
+  const j=await getText('posts/posts.json');
+  posts=j?JSON.parse(j):await bootstrap();
+  renderList();
+}
+
+/* ---------- views ---------- */
+function show(v){['vLogin','vApp'].forEach(i=>$('#'+i).hidden=i!==v);}
+function showSec(v){$('#vList').hidden=v!=='list';$('#vEdit').hidden=v!=='edit';scrollTo(0,0)}
+function renderList(){
+  const ps=sortPosts(posts);
+  $('#list').innerHTML=ps.length?ps.map(p=>`<div class="item"><div><h3 class="d">${esc(p.title)}</h3><p class="mu">${esc(p.category)} · ${thai(p.date)} · /posts/${esc(p.slug)}/</p></div><div class="acts"><a class="btn" href="posts/${esc(p.slug)}/" target="_blank" rel="noopener">ดู</a><button class="btn" data-e="${esc(p.slug)}">แก้ไข</button><button class="btn x" data-d="${esc(p.slug)}">ลบ</button></div></div>`).join(''):'<p class="mu">ยังไม่มีบทความ</p>';
+  $('#cats').innerHTML=[...new Set(['IT','Running','Travel',...posts.map(p=>p.category)])].map(c=>`<option value="${esc(c)}">`).join('');
+}
+function preview(){
+  const t=$('#fTitle').value||'หัวข้อบทความ',b=$('#fBody').value;
+  $('#pv').innerHTML=`<p class="eb">${esc($('#fCat').value||'IT')} · ${thai($('#fDate').value||today())}</p><h1 class="d">${esc(t)}</h1><p class="mu" style="font-size:1.05rem">${esc($('#fExc').value)}</p><div class="body" style="margin-top:24px;padding-top:24px">${bodyHtml(b||' ')}</div>`;
+}
+async function openEditor(slug){
+  editing=slug;const p=posts.find(x=>x.slug===slug);
+  $('#eTitle').textContent=p?'แก้ไขบทความ':'บทความใหม่';
+  $('#fSlug').disabled=!!p;
+  $('#fTitle').value=p?.title||'';$('#fSlug').value=p?.slug||'';$('#fCat').value=p?.category||'IT';$('#fDate').value=p?.date||today();$('#fMin').value=p?.minutes||'';$('#fExc').value=p?.excerpt||'';$('#fBody').value='';
+  showSec('edit');preview();
+  if(p){$('#fBody').value='กำลังโหลดเนื้อหา…';$('#fBody').disabled=true;$('#bSave').disabled=true;
+    try{const h=await getText(`posts/${slug}/index.html`);$('#fBody').value=bodyText(h||'');}catch(e){toast(explain(e),true);$('#fBody').value=''}
+    $('#fBody').disabled=false;$('#bSave').disabled=false;preview();}
+}
+async function save(){
+  const title=$('#fTitle').value.trim(),body=$('#fBody').value,excerpt=$('#fExc').value.trim(),category=$('#fCat').value.trim()||'IT',date=$('#fDate').value;
+  let slug=$('#fSlug').value.trim();
+  if(!title)return toast('กรุณาใส่หัวข้อ',true);
+  if(!body.trim())return toast('กรุณาใส่เนื้อหา',true);
+  if(!date)return toast('กรุณาเลือกวันที่',true);
+  if(!slug)slug=title.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'post-'+date.replace(/-/g,'');
+  if(!/^[a-z0-9][a-z0-9-]*$/.test(slug))return toast('Slug ใช้ได้เฉพาะ a-z 0-9 และ -',true);
+  if(editing===null&&posts.some(p=>p.slug===slug))return toast('มี slug นี้อยู่แล้ว',true);
+  const p={slug,title,category,date,excerpt,minutes:parseInt($('#fMin').value)||est(body)};
+  const b=$('#bSave');busy(b,true);
+  try{
+    const next=sortPosts(posts.filter(x=>x.slug!==slug).concat(p));
+    const idx=await getText('index.html');if(idx===null)throw Object.assign(new Error('ไม่พบ index.html ใน repo'),{});
+    await commit([
+      {path:`posts/${slug}/index.html`,content:postPage(p,body)},
+      {path:'posts/posts.json',content:JSON.stringify(next,null,2)+'\n'},
+      {path:'index.html',content:injectIndex(idx,next)}
+    ],`Admin: ${editing===null?'add':'update'} ${slug}`);
+    posts=next;renderList();showSec('list');toast('เผยแพร่แล้ว — GitHub Pages ใช้เวลาอัปเดต ~1 นาที');
+  }catch(e){toast(explain(e),true)}finally{busy(b,false)}
+}
+async function del(slug){
+  const p=posts.find(x=>x.slug===slug);if(!p||!confirm(`ลบ "${p.title}" ถาวร?`))return;
+  try{
+    const next=posts.filter(x=>x.slug!==slug),idx=await getText('index.html');
+    const files=(await listFiles(`posts/${slug}`)).map(path=>({path,content:null}));
+    await commit([...files,{path:'posts/posts.json',content:JSON.stringify(next,null,2)+'\n'},{path:'index.html',content:injectIndex(idx,next)}],`Admin: delete ${slug}`);
+    posts=next;renderList();toast('ลบแล้ว');
+  }catch(e){toast(explain(e),true)}
+}
+
+/* ---------- login ---------- */
+async function enter(c,persist){
+  cfg=c;
+  try{await api(rp());}catch(e){cfg=null;throw e}
+  (persist?localStorage:sessionStorage).setItem(KEY,JSON.stringify(c));
+  $('#repoName').textContent=`${c.owner}/${c.repo} · ${c.branch}`;
+  show('vApp');showSec('list');
+  try{await loadPosts()}catch(e){$('#list').innerHTML='';toast(explain(e),true)}
+}
+$('#bLogin').onclick=async()=>{
+  const c={owner:$('#lOwner').value.trim(),repo:$('#lRepo').value.trim(),branch:$('#lBranch').value.trim()||'main',token:$('#lToken').value.trim()};
+  if(!c.owner||!c.repo||!c.token)return toast('กรอกข้อมูลให้ครบ',true);
+  const b=$('#bLogin');busy(b,true);
+  try{await enter(c,$('#lRemember').checked)}catch(e){toast(explain(e),true)}finally{busy(b,false)}
+};
+$('#bOut').onclick=()=>{localStorage.removeItem(KEY);sessionStorage.removeItem(KEY);cfg=null;$('#lToken').value='';show('vLogin')};
+$('#bNew').onclick=()=>openEditor(null);
+$('#bCancel').onclick=()=>showSec('list');
+$('#bSave').onclick=save;
+$('#list').onclick=e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.e)openEditor(b.dataset.e);if(b.dataset.d)del(b.dataset.d)};
+['fTitle','fCat','fDate','fExc','fBody'].forEach(i=>$('#'+i).addEventListener('input',preview));
+$('#fTitle').addEventListener('input',()=>{if(editing===null&&!$('#fSlug').dataset.touched)$('#fSlug').value=$('#fTitle').value.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')});
+$('#fSlug').addEventListener('input',e=>e.target.dataset.touched='1');
+
+/* ---------- start ---------- */
+(async()=>{
+  // guess owner/repo from the Pages URL
+  const h=location.hostname,m=h.match(/^(.+)\.github\.io$/);
+  if(m){$('#lOwner').value=m[1];$('#lRepo').value=location.pathname.split('/')[1]&&!location.pathname.split('/')[1].endsWith('.html')?location.pathname.split('/')[1]:h}
+  const saved=localStorage.getItem(KEY)||sessionStorage.getItem(KEY);
+  if(saved){try{await enter(JSON.parse(saved),!!localStorage.getItem(KEY));return}catch(e){toast(explain(e),true)}}
+  show('vLogin');
+})();
+</script></body></html>
