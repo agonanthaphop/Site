@@ -106,8 +106,8 @@
     }
   ],
   "admin": {
-    "salt": "f5f6ca3dcd6a16f5d69d41f066900c77",
+    "salt": "4ad2835ff90a2c67e5cc5ce2e5bebb3f",
     "iterations": 150000,
-    "hash": "9cf7ebefce28dfe5ace1eeb0beaa7f83c3e392344a08e14cb92069c8b27997ea"
+    "hash": "19449fd287ed59ae0e458094a251c3fb126eccc2d2b79d6815b12869e165dc68"
   }
 }
