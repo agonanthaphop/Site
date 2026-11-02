@@ -1,427 +1,326 @@
-<!doctype html><html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow">
-<title>Admin — Auranth</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+Thai:wght@500;700&family=IBM+Plex+Sans+Thai:wght@400;500&display=swap">
-<link rel="stylesheet" href="style.css">
-<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>ระบบจัดการเว็บไซต์</title>
+<link rel="stylesheet" href="assets/style.css">
 <style>
-.wrap{max-width:1180px;margin:0 auto;padding:32px 24px 96px}
-.bar2{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:20px;margin-bottom:32px}
-.bar2 h1{margin:0;font-size:1.6rem}
-.btn{font:inherit;font-weight:500;border:1px solid var(--ink);background:transparent;color:var(--ink);padding:8px 20px;border-radius:999px;cursor:pointer;display:inline-block;line-height:1.5}
-.btn:hover{background:var(--ink);color:var(--bg)}
-.btn.p{background:var(--ac);border-color:var(--ac);color:#fff}.btn.p:hover{filter:brightness(.9)}
-.btn.x{border-color:#c0392b;color:#c0392b}.btn.x:hover{background:#c0392b;color:#fff}
-.btn:disabled{opacity:.5;cursor:wait}
-label{display:block;font-size:.9rem;color:var(--mu);margin:16px 0 6px}
-input,select,textarea{width:100%;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink)}
-textarea{line-height:1.8;resize:vertical;min-height:380px;font-family:ui-monospace,Menlo,Consolas,'IBM Plex Sans Thai',monospace;font-size:.95rem;border-top-left-radius:0;border-top-right-radius:0}
-.row{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
-.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:28px}
-.login{max-width:520px;margin:48px auto}
-.chk{display:flex;gap:8px;align-items:center;margin-top:16px;font-size:.9rem;color:var(--mu)}.chk input{width:auto}
-.head{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:8px}
-.item{display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:18px 0;border-top:1px solid var(--line)}
-.item h3{margin:0 0 4px;font-size:1.2rem}.item p{margin:0;font-size:.9rem}
-.acts{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.acts .btn{padding:6px 16px;font-size:.9rem}
-.edit{display:grid;gap:32px;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start}
-@media(max-width:960px){.edit{grid-template-columns:1fr}}
-#pv{margin:0;max-width:none;padding:28px}
-#pv h1{font-size:clamp(1.8rem,4vw,2.4rem);line-height:1.3;margin:12px 0}
-.tb{display:flex;flex-wrap:wrap;gap:4px;border:1px solid var(--line);border-bottom:0;border-radius:10px 10px 0 0;background:var(--code);padding:6px;margin-top:6px}
-.tb button{font:inherit;font-size:.85rem;border:0;background:transparent;color:var(--ink);padding:4px 10px;border-radius:6px;cursor:pointer}
-.tb button:hover{background:var(--line)}
-.hint{font-size:.85rem;color:var(--mu);margin:6px 0 0}
-.cov{display:flex;gap:12px;align-items:center;flex-wrap:wrap}.cov img{width:120px;height:60px;object-fit:cover;border-radius:8px;border:1px solid var(--line)}
-.note{background:var(--code);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin:0 0 16px;font-size:.92rem;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
-.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:12px 22px;border-radius:999px;max-width:90vw;z-index:50}
-.toast.err{background:#c0392b;color:#fff}
-</style></head><body>
-<div class="wrap">
+  body{background:#e9e6e0}
+  .login{min-height:100vh;display:grid;place-items:center;background:var(--ink-2);position:relative;overflow:hidden}
+  .login::before{content:"";position:absolute;right:-10%;top:-20%;width:55%;height:140%;background:var(--steel);transform:skewX(-18deg)}
+  .login form{position:relative;background:#fff;padding:40px;width:min(380px,92vw);display:grid;gap:14px;clip-path:polygon(0 0,100% 0,100% 90%,90% 100%,0 100%)}
+  .login h1{font-size:1.5rem}
+  .err{color:#c62828;font-size:.9rem;min-height:1.2em}
+  .app{display:none}
+  .bar{background:var(--ink);color:#fff}
+  .bar .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;gap:10px}
+  .bar .acts{display:flex;gap:10px;flex-wrap:wrap}
+  .bar .btn{padding:9px 18px;font-size:.92rem}
+  .tabs{display:flex;gap:4px;margin:26px 0 0;flex-wrap:wrap}
+  .tabs button{font-family:'Kanit';border:0;background:#d6d2ca;padding:11px 20px;cursor:pointer;font-size:.97rem}
+  .tabs button.on{background:#fff;color:var(--accent)}
+  .pane{display:none;background:#fff;padding:30px;margin-bottom:40px}
+  .pane.on{display:block}
+  .pane h2{font-size:1.3rem;margin-bottom:6px}
+  .hint{color:var(--muted);font-size:.9rem;margin-bottom:20px}
+  .fgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .fgrid .full{grid-column:1/-1}
+  label{display:grid;gap:6px;font-family:'Kanit';font-size:.92rem}
+  .item{border:1px solid var(--line);border-left:4px solid var(--accent);padding:18px;margin-bottom:14px;display:grid;gap:12px;background:#fbfaf8}
+  .item .top-row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .item .top-row b{font-family:'Kanit'}
+  .mini{border:0;background:none;cursor:pointer;font-family:'Kanit';font-size:.9rem;padding:4px 8px}
+  .mini.del{color:#c62828}
+  .stats-ed{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  .toast{position:fixed;right:20px;bottom:20px;background:var(--ink);color:#fff;padding:14px 20px;border-left:4px solid var(--accent);display:none;max-width:420px;z-index:99}
+  .dirty{background:var(--accent-2)!important;color:var(--ink)!important}
+  .box{background:var(--paper);padding:16px;border-left:4px solid var(--accent-2);font-size:.92rem;margin:16px 0}
+  @media(max-width:700px){.fgrid,.stats-ed{grid-template-columns:1fr}.bar .wrap{height:auto;padding:12px 20px;flex-direction:column}}
+</style>
+</head>
+<body>
 
-<section id="vLogin" class="login card" hidden>
-  <p class="eb">Admin</p><h1 class="d" style="margin:8px 0 4px;font-size:1.8rem">เข้าสู่ระบบจัดการบล็อก</h1>
-  <p class="mu" style="margin:0">ใช้ GitHub Token ที่มีสิทธิ์ <b>Contents: Read and write</b> เฉพาะ repo นี้</p>
-  <label for="lOwner">GitHub username / org</label><input id="lOwner" autocomplete="off">
-  <div class="row"><div><label for="lRepo">Repository</label><input id="lRepo" autocomplete="off"></div>
-  <div><label for="lBranch">Branch</label><input id="lBranch" value="main" autocomplete="off"></div></div>
-  <label for="lToken">Personal Access Token</label><input id="lToken" type="password" autocomplete="off" placeholder="github_pat_...">
-  <label class="chk"><input id="lRemember" type="checkbox"> จำไว้ในเบราว์เซอร์เครื่องนี้ (ไม่แนะนำบนเครื่องสาธารณะ)</label>
-  <p style="margin:24px 0 0"><button id="bLogin" class="btn p">เข้าสู่ระบบ</button></p>
-</section>
+<!-- หน้าล็อกอิน -->
+<div class="login" id="loginView">
+  <form id="loginForm">
+    <div class="kicker" style="color:var(--accent)">Admin</div>
+    <h1>เข้าสู่ระบบจัดการ</h1>
+    <label>รหัสผ่าน<input type="password" id="pw" autocomplete="current-password" required autofocus></label>
+    <div class="err" id="loginErr"></div>
+    <button class="btn" type="submit" id="loginBtn">เข้าสู่ระบบ</button>
+    <a href="index.html" style="font-size:.9rem;color:var(--muted)">← กลับหน้าเว็บ</a>
+  </form>
+</div>
 
-<div id="vApp" hidden>
-  <div class="bar2"><div><h1 class="d">Auranth · Admin</h1><span class="mu" id="repoName" style="font-size:.9rem"></span></div>
-  <div class="acts"><a class="btn" href="./" target="_blank" rel="noopener">ดูหน้าเว็บ</a><button id="bOut" class="btn">ออกจากระบบ</button></div></div>
-
-  <section id="vList">
-    <div class="head"><h2 class="d" style="margin:0;font-size:1.6rem">บทความทั้งหมด</h2>
-      <div class="acts"><button id="bRebuild" class="btn" title="สร้างหน้าทุกหน้าใหม่ด้วยดีไซน์ล่าสุด">สร้างหน้าทั้งหมดใหม่</button><button id="bNew" class="btn p">+ เขียนบทความใหม่</button></div></div>
-    <div id="list"><p class="mu">กำลังโหลด…</p></div>
-  </section>
-
-  <section id="vEdit" hidden>
-    <div class="head"><h2 class="d" id="eTitle" style="margin:0;font-size:1.6rem"></h2>
-    <div class="acts"><button id="bCancel" class="btn">ยกเลิก</button><button id="bSave" class="btn p">เผยแพร่</button></div></div>
-    <div id="draftNote" class="note" hidden><span id="draftTxt"></span><span class="acts"><button id="bDraftYes" class="btn">กู้คืนฉบับร่าง</button><button id="bDraftNo" class="btn">ทิ้ง</button></span></div>
-    <div class="edit">
-      <div>
-        <label for="fTitle">หัวข้อ</label><input id="fTitle" maxlength="200">
-        <div class="row">
-          <div><label for="fSlug">Slug (URL)</label><input id="fSlug" placeholder="my-first-post" maxlength="80"></div>
-          <div><label for="fCat">หมวด</label><input id="fCat" list="cats" maxlength="40"><datalist id="cats"></datalist></div>
-        </div>
-        <div class="row">
-          <div><label for="fDate">วันที่</label><input id="fDate" type="date"></div>
-          <div><label for="fMin">เวลาอ่าน (นาที)</label><input id="fMin" type="number" min="1" placeholder="อัตโนมัติ"></div>
-        </div>
-        <label for="fTags">แท็ก (คั่นด้วย ,)</label><input id="fTags" placeholder="windows, server, tips">
-        <label for="fExc">คำโปรยสั้นๆ</label><input id="fExc" maxlength="300">
-        <label>รูปปก</label>
-        <div class="cov"><img id="covImg" alt="" hidden><button id="bCov" type="button" class="btn">เลือกรูปปก</button><button id="bCovX" type="button" class="btn x" hidden>เอาออก</button></div>
-        <label for="fBody">เนื้อหา</label>
-        <div class="tb" role="toolbar" aria-label="เครื่องมือจัดรูปแบบ">
-          <button type="button" data-a="h2">หัวข้อ</button><button type="button" data-a="h3">หัวข้อย่อย</button><button type="button" data-a="b"><b>ตัวหนา</b></button><button type="button" data-a="code">&lt;โค้ด&gt;</button><button type="button" data-a="pre">บล็อกโค้ด</button><button type="button" data-a="link">ลิงก์</button><button type="button" data-a="ul">รายการ</button><button type="button" data-a="q">ยกคำพูด</button><button type="button" data-a="img">แทรกรูป</button>
-        </div>
-        <textarea id="fBody"></textarea>
-        <p class="hint">เว้นบรรทัดว่าง = ขึ้นย่อหน้าใหม่ · ระบบเก็บฉบับร่างในเบราว์เซอร์นี้ให้อัตโนมัติ (ไม่ขึ้นเว็บจนกว่าจะกดเผยแพร่)</p>
-        <input id="fFile" type="file" accept="image/*" hidden>
-      </div>
-      <div><p class="eb" style="margin:16px 0 12px">ตัวอย่าง</p><article id="pv" class="card"></article></div>
+<!-- หน้าจัดการ -->
+<div class="app" id="appView">
+  <div class="bar"><div class="wrap">
+    <div class="brand"><span class="mark"></span>จัดการเว็บไซต์</div>
+    <div class="acts">
+      <button class="btn" id="saveBtn">บันทึกขึ้น GitHub</button>
+      <button class="btn ghost" id="dlBtn">ดาวน์โหลด data.json</button>
+      <a class="btn ghost" href="index.html" target="_blank">ดูหน้าเว็บ</a>
+      <button class="btn ghost" id="logoutBtn">ออกจากระบบ</button>
     </div>
-  </section>
+  </div></div>
+
+  <div class="wrap">
+    <div class="tabs" id="tabs">
+      <button data-t="site" class="on">ข้อมูลร้าน</button>
+      <button data-t="services">บริการ</button>
+      <button data-t="posts">บทความ</button>
+      <button data-t="github">ตั้งค่า GitHub</button>
+      <button data-t="pass">เปลี่ยนรหัสผ่าน</button>
+    </div>
+
+    <div class="pane on" id="p-site">
+      <h2>ข้อมูลร้าน</h2><p class="hint">ข้อความที่แสดงบนหน้าแรก ส่วนติดต่อ และส่วนเกี่ยวกับเรา</p>
+      <div class="fgrid" id="siteForm"></div>
+      <h3 style="margin:26px 0 10px;font-size:1.05rem">ตัวเลขแถบสีส้ม</h3>
+      <div class="stats-ed" id="statsForm"></div>
+    </div>
+
+    <div class="pane" id="p-services">
+      <div class="head" style="margin-bottom:16px"><div><h2>บริการ</h2><p class="hint" style="margin:0">เพิ่ม แก้ไข ลบ หรือเลื่อนลำดับบริการ</p></div><button class="btn" id="addService">+ เพิ่มบริการ</button></div>
+      <div id="serviceEd"></div>
+    </div>
+
+    <div class="pane" id="p-posts">
+      <div class="head" style="margin-bottom:16px"><div><h2>บทความ</h2><p class="hint" style="margin:0">บทความเรียงตามวันที่ล่าสุดบนหน้าเว็บโดยอัตโนมัติ</p></div><button class="btn" id="addPost">+ เพิ่มบทความ</button></div>
+      <div id="postEd"></div>
+    </div>
+
+    <div class="pane" id="p-github">
+      <h2>ตั้งค่าการบันทึกขึ้น GitHub</h2>
+      <p class="hint">ปุ่ม "บันทึกขึ้น GitHub" จะ commit ไฟล์ data.json เข้า repository โดยตรง แล้ว GitHub Pages จะอัปเดตหน้าเว็บภายในประมาณ 1 นาที</p>
+      <div class="fgrid">
+        <label>GitHub username / organization<input id="ghOwner" placeholder="เช่น nanthaphop"></label>
+        <label>Repository<input id="ghRepo" placeholder="เช่น garage-site"></label>
+        <label>Branch<input id="ghBranch" value="main"></label>
+        <label>Path ของไฟล์ข้อมูล<input id="ghPath" value="data.json"></label>
+        <label class="full">Personal Access Token (fine-grained)<input id="ghToken" type="password" placeholder="github_pat_..."></label>
+        <label class="full" style="display:flex;gap:10px;align-items:center;font-family:Sarabun"><input type="checkbox" id="ghRemember" style="width:auto"> จำ token ไว้ในเบราว์เซอร์นี้ (ใช้เฉพาะเครื่องส่วนตัวเท่านั้น)</label>
+      </div>
+      <p style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap"><button class="btn dark" id="ghSaveCfg">บันทึกการตั้งค่า</button><button class="btn ghost" style="box-shadow:inset 0 0 0 2px var(--ink);color:var(--ink)" id="ghTest">ทดสอบการเชื่อมต่อ</button></p>
+      <div class="box">
+        <b>วิธีสร้าง token:</b> GitHub → Settings → Developer settings → Personal access tokens → Fine-grained tokens → Generate new token<br>
+        • Repository access: <b>Only select repositories</b> แล้วเลือก repo ของเว็บนี้เท่านั้น<br>
+        • Permissions → Repository permissions → <b>Contents: Read and write</b><br>
+        • ตั้งวันหมดอายุตามความเหมาะสม และอย่าแชร์ token ให้ผู้อื่น
+      </div>
+    </div>
+
+    <div class="pane" id="p-pass">
+      <h2>เปลี่ยนรหัสผ่านหน้าจัดการ</h2>
+      <p class="hint">รหัสผ่านถูกเก็บเป็นค่า hash (PBKDF2-SHA256) ใน data.json ไม่เก็บตัวรหัสจริง หลังเปลี่ยนแล้วต้องกด "บันทึกขึ้น GitHub" ด้วย</p>
+      <div class="fgrid">
+        <label>รหัสผ่านใหม่ (อย่างน้อย 8 ตัวอักษร)<input type="password" id="np1" autocomplete="new-password"></label>
+        <label>ยืนยันรหัสผ่านใหม่<input type="password" id="np2" autocomplete="new-password"></label>
+      </div>
+      <p style="margin-top:16px"><button class="btn dark" id="changePw">เปลี่ยนรหัสผ่าน</button></p>
+    </div>
+  </div>
 </div>
-</div>
-<div id="toast" class="toast" hidden></div>
+
+<div class="toast" id="toast"></div>
 
 <script>
-/*PURE:START*/
-const SITE='Auranth',TAGLINE='เรื่องเล่า ความคิด และการเดินทาง ในบล็อกส่วนตัว Auranth';
-const BASE=(typeof location!=='undefined')?new URL('./',location.href).href:'https://example.com/';
-const MON=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
-const FONTS='https://fonts.googleapis.com/css2?family=Noto+Serif+Thai:wght@500;700&family=IBM+Plex+Sans+Thai:wght@400;500&display=swap';
-const THEME_INIT="<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}<\/script>";
-const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const thai=iso=>{const [y,m,d]=iso.split('-').map(Number);return `${d} ${MON[m-1]} ${y+543}`};
-const unThai=t=>{const m=String(t).match(/(\d{1,2})\s+(\S+)\s+(\d{4})/);if(!m)return new Date().toISOString().slice(0,10);const i=MON.indexOf(m[2]);return `${+m[3]-543}-${String((i<0?0:i)+1).padStart(2,'0')}-${m[1].padStart(2,'0')}`};
-const est=t=>Math.max(1,Math.round(t.length/900));
-const rfc=iso=>new Date(iso+'T00:00:00+07:00').toUTCString();
-const sortPosts=a=>[...a].sort((x,y)=>y.date.localeCompare(x.date)||x.slug.localeCompare(y.slug));
-const plain=b=>String(b).replace(/!\[[^\]]*\]\([^)]*\)/g,' ').replace(/\[([^\]]+)\]\([^)]*\)/g,'$1').replace(/[`*#>]/g,'').replace(/^- /gm,'').replace(/\s+/g,' ').trim().slice(0,1200);
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let DATA = null, dirty = false;
 
-/* ---- mini-markdown ---- */
-function inline(s){
-  const codes=[];
-  s=String(s).replace(/`([^`]+)`/g,(_,c)=>{codes.push(c);return `\u0000${codes.length-1}\u0000`});
-  s=esc(s);
-  s=s.replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>');
-  s=s.replace(/\[([^\]]+)\]\(((?:https?:\/\/|\/|#|uploads\/)[^\s)]*)\)/g,(m,t,u)=>`<a href="${u}"${/^https?:/.test(u)?' target="_blank" rel="noopener"':''}>${t}</a>`);
-  return s.replace(/\u0000(\d+)\u0000/g,(_,i)=>`<code>${esc(codes[i])}</code>`);
+function toast(msg, ms = 3500){ const t = $('toast'); t.textContent = msg; t.style.display = 'block'; clearTimeout(t._h); t._h = setTimeout(() => t.style.display = 'none', ms); }
+function markDirty(){ dirty = true; $('saveBtn').classList.add('dirty'); $('saveBtn').textContent = 'บันทึกขึ้น GitHub •'; }
+function clearDirty(){ dirty = false; $('saveBtn').classList.remove('dirty'); $('saveBtn').textContent = 'บันทึกขึ้น GitHub'; }
+window.addEventListener('beforeunload', e => { if (dirty) { e.preventDefault(); e.returnValue = ''; } });
+
+// ---------- รหัสผ่าน (PBKDF2 ผ่าน Web Crypto) ----------
+const hex = buf => [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2,'0')).join('');
+async function pbkdf2(pw, salt, iter){
+  const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(pw), 'PBKDF2', false, ['deriveBits']);
+  return hex(await crypto.subtle.deriveBits({name:'PBKDF2', hash:'SHA-256', salt:new TextEncoder().encode(salt), iterations:iter}, key, 256));
 }
-function md(src,o={}){
-  const L=String(src).replace(/\r\n/g,'\n').split('\n'),out=[],toc=[];let i=0;
-  const isBlock=l=>/^(```|#{2,3}\s|>\s?|- |!\[[^\]]*\]\([^)\s]+\)\s*$)/.test(l);
-  const imgSrc=u=>o.res?o.res(u):(/^uploads\//.test(u)?(o.pre||'')+u:u);
-  while(i<L.length){
-    const l=L[i];
-    if(!l.trim()){i++;continue}
-    if(/^```/.test(l)){const lang=l.slice(3).trim().replace(/[^\w+-]/g,'');const b=[];i++;while(i<L.length&&!/^```/.test(L[i]))b.push(L[i++]);i++;out.push(`<pre><code${lang?` class="lang-${lang}"`:''}>${esc(b.join('\n'))}</code></pre>`);continue}
-    let m=l.match(/^(#{2,3})\s+(.+)$/);
-    if(m){const n=m[1].length,id='s'+(toc.length+1);if(n===2)toc.push({id,t:m[2].trim().replace(/[`*]/g,'')});out.push(`<h${n} class="d"${n===2?` id="${id}"`:''}>${inline(m[2].trim())}</h${n}>`);i++;continue}
-    m=l.match(/^!\[([^\]]*)\]\(([^)\s]+)\)\s*$/);
-    if(m){out.push(`<figure><img src="${esc(imgSrc(m[2]))}" alt="${esc(m[1])}" loading="lazy">${m[1]?`<figcaption>${esc(m[1])}</figcaption>`:''}</figure>`);i++;continue}
-    if(/^>\s?/.test(l)){const b=[];while(i<L.length&&/^>\s?/.test(L[i]))b.push(L[i++].replace(/^>\s?/,''));out.push(`<blockquote><p>${b.map(inline).join('<br>')}</p></blockquote>`);continue}
-    if(/^- /.test(l)){const b=[];while(i<L.length&&/^- /.test(L[i]))b.push(L[i++].slice(2));out.push(`<ul>${b.map(x=>`<li>${inline(x)}</li>`).join('')}</ul>`);continue}
-    const b=[];while(i<L.length&&L[i].trim()&&!isBlock(L[i]))b.push(L[i++]);
-    if(!b.length)b.push(L[i++]);
-    out.push(`<p>${b.map(inline).join('<br>')}</p>`);
-  }
-  return{html:out.join('\n'),toc};
+async function loadData(){
+  const r = await fetch('data.json?v=' + Date.now(), {cache:'no-store'});
+  if (!r.ok) throw new Error('โหลด data.json ไม่ได้');
+  return r.json();
 }
 
-/* ---- page templates ---- */
-const topbar=root=>`<a class="skip" href="#main">ข้ามไปเนื้อหา</a><header class="top"><a class="brand d" href="${root||'./'}">${SITE}</a><nav class="tools" aria-label="เมนู"><a href="${root}#search">ค้นหา</a><a href="${root}feed.xml">RSS</a><button id="tt" class="tt" type="button" aria-pressed="false">โหมดมืด</button></nav></header>`;
-const footer=root=>`<footer class="foot"><span>© ${SITE}</span><a href="${root}feed.xml">RSS</a></footer>`;
-const headHtml=o=>`<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>${esc(o.title)}</title><meta name="description" content="${esc(o.desc)}">
-<link rel="canonical" href="${esc(o.url)}">
-<meta property="og:site_name" content="${SITE}"><meta property="og:type" content="${o.type}"><meta property="og:title" content="${esc(o.title)}"><meta property="og:description" content="${esc(o.desc)}"><meta property="og:url" content="${esc(o.url)}"><meta property="og:image" content="${esc(o.img)}"><meta name="twitter:card" content="summary_large_image">
-<link rel="alternate" type="application/rss+xml" title="${SITE}" href="${o.root}feed.xml">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="${FONTS}"><link rel="stylesheet" href="${o.root}style.css">${THEME_INIT}`;
-
-function postPage(p,body){
-  const root='../../',url=`${BASE}posts/${p.slug}/`,img=BASE+(p.cover||'hero.jpg');
-  const {html:bh,toc}=md(body,{pre:root});
-  const ld=JSON.stringify({'@context':'https://schema.org','@type':'BlogPosting',headline:p.title,description:p.excerpt,datePublished:p.date,image:img,mainEntityOfPage:url,author:{'@type':'Person',name:SITE}}).replace(/</g,'\\u003c');
-  const tocH=toc.length>=3?`<nav class="toc" aria-label="สารบัญ"><b class="d">สารบัญ</b><ol>${toc.map(t=>`<li><a href="#${t.id}">${esc(t.t)}</a></li>`).join('')}</ol></nav>`:'';
-  const tagsH=(p.tags||[]).length?`<div class="tags">${p.tags.map(t=>`<a class="chip" href="${root}?tag=${encodeURIComponent(t)}">#${esc(t)}</a>`).join('')}</div>`:'';
-  return `<!doctype html><html lang="th"><head>${headHtml({title:`${p.title} — ${SITE}`,desc:p.excerpt,url,img,type:'article',root})}<script type="application/ld+json">${ld}<\/script></head><body data-post="${esc(p.slug)}" data-root="${root}"><div id="bar"></div>${topbar(root)}<article id="main"><a class="mu" href="${root}">← ${SITE}</a><p class="eb" style="margin-top:32px"><a href="${root}?cat=${encodeURIComponent(p.category)}">${esc(p.category)}</a> · ${thai(p.date)} · ${p.minutes||1} นาที</p><h1 class="d" style="font-size:clamp(2rem,5vw,2.8rem);line-height:1.3;margin:12px 0">${esc(p.title)}</h1><p class="mu" style="font-size:1.1rem">${esc(p.excerpt)}</p>${p.cover?`<figure class="cover"><img src="${root}${esc(p.cover)}" alt=""></figure>`:''}${tocH}<div class="body">${bh}</div>${tagsH}<p class="share"><button id="cp" class="chip" type="button">คัดลอกลิงก์</button></p></article><nav id="more" class="more" aria-label="บทความอื่น"></nav>${footer(root)}<script src="${root}assets/site.js" defer><\/script></body></html>
-`;
-}
-const attrs=p=>`data-slug="${esc(p.slug)}" data-cat="${esc(p.category)}" data-tags="${esc((p.tags||[]).join('|'))}"`;
-function listHtml(ps){
-  ps=sortPosts(ps);if(!ps.length)return '';
-  const [f,...rest]=ps;
-  let h=`<a class="f" ${attrs(f)} href="posts/${esc(f.slug)}/"><div class="img"><img src="${esc(f.cover||'hero.jpg')}" alt=""></div><p class="eb" style="margin-top:32px">${esc(f.category)} · ${thai(f.date)}</p><h2 class="d">${esc(f.title)}</h2><p class="mu" style="font-size:1.1rem">${esc(f.excerpt)}</p></a>\n`;
-  if(rest.length)h+=`<div class="grid">${rest.map(p=>`<a class="c" ${attrs(p)} href="posts/${esc(p.slug)}/">${p.cover?`<div class="th"><img src="${esc(p.cover)}" alt="" loading="lazy"></div>`:''}<p class="eb">${esc(p.category)} · ${p.minutes||1} นาที</p><h3 class="d">${esc(p.title)}</h3><p class="mu">${esc(p.excerpt)}</p><p class="mu" style="font-size:.85rem">${thai(p.date)}</p></a>`).join('')}</div>\n`;
-  return h;
-}
-function injectIndex(html,ps){
-  const block=`<!--POSTS:START-->\n${listHtml(ps)}<!--POSTS:END-->`;
-  if(html.includes('<!--POSTS:START-->')&&html.includes('<!--POSTS:END-->'))return html.replace(/<!--POSTS:START-->[\s\S]*?<!--POSTS:END-->/,()=>block);
-  return html.replace(/(<\/section>)[\s\S]*?(<\/main>)/,(_,a,b)=>`${a}\n${block}\n${b}`);
-}
-const feedXml=ps=>`<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>${SITE}</title><link>${BASE}</link><description>${esc(TAGLINE)}</description><language>th</language><atom:link href="${BASE}feed.xml" rel="self" type="application/rss+xml"/>${sortPosts(ps).slice(0,20).map(p=>`<item><title>${esc(p.title)}</title><link>${BASE}posts/${esc(p.slug)}/</link><guid isPermaLink="true">${BASE}posts/${esc(p.slug)}/</guid><pubDate>${rfc(p.date)}</pubDate><description>${esc(p.excerpt)}</description><category>${esc(p.category)}</category></item>`).join('')}</channel></rss>
-`;
-const sitemapXml=ps=>`<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${BASE}</loc></url>${sortPosts(ps).map(p=>`<url><loc>${BASE}posts/${esc(p.slug)}/</loc><lastmod>${p.date}</lastmod></url>`).join('')}</urlset>
-`;
-const notFound=()=>`<!doctype html><html lang="th"><head><base href="${BASE}"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>ไม่พบหน้านี้ — ${SITE}</title><link rel="stylesheet" href="${FONTS}"><link rel="stylesheet" href="style.css">${THEME_INIT}</head><body>${topbar('')}<main id="main"><section class="hero"><p class="eb">404</p><h1 class="d" style="font-size:clamp(2rem,6vw,3rem)">ไม่พบหน้านี้</h1><p class="mu"><a href="./" style="text-decoration:underline">กลับหน้าแรก</a></p></section></main>${footer('')}<script src="assets/site.js" defer><\/script></body></html>
-`;
-function siteFiles(next,idx){
-  return [{path:'index.html',content:injectIndex(idx,next)},{path:'search.json',content:JSON.stringify(next)},{path:'feed.xml',content:feedXml(next)},{path:'sitemap.xml',content:sitemapXml(next)},{path:'404.html',content:notFound()}];
-}
-/*PURE:END*/
-
-const $=s=>document.querySelector(s);
-const KEY='auranth-admin',DKEY='auranth-draft:';
-let cfg=null,posts=[],editing=null,cover='',staged={},savedDraft=null;
-
-function toast(msg,err){const t=$('#toast');t.textContent=msg;t.className='toast'+(err?' err':'');t.hidden=false;clearTimeout(toast.h);toast.h=setTimeout(()=>t.hidden=true,err?7000:3500)}
-const busy=(b,on)=>{b.disabled=on};
-const today=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
-const slugify=s=>s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
-
-/* ---------- GitHub API ---------- */
-const rp=()=>`/repos/${cfg.owner}/${cfg.repo}`;
-async function api(path,opt={}){
-  const r=await fetch('https://api.github.com'+path,{cache:'no-store',...opt,headers:{'Accept':'application/vnd.github+json','Authorization':'Bearer '+cfg.token,'X-GitHub-Api-Version':'2022-11-28','Content-Type':'application/json',...(opt.headers||{})}});
-  if(!r.ok){const e=new Error(`${r.status}`);e.status=r.status;try{e.detail=(await r.json()).message}catch{}throw e}
-  return opt.raw?r.text():r.json();
-}
-const getText=async path=>{try{return await api(`${rp()}/contents/${path}?ref=${encodeURIComponent(cfg.branch)}`,{headers:{Accept:'application/vnd.github.raw+json'},raw:true})}catch(e){if(e.status===404)return null;throw e}};
-async function listFiles(dir){const items=await api(`${rp()}/contents/${dir}?ref=${encodeURIComponent(cfg.branch)}`);let out=[];for(const i of items){if(i.type==='dir')out=out.concat(await listFiles(i.path));else out.push(i.path)}return out}
-async function commit(files,message){ // commit เดียว: {path,content} | {path,b64} | {path,content:null}=ลบ
-  const ref=await api(`${rp()}/git/ref/heads/${encodeURIComponent(cfg.branch)}`);
-  const base=ref.object.sha,c=await api(`${rp()}/git/commits/${base}`),entries=[];
-  for(const f of files){
-    if(f.b64!==undefined){const bl=await api(`${rp()}/git/blobs`,{method:'POST',body:JSON.stringify({content:f.b64,encoding:'base64'})});entries.push({path:f.path,mode:'100644',type:'blob',sha:bl.sha})}
-    else if(f.content===null)entries.push({path:f.path,mode:'100644',type:'blob',sha:null});
-    else entries.push({path:f.path,mode:'100644',type:'blob',content:f.content});
-  }
-  const tree=await api(`${rp()}/git/trees`,{method:'POST',body:JSON.stringify({base_tree:c.tree.sha,tree:entries})});
-  const nc=await api(`${rp()}/git/commits`,{method:'POST',body:JSON.stringify({message,tree:tree.sha,parents:[base]})});
-  await api(`${rp()}/git/refs/heads/${encodeURIComponent(cfg.branch)}`,{method:'PATCH',body:JSON.stringify({sha:nc.sha})});
-}
-function explain(e){
-  if(e.status===401)return 'Token ไม่ถูกต้องหรือหมดอายุ';
-  if(e.status===403)return 'Token ไม่มีสิทธิ์เขียน หรือเรียกใช้ถี่เกินไป';
-  if(e.status===404)return 'ไม่พบ repo / branch นี้ (หรือ Token ไม่มีสิทธิ์เข้าถึง)';
-  if(e.status===409||e.status===422)return 'บันทึกชนกัน ลองโหลดหน้าใหม่แล้วทำอีกครั้ง';
-  return e.message+(e.detail?' — '+e.detail:'');
-}
-
-/* ---------- อ่านเนื้อหาเดิม ---------- */
-function legacyBody(html){ // หน้าเก่าที่ยังไม่มี post.md
-  const d=new DOMParser().parseFromString(html.replace(/<br\s*\/?>/gi,'\n'),'text/html'),b=d.querySelector('.body');if(!b)return '';
-  return [...b.children].map(el=>{const t=el.tagName;
-    if(/^H[1-6]$/.test(t))return '## '+el.textContent.trim();
-    if(t==='PRE')return '```\n'+el.textContent.replace(/\n$/,'')+'\n```';
-    if(t==='UL'||t==='OL')return [...el.children].map(li=>'- '+li.textContent.trim()).join('\n');
-    if(t==='BLOCKQUOTE')return el.textContent.trim().split('\n').map(x=>'> '+x).join('\n');
-    if(t==='FIGURE'){const im=el.querySelector('img');return im?`![${im.alt||''}](${(im.getAttribute('src')||'').replace(/^(\.\.\/)+/,'')})`:''}
-    return el.textContent.trim()}).filter(Boolean).join('\n\n');
-}
-async function bodyOf(slug){
-  const m=await getText(`posts/${slug}/post.md`);if(m!==null)return m;
-  const h=await getText(`posts/${slug}/index.html`);return h?legacyBody(h):'';
-}
-async function bootstrap(){ // สร้างรายการจาก index.html เดิม (ครั้งแรก)
-  const idx=await getText('index.html');if(!idx)return [];
-  const d=new DOMParser().parseFromString(idx,'text/html'),out=[];
-  const slugOf=a=>(a.getAttribute('href').match(/posts\/([^/]+)/)||[])[1];
-  const f=d.querySelector('a.f');
-  if(f&&slugOf(f)){const [c,dt]=f.querySelector('.eb').textContent.split('·').map(s=>s.trim());out.push({slug:slugOf(f),title:f.querySelector('h2').textContent.trim(),category:c,date:unThai(dt),excerpt:f.querySelector('p.mu').textContent.trim(),minutes:null,tags:[],cover:'',text:''})}
-  d.querySelectorAll('.grid a').forEach(a=>{if(!slugOf(a))return;const [c,m]=a.querySelector('.eb').textContent.split('·').map(s=>s.trim());const mu=a.querySelectorAll('p.mu');out.push({slug:slugOf(a),title:a.querySelector('h3').textContent.trim(),category:c,date:unThai(mu[1]?.textContent||''),excerpt:mu[0].textContent.trim(),minutes:parseInt(m)||null,tags:[],cover:'',text:''})});
-  await Promise.all(out.map(async p=>{try{const b=await bodyOf(p.slug);p.text=plain(b);if(!p.minutes)p.minutes=est(b)}catch{p.minutes=p.minutes||1}}));
-  return out;
-}
-async function loadPosts(){
-  const j=await getText('search.json');
-  posts=j?JSON.parse(j):await bootstrap();
-  renderList();
-}
-
-/* ---------- รูปภาพ ---------- */
-const toB64=u8=>{let s='';for(let i=0;i<u8.length;i+=0x8000)s+=String.fromCharCode.apply(null,u8.subarray(i,i+0x8000));return btoa(s)};
-async function stageImage(file){
-  if(file.size>10*1024*1024)throw new Error('ไฟล์ใหญ่เกิน 10 MB');
-  let blob=file,ext;
-  if(/svg/.test(file.type))ext='svg';else if(/gif/.test(file.type))ext='gif';
-  else{
-    const bm=await createImageBitmap(file),s=Math.min(1,1600/Math.max(bm.width,bm.height));
-    const c=document.createElement('canvas');c.width=Math.round(bm.width*s);c.height=Math.round(bm.height*s);
-    const g=c.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,c.width,c.height);g.drawImage(bm,0,0,c.width,c.height);
-    blob=await new Promise(r=>c.toBlob(r,'image/jpeg',.85));ext='jpg';
-  }
-  const path=`uploads/${new Date().getFullYear()}/${slugify($('#fSlug').value)||'img'}-${Date.now().toString(36)}.${ext}`;
-  staged[path]={b64:toB64(new Uint8Array(await blob.arrayBuffer())),url:URL.createObjectURL(blob)};
-  return path;
-}
-function pickImage(){return new Promise(res=>{const f=$('#fFile');f.value='';f.onchange=()=>res(f.files[0]||null);f.click()})}
-const resolveImg=u=>staged[u]?staged[u].url:u;
-
-/* ---------- views ---------- */
-function show(v){['vLogin','vApp'].forEach(i=>$('#'+i).hidden=i!==v)}
-function showSec(v){$('#vList').hidden=v!=='list';$('#vEdit').hidden=v!=='edit';scrollTo(0,0)}
-function renderList(){
-  const ps=sortPosts(posts);
-  $('#list').innerHTML=ps.length?ps.map(p=>`<div class="item"><div><h3 class="d">${esc(p.title)}</h3><p class="mu">${esc(p.category)} · ${thai(p.date)} · /posts/${esc(p.slug)}/${(p.tags||[]).length?' · '+p.tags.map(t=>'#'+esc(t)).join(' '):''}</p></div><div class="acts"><a class="btn" href="posts/${esc(p.slug)}/" target="_blank" rel="noopener">ดู</a><button class="btn" data-e="${esc(p.slug)}">แก้ไข</button><button class="btn x" data-d="${esc(p.slug)}">ลบ</button></div></div>`).join(''):'<p class="mu">ยังไม่มีบทความ</p>';
-  $('#cats').innerHTML=[...new Set(['IT','Running','Travel',...posts.map(p=>p.category)])].map(c=>`<option value="${esc(c)}">`).join('');
-}
-function paintCover(){
-  const im=$('#covImg');im.hidden=!cover;$('#bCovX').hidden=!cover;
-  if(cover)im.src=resolveImg(cover);
-  $('#bCov').textContent=cover?'เปลี่ยนรูปปก':'เลือกรูปปก';
-}
-const tagsVal=()=>$('#fTags').value.split(',').map(s=>s.trim().replace(/[|#]/g,'')).filter(Boolean).slice(0,8);
-function preview(){
-  const body=$('#fBody').value,tags=tagsVal();
-  const {html}=md(body||' ',{res:resolveImg});
-  $('#pv').innerHTML=`${cover?`<figure class="cover" style="margin:0 0 20px"><img src="${esc(resolveImg(cover))}" alt=""></figure>`:''}<p class="eb">${esc($('#fCat').value||'IT')} · ${thai($('#fDate').value||today())} · ${parseInt($('#fMin').value)||est(body)} นาที</p><h1 class="d">${esc($('#fTitle').value||'หัวข้อบทความ')}</h1><p class="mu" style="font-size:1.05rem">${esc($('#fExc').value)}</p><div class="body" style="margin-top:24px;padding-top:24px">${html}</div>${tags.length?`<div class="tags">${tags.map(t=>`<span class="chip">#${esc(t)}</span>`).join('')}</div>`:''}`;
-}
-function setFields(p){
-  $('#fTitle').value=p.title||'';$('#fSlug').value=p.slug||'';$('#fCat').value=p.category||'IT';$('#fDate').value=p.date||today();$('#fMin').value=p.minutes||'';$('#fExc').value=p.excerpt||'';$('#fBody').value=p.body||'';$('#fTags').value=(p.tags||[]).join(', ');cover=p.cover||'';paintCover();
-}
-
-/* ---------- ร่างอัตโนมัติ (เก็บในเบราว์เซอร์นี้เท่านั้น) ---------- */
-const dkey=()=>DKEY+(editing||'new');
-function snapshot(){return{title:$('#fTitle').value,slug:$('#fSlug').value,category:$('#fCat').value,date:$('#fDate').value,minutes:$('#fMin').value,excerpt:$('#fExc').value,body:$('#fBody').value,tags:tagsVal(),cover:staged[cover]?'':cover,t:Date.now()}}
-let dTimer;
-function autosave(){clearTimeout(dTimer);dTimer=setTimeout(()=>{const s=snapshot();if(!s.title.trim()&&!s.body.trim())return;try{localStorage.setItem(dkey(),JSON.stringify(s))}catch{}},800)}
-function checkDraft(base){
-  $('#draftNote').hidden=true;savedDraft=null;
-  try{const s=JSON.parse(localStorage.getItem(dkey())||'null');
-    if(s&&(s.body!==base.body||s.title!==base.title)){savedDraft=s;$('#draftTxt').textContent='มีฉบับร่างที่ยังไม่ได้เผยแพร่ (บันทึกเมื่อ '+new Date(s.t).toLocaleString('th-TH')+')';$('#draftNote').hidden=false}
-  }catch{}
-}
-
-async function openEditor(slug){
-  editing=slug;staged={};
-  const p=posts.find(x=>x.slug===slug);
-  $('#eTitle').textContent=p?'แก้ไขบทความ':'บทความใหม่';
-  $('#fSlug').disabled=!!p;$('#fSlug').dataset.touched='';
-  setFields({...(p||{}),body:''});showSec('edit');preview();
-  let base={title:p?.title||'',body:''};
-  if(p){$('#fBody').value='กำลังโหลดเนื้อหา…';$('#fBody').disabled=true;$('#bSave').disabled=true;
-    try{const b=await bodyOf(slug);$('#fBody').value=b;base.body=b}catch(e){toast(explain(e),true);$('#fBody').value=''}
-    $('#fBody').disabled=false;$('#bSave').disabled=false;preview();}
-  checkDraft(base);
-}
-async function save(){
-  const title=$('#fTitle').value.trim(),body=$('#fBody').value,excerpt=$('#fExc').value.trim(),category=$('#fCat').value.trim()||'IT',date=$('#fDate').value;
-  let slug=$('#fSlug').value.trim();
-  if(!title)return toast('กรุณาใส่หัวข้อ',true);
-  if(!body.trim())return toast('กรุณาใส่เนื้อหา',true);
-  if(!date)return toast('กรุณาเลือกวันที่',true);
-  if(!slug)slug=slugify(title)||'post-'+date.replace(/-/g,'');
-  if(!/^[a-z0-9][a-z0-9-]*$/.test(slug))return toast('Slug ใช้ได้เฉพาะ a-z 0-9 และ -',true);
-  if(editing===null&&posts.some(p=>p.slug===slug))return toast('มี slug นี้อยู่แล้ว',true);
-  const p={slug,title,category,date,excerpt,minutes:parseInt($('#fMin').value)||est(body),tags:tagsVal(),cover,text:plain(body)};
-  const b=$('#bSave');busy(b,true);
-  try{
-    const next=sortPosts(posts.filter(x=>x.slug!==slug).concat(p));
-    const idx=await getText('index.html');if(idx===null)throw new Error('ไม่พบ index.html ใน repo');
-    const used=Object.keys(staged).filter(k=>body.includes(k)||cover===k);
-    await commit([
-      {path:`posts/${slug}/index.html`,content:postPage(p,body)},
-      {path:`posts/${slug}/post.md`,content:body},
-      ...siteFiles(next,idx),
-      ...used.map(k=>({path:k,b64:staged[k].b64}))
-    ],`Admin: ${editing===null?'add':'update'} ${slug}`);
-    try{localStorage.removeItem(dkey())}catch{}
-    staged={};posts=next;renderList();showSec('list');toast('เผยแพร่แล้ว — GitHub Pages ใช้เวลาอัปเดต ~1 นาที');
-  }catch(e){toast(explain(e),true)}finally{busy(b,false)}
-}
-async function del(slug){
-  const p=posts.find(x=>x.slug===slug);if(!p||!confirm(`ลบ "${p.title}" ถาวร?\n(รูปที่อัปโหลดไว้ใน uploads/ จะไม่ถูกลบ)`))return;
-  try{
-    const next=posts.filter(x=>x.slug!==slug),idx=await getText('index.html');
-    const files=(await listFiles(`posts/${slug}`)).map(path=>({path,content:null}));
-    await commit([...files,...siteFiles(next,idx)],`Admin: delete ${slug}`);
-    posts=next;renderList();toast('ลบแล้ว');
-  }catch(e){toast(explain(e),true)}
-}
-async function rebuild(){
-  if(!confirm('สร้างหน้าบทความทุกหน้า หน้าแรก RSS และ sitemap ใหม่ด้วยดีไซน์ล่าสุด?\nเนื้อหาไม่เปลี่ยน (ทำใน commit เดียว ย้อนกลับได้จาก GitHub)'))return;
-  const b=$('#bRebuild');busy(b,true);
-  try{
-    const idx=await getText('index.html');if(idx===null)throw new Error('ไม่พบ index.html ใน repo');
-    const next=[],files=[];
-    for(const p of posts){
-      const body=await bodyOf(p.slug),q={tags:[],cover:'',...p,minutes:p.minutes||est(body),text:plain(body)};
-      next.push(q);files.push({path:`posts/${p.slug}/index.html`,content:postPage(q,body)},{path:`posts/${p.slug}/post.md`,content:body});
+$('loginForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const lock = +sessionStorage.getItem('lockUntil') || 0;
+  if (Date.now() < lock) { $('loginErr').textContent = `ลองผิดหลายครั้ง กรุณารอ ${Math.ceil((lock-Date.now())/1000)} วินาที`; return; }
+  $('loginBtn').disabled = true; $('loginErr').textContent = 'กำลังตรวจสอบ...';
+  try {
+    DATA = DATA || await loadData();
+    const a = DATA.admin;
+    const h = await pbkdf2($('pw').value, a.salt, a.iterations);
+    if (h === a.hash) {
+      sessionStorage.setItem('authed', a.hash); sessionStorage.removeItem('fails');
+      $('pw').value = ''; showApp();
+    } else {
+      const f = (+sessionStorage.getItem('fails') || 0) + 1; sessionStorage.setItem('fails', f);
+      if (f >= 5) { sessionStorage.setItem('lockUntil', Date.now() + 60000); sessionStorage.setItem('fails', 0); }
+      $('loginErr').textContent = 'รหัสผ่านไม่ถูกต้อง';
     }
-    await commit([...files,...siteFiles(sortPosts(next),idx)],'Admin: rebuild site');
-    posts=sortPosts(next);renderList();toast(`สร้างใหม่ ${next.length} บทความแล้ว — รอ ~1 นาที`);
-  }catch(e){toast(explain(e),true)}finally{busy(b,false)}
-}
-
-/* ---------- toolbar ---------- */
-function ins(before,after='',ph=''){
-  const t=$('#fBody'),s=t.selectionStart,e=t.selectionEnd,sel=t.value.slice(s,e)||ph;
-  t.setRangeText(before+sel+after,s,e,'end');
-  t.focus();t.setSelectionRange(s+before.length,s+before.length+sel.length);
-  t.dispatchEvent(new Event('input'));
-}
-async function addImage(forCover){
-  const f=await pickImage();if(!f)return;
-  try{const path=await stageImage(f);
-    if(forCover){cover=path;paintCover();preview();autosave()}
-    else ins(`\n\n![`,`](${path})\n\n`,f.name.replace(/\.[^.]+$/,''));
-    toast('เพิ่มรูปแล้ว — จะอัปโหลดตอนกดเผยแพร่');
-  }catch(e){toast(e.message||'อ่านรูปไม่สำเร็จ',true)}
-}
-$('.tb').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
-  ({h2:()=>ins('\n\n## ','\n\n','หัวข้อ'),h3:()=>ins('\n\n### ','\n\n','หัวข้อย่อย'),b:()=>ins('**','**','ตัวหนา'),code:()=>ins('`','`','code'),pre:()=>ins('\n\n```\n','\n```\n\n','คำสั่ง'),link:()=>ins('[',']( https://)'.replace(' ',''),'ข้อความ'),ul:()=>ins('\n- ','','รายการ'),q:()=>ins('\n> ','','คำพูด'),img:()=>addImage(false)})[b.dataset.a]();
+  } catch (err) { $('loginErr').textContent = err.message + ' (ต้องเปิดผ่านเว็บเซิร์ฟเวอร์)'; }
+  $('loginBtn').disabled = false;
 });
 
-/* ---------- login ---------- */
-async function enter(c,persist){
-  cfg=c;
-  try{await api(rp());}catch(e){cfg=null;throw e}
-  (persist?localStorage:sessionStorage).setItem(KEY,JSON.stringify(c));
-  $('#repoName').textContent=`${c.owner}/${c.repo} · ${c.branch}`;
-  show('vApp');showSec('list');
-  try{await loadPosts()}catch(e){$('#list').innerHTML='';toast(explain(e),true)}
-}
-$('#bLogin').onclick=async()=>{
-  const c={owner:$('#lOwner').value.trim(),repo:$('#lRepo').value.trim(),branch:$('#lBranch').value.trim()||'main',token:$('#lToken').value.trim()};
-  if(!c.owner||!c.repo||!c.token)return toast('กรอกข้อมูลให้ครบ',true);
-  const b=$('#bLogin');busy(b,true);
-  try{await enter(c,$('#lRemember').checked)}catch(e){toast(explain(e),true)}finally{busy(b,false)}
+$('logoutBtn').onclick = () => {
+  if (dirty && !confirm('ยังมีการแก้ไขที่ยังไม่ได้บันทึก ต้องการออกหรือไม่?')) return;
+  dirty = false; sessionStorage.removeItem('authed'); sessionStorage.removeItem('ghToken'); location.reload();
 };
-$('#bOut').onclick=()=>{localStorage.removeItem(KEY);sessionStorage.removeItem(KEY);cfg=null;$('#lToken').value='';show('vLogin')};
-$('#bNew').onclick=()=>openEditor(null);
-$('#bRebuild').onclick=rebuild;
-$('#bCancel').onclick=()=>showSec('list');
-$('#bSave').onclick=save;
-$('#bCov').onclick=()=>addImage(true);
-$('#bCovX').onclick=()=>{cover='';paintCover();preview();autosave()};
-$('#bDraftYes').onclick=()=>{if(savedDraft){setFields(savedDraft);if(editing)$('#fSlug').value=editing;preview()}$('#draftNote').hidden=true};
-$('#bDraftNo').onclick=()=>{try{localStorage.removeItem(dkey())}catch{}$('#draftNote').hidden=true};
-$('#list').onclick=e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.e)openEditor(b.dataset.e);if(b.dataset.d)del(b.dataset.d)};
-['fTitle','fCat','fDate','fMin','fExc','fBody','fTags'].forEach(i=>$('#'+i).addEventListener('input',()=>{preview();autosave()}));
-$('#fTitle').addEventListener('input',()=>{if(editing===null&&!$('#fSlug').dataset.touched)$('#fSlug').value=slugify($('#fTitle').value)});
-$('#fSlug').addEventListener('input',e=>e.target.dataset.touched='1');
 
-/* ---------- start ---------- */
-(async()=>{
-  const m=location.hostname.match(/^(.+)\.github\.io$/);
-  if(m){const seg=location.pathname.split('/')[1];$('#lOwner').value=m[1];$('#lRepo').value=seg&&!seg.endsWith('.html')?seg:location.hostname}
-  const saved=localStorage.getItem(KEY)||sessionStorage.getItem(KEY);
-  if(saved){try{await enter(JSON.parse(saved),!!localStorage.getItem(KEY));return}catch(e){toast(explain(e),true)}}
-  show('vLogin');
+// ---------- แท็บ ----------
+$('tabs').onclick = e => {
+  const t = e.target.dataset.t; if (!t) return;
+  document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('on', b.dataset.t === t));
+  document.querySelectorAll('.pane').forEach(p => p.classList.toggle('on', p.id === 'p-' + t));
+};
+
+// ---------- ข้อมูลร้าน ----------
+const SITE_FIELDS = [
+  ['name','ชื่อร้าน'],['tagline','สโลแกน'],['heroTitle','หัวข้อใหญ่หน้าแรก (Enter = ขึ้นบรรทัดใหม่)','ta'],['heroText','ข้อความใต้หัวข้อ','ta'],
+  ['phone','เบอร์โทร'],['line','LINE ID'],['email','อีเมล (รับคำขอนัดหมาย)'],['hours','เวลาทำการ'],
+  ['address','ที่อยู่','ta full'],['mapUrl','ลิงก์ Google Maps','full'],['aboutTitle','หัวข้อ "เกี่ยวกับเรา"','full'],['aboutText','ข้อความ "เกี่ยวกับเรา"','ta full']
+];
+function renderSite(){
+  const s = DATA.site;
+  $('siteForm').innerHTML = SITE_FIELDS.map(([k,l,o='']) => `<label class="${o.includes('full')?'full':''}">${l}${o.includes('ta')
+    ? `<textarea rows="3" data-k="${k}">${esc(s[k])}</textarea>` : `<input data-k="${k}" value="${esc(s[k])}">`}</label>`).join('');
+  $('siteForm').oninput = e => { s[e.target.dataset.k] = e.target.value; markDirty(); };
+  s.stats = s.stats || [];
+  while (s.stats.length < 4) s.stats.push({value:'',label:''});
+  $('statsForm').innerHTML = s.stats.map((x,i) => `<div class="item" style="border-left-color:var(--accent-2)">
+    <input data-i="${i}" data-f="value" value="${esc(x.value)}" placeholder="ตัวเลข"><input data-i="${i}" data-f="label" value="${esc(x.label)}" placeholder="คำอธิบาย"></div>`).join('');
+  $('statsForm').oninput = e => { s.stats[e.target.dataset.i][e.target.dataset.f] = e.target.value; markDirty(); };
+}
+
+// ---------- รายการ (บริการ / บทความ) ----------
+const ICON_OPTS = {wrench:'ประแจ',brake:'เบรก',engine:'เครื่องยนต์',snow:'แอร์',battery:'แบตเตอรี่',tire:'ล้อ/ยาง',car:'รถยนต์'};
+const LISTS = {
+  services: { box:'serviceEd', name:'บริการ', blank:() => ({id:'s'+Date.now(),icon:'wrench',title:'บริการใหม่',desc:'',price:''}),
+    fields: x => `
+      <div class="fgrid">
+        <label>ชื่อบริการ<input data-f="title" value="${esc(x.title)}"></label>
+        <label>ไอคอน<select data-f="icon">${Object.entries(ICON_OPTS).map(([k,v]) => `<option value="${k}" ${x.icon===k?'selected':''}>${v}</option>`).join('')}</select></label>
+        <label class="full">รายละเอียด<textarea rows="2" data-f="desc">${esc(x.desc)}</textarea></label>
+        <label class="full">ราคา<input data-f="price" value="${esc(x.price)}" placeholder="เช่น เริ่มต้น 990 บาท"></label>
+      </div>` },
+  posts: { box:'postEd', name:'บทความ', blank:() => ({id:'p'+Date.now(),date:new Date().toISOString().slice(0,10),title:'บทความใหม่',excerpt:'',body:''}),
+    fields: x => `
+      <div class="fgrid">
+        <label>หัวข้อ<input data-f="title" value="${esc(x.title)}"></label>
+        <label>วันที่<input type="date" data-f="date" value="${esc(x.date)}"></label>
+        <label class="full">ข้อความย่อ<textarea rows="2" data-f="excerpt">${esc(x.excerpt)}</textarea></label>
+        <label class="full">เนื้อหาเต็ม<textarea rows="6" data-f="body">${esc(x.body)}</textarea></label>
+      </div>` }
+};
+function renderList(key){
+  const L = LISTS[key], arr = DATA[key] = DATA[key] || [];
+  const box = $(L.box);
+  box.innerHTML = arr.map((x,i) => `<div class="item" data-i="${i}">
+    <div class="top-row"><b>${i+1}. ${esc(x.title)}</b><span>
+      <button class="mini" data-a="up" ${i===0?'disabled':''}>▲</button><button class="mini" data-a="down" ${i===arr.length-1?'disabled':''}>▼</button>
+      <button class="mini del" data-a="del">ลบ</button></span></div>${L.fields(x)}</div>`).join('') || `<p class="hint">ยังไม่มี${L.name}</p>`;
+  box.oninput = box.onchange = e => {
+    const it = e.target.closest('.item'), f = e.target.dataset.f; if (!it || !f) return;
+    arr[it.dataset.i][f] = e.target.value; markDirty();
+    if (f === 'title') it.querySelector('.top-row b').textContent = `${+it.dataset.i+1}. ${e.target.value}`;
+  };
+  box.onclick = e => {
+    const a = e.target.dataset.a; if (!a) return;
+    const i = +e.target.closest('.item').dataset.i;
+    if (a === 'del') { if (!confirm(`ลบ "${arr[i].title}" ?`)) return; arr.splice(i,1); }
+    if (a === 'up') [arr[i-1],arr[i]] = [arr[i],arr[i-1]];
+    if (a === 'down') [arr[i+1],arr[i]] = [arr[i],arr[i+1]];
+    markDirty(); renderList(key);
+  };
+}
+$('addService').onclick = () => { DATA.services.unshift(LISTS.services.blank()); markDirty(); renderList('services'); };
+$('addPost').onclick = () => { DATA.posts.unshift(LISTS.posts.blank()); markDirty(); renderList('posts'); };
+
+// ---------- GitHub ----------
+const CFG_KEY = 'ghCfg';
+function getCfg(){
+  return { owner:$('ghOwner').value.trim(), repo:$('ghRepo').value.trim(), branch:$('ghBranch').value.trim()||'main',
+           path:$('ghPath').value.trim()||'data.json', token:$('ghToken').value.trim() };
+}
+function loadCfg(){
+  let c = {};
+  try { c = JSON.parse(localStorage.getItem(CFG_KEY) || '{}'); } catch {}
+  // เดาค่าจาก URL ของ GitHub Pages อัตโนมัติ เช่น https://user.github.io/repo/
+  const m = location.hostname.match(/^([^.]+)\.github\.io$/);
+  if (m) { c.owner = c.owner || m[1]; c.repo = c.repo || location.pathname.split('/').filter(Boolean)[0] || `${m[1]}.github.io`; }
+  $('ghOwner').value = c.owner || ''; $('ghRepo').value = c.repo || ''; $('ghBranch').value = c.branch || 'main'; $('ghPath').value = c.path || 'data.json';
+  $('ghToken').value = sessionStorage.getItem('ghToken') || c.token || '';
+  $('ghRemember').checked = !!c.token;
+}
+$('ghSaveCfg').onclick = () => {
+  const c = getCfg();
+  sessionStorage.setItem('ghToken', c.token);
+  if (!$('ghRemember').checked) delete c.token;
+  try { localStorage.setItem(CFG_KEY, JSON.stringify(c)); } catch {}
+  toast('บันทึกการตั้งค่าแล้ว');
+};
+async function gh(c, method, body){
+  const url = `https://api.github.com/repos/${encodeURIComponent(c.owner)}/${encodeURIComponent(c.repo)}/contents/${c.path.split('/').map(encodeURIComponent).join('/')}`
+            + (method === 'GET' ? `?ref=${encodeURIComponent(c.branch)}` : '');
+  const r = await fetch(url, { method, headers:{ Authorization:`Bearer ${c.token}`, Accept:'application/vnd.github+json', 'X-GitHub-Api-Version':'2022-11-28' }, body: body && JSON.stringify(body) });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(`GitHub ${r.status}: ${j.message || r.statusText}`);
+  return j;
+}
+$('ghTest').onclick = async () => {
+  const c = getCfg(); if (!c.owner || !c.repo || !c.token) return toast('กรอก username, repository และ token ให้ครบ');
+  try { const f = await gh(c, 'GET'); toast(`เชื่อมต่อสำเร็จ ✓ พบไฟล์ ${f.path}`); } catch (e) { toast('เชื่อมต่อไม่สำเร็จ: ' + e.message, 6000); }
+};
+const b64utf8 = s => { const b = new TextEncoder().encode(s); let bin = ''; for (let i = 0; i < b.length; i += 0x8000) bin += String.fromCharCode(...b.subarray(i, i + 0x8000)); return btoa(bin); };
+
+$('saveBtn').onclick = async () => {
+  const c = getCfg();
+  if (!c.owner || !c.repo || !c.token) { $('tabs').querySelector('[data-t=github]').click(); return toast('ตั้งค่า GitHub ก่อน (หรือใช้ปุ่มดาวน์โหลด data.json แล้วอัปโหลดเอง)', 6000); }
+  $('saveBtn').disabled = true; $('saveBtn').textContent = 'กำลังบันทึก...';
+  try {
+    const cur = await gh(c, 'GET');
+    await gh(c, 'PUT', { message:`Update site content via admin (${new Date().toLocaleString('th-TH')})`, content:b64utf8(JSON.stringify(DATA, null, 2) + '\n'), sha:cur.sha, branch:c.branch });
+    sessionStorage.setItem('ghToken', c.token);
+    clearDirty(); toast('บันทึกสำเร็จ ✓ หน้าเว็บจะอัปเดตภายในประมาณ 1–2 นาที', 6000);
+  } catch (e) { toast('บันทึกไม่สำเร็จ: ' + e.message, 8000); if (dirty) markDirty(); else clearDirty(); }
+  $('saveBtn').disabled = false; if (dirty) $('saveBtn').textContent = 'บันทึกขึ้น GitHub •';
+};
+
+$('dlBtn').onclick = () => {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(DATA, null, 2) + '\n'], {type:'application/json'}));
+  a.download = 'data.json'; a.click(); URL.revokeObjectURL(a.href);
+};
+
+// ---------- เปลี่ยนรหัสผ่าน ----------
+$('changePw').onclick = async () => {
+  const p1 = $('np1').value, p2 = $('np2').value;
+  if (p1.length < 8) return toast('รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร');
+  if (p1 !== p2) return toast('รหัสผ่านทั้งสองช่องไม่ตรงกัน');
+  const salt = hex(crypto.getRandomValues(new Uint8Array(16))), iterations = 150000;
+  DATA.admin = { salt, iterations, hash: await pbkdf2(p1, salt, iterations) };
+  sessionStorage.setItem('authed', DATA.admin.hash);
+  $('np1').value = $('np2').value = ''; markDirty();
+  toast('เปลี่ยนรหัสผ่านแล้ว กด "บันทึกขึ้น GitHub" เพื่อให้มีผล', 6000);
+};
+
+// ---------- เริ่มต้น ----------
+function showApp(){
+  $('loginView').style.display = 'none'; $('appView').style.display = 'block';
+  renderSite(); renderList('services'); renderList('posts'); loadCfg();
+}
+(async () => {
+  const a = sessionStorage.getItem('authed');
+  if (!a) return;
+  try { DATA = await loadData(); if (DATA.admin.hash === a) showApp(); } catch {}
 })();
-</script></body></html>
+</script>
+</body>
+</html>
