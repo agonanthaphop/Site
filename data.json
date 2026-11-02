@@ -99,8 +99,8 @@
     }
   ],
   "admin": {
-    "salt": "798fd295d04dfead8696670ee984d3fd",
+    "salt": "475c69726090d3ad93c6c59443d058e6",
     "iterations": 150000,
-    "hash": "51fd2c919d4bcec3e4f05d5e69f2a7a93897c02afe7696db166dd5615fe56af6"
+    "hash": "5167744b98718c744b62d804ca2347959e9c219e437fd37b01f7c482f6dd4535"
   }
 }
