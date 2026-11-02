@@ -9,12 +9,36 @@
     "email": ""
   },
   "categories": [
-    { "id": "network", "name": "Network", "icon": "network" },
-    { "id": "server", "name": "Server & Windows", "icon": "server" },
-    { "id": "database", "name": "Database", "icon": "database" },
-    { "id": "security", "name": "Security", "icon": "shield" },
-    { "id": "m365", "name": "Microsoft 365", "icon": "cloud" },
-    { "id": "hardware", "name": "Hardware", "icon": "chip" }
+    {
+      "id": "network",
+      "name": "Network",
+      "icon": "network"
+    },
+    {
+      "id": "server",
+      "name": "Server & Windows",
+      "icon": "server"
+    },
+    {
+      "id": "database",
+      "name": "Database",
+      "icon": "database"
+    },
+    {
+      "id": "security",
+      "name": "Security",
+      "icon": "shield"
+    },
+    {
+      "id": "m365",
+      "name": "Microsoft 365",
+      "icon": "cloud"
+    },
+    {
+      "id": "hardware",
+      "name": "Hardware",
+      "icon": "chip"
+    }
   ],
   "posts": [
     {
@@ -22,7 +46,12 @@
       "slug": "network-troubleshooting-commands",
       "title": "คำสั่ง Windows ตรวจปัญหาเครือข่ายที่ใช้บ่อย",
       "category": "network",
-      "tags": ["windows", "cmd", "powershell", "troubleshooting"],
+      "tags": [
+        "windows",
+        "cmd",
+        "powershell",
+        "troubleshooting"
+      ],
       "date": "2026-10-28",
       "cover": "",
       "excerpt": "ชุดคำสั่งพื้นฐานไล่ปัญหาเน็ตใช้ไม่ได้ ตั้งแต่ IP, DNS, Gateway จนถึงพอร์ตปลายทาง",
@@ -33,7 +62,12 @@
       "slug": "sql-server-backup-tsql",
       "title": "Backup และ Restore SQL Server ด้วย T-SQL",
       "category": "database",
-      "tags": ["sql-server", "backup", "t-sql", "dr"],
+      "tags": [
+        "sql-server",
+        "backup",
+        "t-sql",
+        "dr"
+      ],
       "date": "2026-10-15",
       "cover": "",
       "excerpt": "สคริปต์สำรองข้อมูลแบบ Full และ Differential พร้อมวิธีทดสอบ Restore ไปเป็นฐานข้อมูลใหม่",
@@ -44,7 +78,11 @@
       "slug": "powershell-server-disk-check",
       "title": "PowerShell เช็กพื้นที่ดิสก์ของ Server หลายเครื่อง",
       "category": "server",
-      "tags": ["powershell", "monitoring", "windows-server"],
+      "tags": [
+        "powershell",
+        "monitoring",
+        "windows-server"
+      ],
       "date": "2026-10-02",
       "cover": "",
       "excerpt": "สคริปต์สั้น ๆ ดึงพื้นที่ว่างทุกไดรฟ์จากหลายเครื่องในครั้งเดียว และไฮไลต์ไดรฟ์ที่เหลือต่ำกว่า 15%",
@@ -55,7 +93,12 @@
       "slug": "bcp-dr-test-checklist",
       "title": "เช็กลิสต์ทดสอบ DR / BCP ประจำปี",
       "category": "security",
-      "tags": ["bcp", "dr", "checklist", "backup"],
+      "tags": [
+        "bcp",
+        "dr",
+        "checklist",
+        "backup"
+      ],
       "date": "2026-09-20",
       "cover": "",
       "excerpt": "รายการที่ต้องเตรียมและตรวจก่อน ระหว่าง และหลังทดสอบแผนกู้คืนระบบ",
@@ -63,8 +106,8 @@
     }
   ],
   "admin": {
-    "salt": "798fd295d04dfead8696670ee984d3fd",
+    "salt": "f5f6ca3dcd6a16f5d69d41f066900c77",
     "iterations": 150000,
-    "hash": "51fd2c919d4bcec3e4f05d5e69f2a7a93897c02afe7696db166dd5615fe56af6"
+    "hash": "9cf7ebefce28dfe5ace1eeb0beaa7f83c3e392344a08e14cb92069c8b27997ea"
   }
 }
