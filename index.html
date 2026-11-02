@@ -3,102 +3,50 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>อู่ซ่อมรถยนต์</title>
+<title>คลังความรู้ IT</title>
 <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
 <header class="top">
   <div class="wrap">
-    <a class="brand" href="#"><span class="mark"></span><span data-bind="site.name"></span></a>
-    <nav class="menu" id="menu">
-      <a href="#services">บริการ</a>
-      <a href="#about">เกี่ยวกับเรา</a>
-      <a href="#blog">บทความ</a>
-      <a href="#contact">ติดต่อ</a>
+    <a class="brand" href="./"><span class="mark"></span><span data-site="name"></span></a>
+    <nav class="menu">
+      <a href="./">บทความทั้งหมด</a>
+      <a href="#about">เกี่ยวกับ</a>
     </nav>
-    <a class="btn" href="#contact">นัดหมายซ่อม</a>
-    <button class="burger" aria-label="เมนู" onclick="document.getElementById('menu').classList.toggle('show')">☰</button>
   </div>
 </header>
 
 <section class="hero">
   <div class="wrap">
-    <div>
-      <div class="kicker" data-bind="site.tagline"></div>
-      <h1 data-bind="site.heroTitle"></h1>
-      <p data-bind="site.heroText"></p>
-      <div class="actions">
-        <a class="btn" href="#contact">จองคิวซ่อม</a>
-        <a class="btn ghost" id="callBtn" href="#">โทรหาเรา</a>
-      </div>
-    </div>
-    <div class="geo" aria-hidden="true"><span class="g1"></span><span class="g2"></span><span class="g3"></span><span class="g4"></span></div>
+    <div class="kicker" data-site="tagline"></div>
+    <h1 data-site="heroTitle"></h1>
+    <p data-site="heroText"></p>
   </div>
 </section>
 
-<div class="stats"><div class="wrap" id="stats"></div></div>
+<div class="searchbar"><div class="wrap">
+  <label class="box">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+    <input id="q" type="search" placeholder="ค้นหาบทความ คำสั่ง หรือแท็ก เช่น powershell, backup" autocomplete="off">
+    <kbd>/</kbd>
+  </label>
+</div></div>
 
-<section id="services">
-  <div class="wrap">
-    <div class="head">
-      <div><div class="kicker">Our Services</div><h2>บริการของเรา</h2></div>
-      <a class="btn dark" href="#contact">สอบถามราคา</a>
-    </div>
-    <div class="grid" id="serviceList"></div>
+<main class="home"><div class="wrap layout">
+  <aside class="side">
+    <div><h3>หมวดหมู่</h3><div class="cats" id="cats"></div></div>
+    <div><h3>แท็ก</h3><div class="tags" id="tags"></div></div>
+  </aside>
+  <div>
+    <div class="result-head"><h2 id="resultTitle">บทความล่าสุด</h2><button class="clear" id="clearBtn" hidden>ล้างตัวกรอง ✕</button></div>
+    <div class="cards" id="cards"></div>
   </div>
-</section>
+</div></main>
 
-<section class="about" id="about">
-  <div class="wrap">
-    <div>
-      <div class="kicker">About Us</div>
-      <h2 data-bind="site.aboutTitle" style="font-size:clamp(1.7rem,3vw,2.4rem);line-height:1.25"></h2>
-      <p data-bind="site.aboutText"></p>
-      <a class="btn" href="#contact">ติดต่อเรา</a>
-    </div>
-    <ul class="panel">
-      <li>ประเมินราคาก่อนซ่อม แจ้งทุกรายการ</li>
-      <li>อะไหล่แท้และเทียบคุณภาพ ให้ลูกค้าเลือก</li>
-      <li>ส่งรูปและวิดีโองานซ่อมให้ดูระหว่างดำเนินการ</li>
-      <li>รับประกันงานซ่อมและอะไหล่</li>
-    </ul>
-  </div>
-</section>
+<footer id="about"><div class="wrap"><span>© <span id="yr"></span> <span data-site="name"></span> · <span data-site="aboutText"></span></span><a href="admin.html">ผู้ดูแลระบบ</a></div></footer>
 
-<section id="blog">
-  <div class="wrap">
-    <div class="head"><div><div class="kicker">Tips &amp; News</div><h2>บทความและเคล็ดลับ</h2></div></div>
-    <div class="posts" id="postList"></div>
-  </div>
-</section>
-
-<section class="contact" id="contact">
-  <div class="wrap">
-    <div>
-      <div class="kicker">Contact</div>
-      <h2 style="font-size:clamp(1.7rem,3vw,2.4rem);margin-bottom:20px">ติดต่อและเวลาทำการ</h2>
-      <ul class="info">
-        <li><b>ที่อยู่</b><span data-bind="site.address"></span></li>
-        <li><b>โทร</b><span data-bind="site.phone"></span></li>
-        <li><b>LINE</b><span data-bind="site.line"></span></li>
-        <li><b>อีเมล</b><span data-bind="site.email"></span></li>
-        <li><b>เวลา</b><span data-bind="site.hours"></span></li>
-      </ul>
-      <p style="margin-top:20px"><a id="mapLink" class="btn dark" target="_blank" rel="noopener" href="#">ดูแผนที่</a></p>
-    </div>
-    <form class="book" id="bookForm">
-      <h3>นัดหมายเข้ารับบริการ</h3>
-      <div class="row2"><input name="name" placeholder="ชื่อ-นามสกุล" required><input name="tel" placeholder="เบอร์โทร" required></div>
-      <div class="row2"><input name="car" placeholder="ยี่ห้อ / รุ่นรถ"><input name="date" type="date"></div>
-      <select name="service" id="serviceSelect"><option value="">เลือกบริการ</option></select>
-      <textarea name="note" rows="4" placeholder="อาการ / รายละเอียดเพิ่มเติม"></textarea>
-      <button class="btn" type="submit">ส่งคำขอนัดหมาย (ทางอีเมล)</button>
-    </form>
-  </div>
-</section>
-
-<footer><div class="wrap"><span>© <span id="yr"></span> <span data-bind="site.name"></span></span><a href="admin.html">ผู้ดูแลระบบ</a></div></footer>
-
-<script src="assets/app.js"></script>
+<script src="assets/common.js"></script>
+<script src="assets/home.js"></script>
 </body>
 </html>

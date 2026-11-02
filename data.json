@@ -1,106 +1,70 @@
 {
   "site": {
-    "name": "GEARBOX GARAGE",
-    "tagline": "อู่ซ่อมรถยนต์ครบวงจร",
-    "heroTitle": "ซ่อมตรงจุด\nขับมั่นใจทุกเส้นทาง",
-    "heroText": "ทีมช่างผู้ชำนาญการ เครื่องมือวิเคราะห์ทันสมัย ประเมินราคาก่อนซ่อมทุกครั้ง ไม่มีค่าใช้จ่ายแอบแฝง",
-    "phone": "02-123-4567",
-    "line": "@gearboxgarage",
-    "email": "contact@gearbox-garage.com",
-    "address": "99/9 ถนนพระราม 9 แขวงห้วยขวาง เขตห้วยขวาง กรุงเทพฯ 10310",
-    "hours": "จันทร์ – เสาร์ 08:00 – 18:00 น. (หยุดวันอาทิตย์)",
-    "mapUrl": "https://maps.google.com/?q=Rama+9+Bangkok",
-    "aboutTitle": "ประสบการณ์กว่า 15 ปี ที่ลูกค้าไว้วางใจ",
-    "aboutText": "เราเริ่มต้นจากอู่เล็ก ๆ ที่ตั้งใจทำงานทุกคันเหมือนรถของตัวเอง ปัจจุบันให้บริการลูกค้ากว่า 20,000 คัน ด้วยมาตรฐานงานซ่อมที่ตรวจสอบได้และรับประกันงานทุกชิ้น",
-    "stats": [
-      {
-        "value": "15+",
-        "label": "ปีประสบการณ์"
-      },
-      {
-        "value": "20K",
-        "label": "คันที่ดูแล"
-      },
-      {
-        "value": "12",
-        "label": "ช่างผู้ชำนาญ"
-      },
-      {
-        "value": "6 เดือน",
-        "label": "รับประกันงาน"
-      }
-    ]
+    "name": "IT NOTEBOOK",
+    "tagline": "คลังความรู้ไอที",
+    "heroTitle": "จดไว้ ค้นเจอ\nใช้ได้จริงหน้างาน",
+    "heroText": "รวมคู่มือ คำสั่ง และวิธีแก้ปัญหาด้าน Network, Server, Database และ Security ที่ใช้งานจริง จัดหมวดหมู่และค้นหาได้ในไม่กี่วินาที",
+    "author": "ผู้ดูแลระบบ",
+    "aboutText": "บันทึกส่วนตัวของงานดูแลระบบไอที เขียนไว้เพื่อให้ตัวเองและทีมหยิบไปใช้ซ้ำได้ทันที",
+    "email": ""
   },
-  "services": [
-    {
-      "id": "s1",
-      "icon": "wrench",
-      "title": "ตรวจเช็กระยะ",
-      "desc": "เปลี่ยนถ่ายน้ำมันเครื่อง ไส้กรอง และตรวจเช็กตามระยะทางของผู้ผลิต",
-      "price": "เริ่มต้น 990 บาท"
-    },
-    {
-      "id": "s2",
-      "icon": "brake",
-      "title": "ระบบเบรก",
-      "desc": "เปลี่ยนผ้าเบรก เจียรจานเบรก ไล่ลมและเปลี่ยนน้ำมันเบรก",
-      "price": "เริ่มต้น 1,200 บาท"
-    },
-    {
-      "id": "s3",
-      "icon": "engine",
-      "title": "เครื่องยนต์",
-      "desc": "วิเคราะห์อาการด้วยเครื่องสแกน OBD-II ซ่อมและโอเวอร์ฮอลเครื่องยนต์",
-      "price": "ประเมินหน้างาน"
-    },
-    {
-      "id": "s4",
-      "icon": "snow",
-      "title": "ระบบแอร์",
-      "desc": "ล้างตู้แอร์ เติมน้ำยา ตรวจรั่ว และเปลี่ยนคอมเพรสเซอร์",
-      "price": "เริ่มต้น 1,500 บาท"
-    },
-    {
-      "id": "s5",
-      "icon": "battery",
-      "title": "ระบบไฟฟ้า",
-      "desc": "ตรวจแบตเตอรี่ ไดชาร์จ ไดสตาร์ท และระบบไฟส่องสว่าง",
-      "price": "เริ่มต้น 500 บาท"
-    },
-    {
-      "id": "s6",
-      "icon": "tire",
-      "title": "ช่วงล่างและยาง",
-      "desc": "ตั้งศูนย์ ถ่วงล้อ เปลี่ยนโช้คอัพ ลูกหมาก และยางรถยนต์",
-      "price": "เริ่มต้น 600 บาท"
-    }
+  "categories": [
+    { "id": "network", "name": "Network", "icon": "network" },
+    { "id": "server", "name": "Server & Windows", "icon": "server" },
+    { "id": "database", "name": "Database", "icon": "database" },
+    { "id": "security", "name": "Security", "icon": "shield" },
+    { "id": "m365", "name": "Microsoft 365", "icon": "cloud" },
+    { "id": "hardware", "name": "Hardware", "icon": "chip" }
   ],
   "posts": [
     {
       "id": "p1",
-      "date": "2026-10-20",
-      "title": "5 สัญญาณเตือนว่าผ้าเบรกใกล้หมด",
-      "excerpt": "เสียงเหล็กขูด แป้นเบรกลึก รถดึงไปข้างใดข้างหนึ่ง อย่ารอให้สายเกินไป",
-      "body": "หากได้ยินเสียงแหลมหรือเสียงเหล็กเสียดสีขณะเบรก รู้สึกว่าแป้นเบรกลึกกว่าปกติ หรือรถดึงไปข้างใดข้างหนึ่ง ควรนำรถเข้าตรวจเช็กทันที การเปลี่ยนผ้าเบรกตั้งแต่เนิ่น ๆ ช่วยประหยัดค่าเจียรหรือเปลี่ยนจานเบรกได้มาก"
+      "slug": "network-troubleshooting-commands",
+      "title": "คำสั่ง Windows ตรวจปัญหาเครือข่ายที่ใช้บ่อย",
+      "category": "network",
+      "tags": ["windows", "cmd", "powershell", "troubleshooting"],
+      "date": "2026-10-28",
+      "cover": "",
+      "excerpt": "ชุดคำสั่งพื้นฐานไล่ปัญหาเน็ตใช้ไม่ได้ ตั้งแต่ IP, DNS, Gateway จนถึงพอร์ตปลายทาง",
+      "body": "## ไล่ปัญหาตามลำดับชั้น\n\nเริ่มจากเครื่องตัวเองออกไปหาปลายทาง จะช่วยตัดสาเหตุได้เร็วที่สุด\n\n| ขั้น | ตรวจอะไร | คำสั่ง |\n|---|---|---|\n| 1 | IP / Gateway | `ipconfig /all` |\n| 2 | ต่อ Gateway ได้ไหม | `ping 192.168.1.1` |\n| 3 | DNS | `nslookup google.com` |\n| 4 | เส้นทาง | `tracert 8.8.8.8` |\n| 5 | พอร์ตปลายทาง | `Test-NetConnection` |\n\n## คำสั่งที่ใช้บ่อย\n\n```cmd\nipconfig /all\nipconfig /flushdns\nipconfig /release && ipconfig /renew\nnetstat -ano | findstr :443\n```\n\n## ทดสอบพอร์ตด้วย PowerShell\n\n```powershell\nTest-NetConnection -ComputerName 10.0.0.20 -Port 1433\n# ดูเฉพาะผลลัพธ์ว่าเชื่อมต่อได้หรือไม่\n(Test-NetConnection 10.0.0.20 -Port 3389).TcpTestSucceeded\n```\n\n> **Tip:** ถ้า `ping` ไม่ผ่านแต่ `Test-NetConnection` ผ่าน แปลว่าปลายทางบล็อก ICMP ไม่ได้แปลว่าเครื่องดับ"
     },
     {
       "id": "p2",
-      "date": "2026-10-05",
-      "title": "ควรเปลี่ยนน้ำมันเครื่องทุกกี่กิโลเมตร?",
-      "excerpt": "น้ำมันสังเคราะห์กับกึ่งสังเคราะห์ต่างกันอย่างไร และเลือกแบบไหนให้เหมาะกับการใช้งาน",
-      "body": "โดยทั่วไปน้ำมันกึ่งสังเคราะห์ควรเปลี่ยนทุก 5,000–7,000 กม. ส่วนสังเคราะห์แท้ 10,000 กม. แต่หากขับในเมืองที่รถติดบ่อย ควรเปลี่ยนเร็วกว่ากำหนดเล็กน้อย ตรวจคู่มือรถของคุณประกอบเสมอ"
+      "slug": "sql-server-backup-tsql",
+      "title": "Backup และ Restore SQL Server ด้วย T-SQL",
+      "category": "database",
+      "tags": ["sql-server", "backup", "t-sql", "dr"],
+      "date": "2026-10-15",
+      "cover": "",
+      "excerpt": "สคริปต์สำรองข้อมูลแบบ Full และ Differential พร้อมวิธีทดสอบ Restore ไปเป็นฐานข้อมูลใหม่",
+      "body": "## Full Backup\n\n```sql\nBACKUP DATABASE [MyDB]\nTO DISK = N'D:\\Backup\\MyDB_FULL.bak'\nWITH COMPRESSION, CHECKSUM, STATS = 10;\n```\n\n## Differential Backup\n\n```sql\nBACKUP DATABASE [MyDB]\nTO DISK = N'D:\\Backup\\MyDB_DIFF.bak'\nWITH DIFFERENTIAL, COMPRESSION, CHECKSUM;\n```\n\n## ตรวจไฟล์ก่อน Restore\n\n```sql\nRESTORE VERIFYONLY FROM DISK = N'D:\\Backup\\MyDB_FULL.bak' WITH CHECKSUM;\nRESTORE FILELISTONLY FROM DISK = N'D:\\Backup\\MyDB_FULL.bak';\n```\n\n## Restore เป็นฐานข้อมูลทดสอบ\n\n```sql\nRESTORE DATABASE [MyDB_Test]\nFROM DISK = N'D:\\Backup\\MyDB_FULL.bak'\nWITH MOVE 'MyDB' TO N'D:\\Data\\MyDB_Test.mdf',\n     MOVE 'MyDB_log' TO N'D:\\Data\\MyDB_Test_log.ldf',\n     RECOVERY, STATS = 10;\n```\n\n- ชื่อ logical file (`MyDB`, `MyDB_log`) ดูได้จากผล `FILELISTONLY`\n- Backup ที่ไม่เคยทดสอบ Restore เท่ากับยังไม่มี Backup"
     },
     {
       "id": "p3",
-      "date": "2026-09-18",
-      "title": "เตรียมรถให้พร้อมก่อนเดินทางไกล",
-      "excerpt": "เช็กลิสต์ง่าย ๆ 7 ข้อ ก่อนออกต่างจังหวัด",
-      "body": "ตรวจลมยางรวมยางอะไหล่ ระดับน้ำมันเครื่อง น้ำหล่อเย็น น้ำมันเบรก ใบปัดน้ำฝน ไฟส่องสว่าง และแบตเตอรี่ หากไม่แน่ใจ แวะให้ช่างตรวจฟรีก่อนเดินทางได้"
+      "slug": "powershell-server-disk-check",
+      "title": "PowerShell เช็กพื้นที่ดิสก์ของ Server หลายเครื่อง",
+      "category": "server",
+      "tags": ["powershell", "monitoring", "windows-server"],
+      "date": "2026-10-02",
+      "cover": "",
+      "excerpt": "สคริปต์สั้น ๆ ดึงพื้นที่ว่างทุกไดรฟ์จากหลายเครื่องในครั้งเดียว และไฮไลต์ไดรฟ์ที่เหลือต่ำกว่า 15%",
+      "body": "## สคริปต์\n\n```powershell\n$servers = 'SRV-APP01','SRV-DB01','SRV-FILE01'\n\nGet-CimInstance Win32_LogicalDisk -ComputerName $servers -Filter 'DriveType=3' |\n  Select-Object PSComputerName, DeviceID,\n    @{n='SizeGB';e={[math]::Round($_.Size/1GB,1)}},\n    @{n='FreeGB';e={[math]::Round($_.FreeSpace/1GB,1)}},\n    @{n='Free%'; e={[math]::Round($_.FreeSpace/$_.Size*100,1)}} |\n  Sort-Object 'Free%' |\n  Format-Table -AutoSize\n```\n\n## ส่งออกเป็น CSV\n\n```powershell\n... | Export-Csv C:\\Reports\\disk.csv -NoTypeInformation -Encoding UTF8\n```\n\n### ข้อควรรู้\n1. ต้องเปิด WinRM บนเครื่องปลายทาง (`Enable-PSRemoting`)\n2. รันด้วยบัญชีที่มีสิทธิ์ admin บนทุกเครื่อง"
+    },
+    {
+      "id": "p4",
+      "slug": "bcp-dr-test-checklist",
+      "title": "เช็กลิสต์ทดสอบ DR / BCP ประจำปี",
+      "category": "security",
+      "tags": ["bcp", "dr", "checklist", "backup"],
+      "date": "2026-09-20",
+      "cover": "",
+      "excerpt": "รายการที่ต้องเตรียมและตรวจก่อน ระหว่าง และหลังทดสอบแผนกู้คืนระบบ",
+      "body": "## ก่อนทดสอบ\n- [x] ระบุระบบสำคัญและเป้าหมาย RTO / RPO\n- [x] ยืนยันว่ามี Backup ล่าสุดครบทุกระบบ\n- [ ] แจ้งผู้เกี่ยวข้องและกำหนดช่วงเวลา\n\n## ระหว่างทดสอบ\n- [ ] Restore ฐานข้อมูลบนเครื่องสำรอง\n- [ ] เปิดแอปพลิเคชันและให้ผู้ใช้ทดสอบจริง\n- [ ] จับเวลาตั้งแต่เริ่มจนระบบใช้งานได้\n\n## หลังทดสอบ\n- [ ] บันทึกเวลาที่ใช้เทียบกับ RTO\n- [ ] สรุปปัญหาที่พบและแผนแก้ไข\n- [ ] เก็บหลักฐาน (ภาพหน้าจอ, log)"
     }
   ],
   "admin": {
-    "salt": "475c69726090d3ad93c6c59443d058e6",
+    "salt": "798fd295d04dfead8696670ee984d3fd",
     "iterations": 150000,
-    "hash": "5167744b98718c744b62d804ca2347959e9c219e437fd37b01f7c482f6dd4535"
+    "hash": "51fd2c919d4bcec3e4f05d5e69f2a7a93897c02afe7696db166dd5615fe56af6"
   }
 }

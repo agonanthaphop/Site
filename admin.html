@@ -4,7 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
-<title>ระบบจัดการเว็บไซต์</title>
+<title>ระบบจัดการคลังความรู้</title>
+<link rel="stylesheet" href="assets/vendor/hljs.css">
 <link rel="stylesheet" href="assets/style.css">
 <style>
   body{background:#e9e6e0}
@@ -14,35 +15,71 @@
   .login h1{font-size:1.5rem}
   .err{color:#c62828;font-size:.9rem;min-height:1.2em}
   .app{display:none}
-  .bar{background:var(--ink);color:#fff}
-  .bar .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;gap:10px}
-  .bar .acts{display:flex;gap:10px;flex-wrap:wrap}
-  .bar .btn{padding:9px 18px;font-size:.92rem}
-  .tabs{display:flex;gap:4px;margin:26px 0 0;flex-wrap:wrap}
-  .tabs button{font-family:'Kanit';border:0;background:#d6d2ca;padding:11px 20px;cursor:pointer;font-size:.97rem}
+  .bar{background:var(--ink);color:#fff;position:sticky;top:0;z-index:20}
+  .bar .wrap{display:flex;align-items:center;justify-content:space-between;min-height:62px;gap:10px;max-width:1400px}
+  .bar .acts{display:flex;gap:8px;flex-wrap:wrap}
+  .bar .btn{padding:8px 16px;font-size:.9rem}
+  .wide{max-width:1400px}
+  .tabs{display:flex;gap:4px;margin:22px 0 0;flex-wrap:wrap}
+  .tabs button{font-family:'Kanit';border:0;background:#d6d2ca;padding:10px 18px;cursor:pointer;font-size:.95rem}
   .tabs button.on{background:#fff;color:var(--accent)}
-  .pane{display:none;background:#fff;padding:30px;margin-bottom:40px}
+  .pane{display:none;background:#fff;padding:28px;margin-bottom:40px}
   .pane.on{display:block}
-  .pane h2{font-size:1.3rem;margin-bottom:6px}
-  .hint{color:var(--muted);font-size:.9rem;margin-bottom:20px}
-  .fgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .pane h2{font-size:1.3rem;margin-bottom:4px}
+  .hint{color:var(--muted);font-size:.9rem;margin-bottom:18px}
+  .fgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
   .fgrid .full{grid-column:1/-1}
-  label{display:grid;gap:6px;font-family:'Kanit';font-size:.92rem}
-  .item{border:1px solid var(--line);border-left:4px solid var(--accent);padding:18px;margin-bottom:14px;display:grid;gap:12px;background:#fbfaf8}
-  .item .top-row{display:flex;justify-content:space-between;align-items:center;gap:10px}
-  .item .top-row b{font-family:'Kanit'}
-  .mini{border:0;background:none;cursor:pointer;font-family:'Kanit';font-size:.9rem;padding:4px 8px}
-  .mini.del{color:#c62828}
-  .stats-ed{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-  .toast{position:fixed;right:20px;bottom:20px;background:var(--ink);color:#fff;padding:14px 20px;border-left:4px solid var(--accent);display:none;max-width:420px;z-index:99}
+  .g4{display:grid;grid-template-columns:2fr 1.4fr 1fr 1fr;gap:14px}
+  label{display:grid;gap:5px;font-family:'Kanit';font-size:.9rem}
+  input,select,textarea{width:100%;padding:10px 12px;border:1px solid var(--line);background:var(--paper);font:inherit;font-family:'Sarabun';font-size:.98rem;border-radius:3px}
+  input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);border-color:transparent}
+  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .sp{flex:1}
+  .lbtn{font-family:'Kanit';border:1px solid var(--line);background:var(--paper);padding:7px 14px;cursor:pointer;font-size:.9rem;color:var(--text)}
+  .lbtn:hover{border-color:var(--accent);color:var(--accent)}
+  .lbtn.del{color:#c62828}
+  .lbtn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+  table.list{width:100%;border-collapse:collapse;font-size:.95rem}
+  table.list th,table.list td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+  table.list th{font-family:'Kanit';font-weight:600;color:var(--muted);font-size:.85rem}
+  table.list tr:hover td{background:#faf9f6}
+  table.list td.t{font-weight:600}
+  .badge{font-size:.75rem;padding:2px 8px;background:var(--accent-2);color:var(--ink);font-family:'Kanit';margin-left:6px}
+  .editor{display:none}
+  .editor.on{display:block}
+  .md-wrap{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line);margin-top:6px}
+  .toolbar{grid-column:1/-1;display:flex;gap:2px;flex-wrap:wrap;background:var(--ink);padding:6px}
+  .toolbar button{background:transparent;border:0;color:#dfe3ea;font-family:'Kanit';font-size:.86rem;padding:6px 10px;cursor:pointer;min-width:34px}
+  .toolbar button:hover{background:var(--steel);color:var(--accent-2)}
+  .toolbar .sep{width:1px;background:#3a4357;margin:4px 6px}
+  .toolbar .view{margin-left:auto;display:none}
+  #mdInput{border:0;border-radius:0;min-height:560px;resize:vertical;font-family:'JetBrains Mono',monospace;font-size:.9rem;line-height:1.65;background:#fbfaf8;border-right:1px solid var(--line)}
+  #mdInput.drag{outline:3px dashed var(--accent);outline-offset:-8px}
+  #mdPreview{padding:22px 26px;max-height:640px;overflow:auto;background:#fff}
+  #mdPreview.md h2::before{display:none}
+  .lbtn{white-space:nowrap}
+  .cover-row{display:flex;gap:10px;align-items:end}
+  .cover-row img{height:60px;width:100px;object-fit:cover;border:1px solid var(--line)}
+  .cat-item{display:grid;grid-template-columns:1fr 1.4fr 1fr auto;gap:10px;align-items:end;padding:14px;border:1px solid var(--line);border-left:4px solid var(--accent);margin-bottom:10px;background:#fbfaf8}
+  .cat-item .ic{width:22px;height:22px;color:var(--accent)}
+  .toast{position:fixed;right:20px;bottom:20px;background:var(--ink);color:#fff;padding:14px 20px;border-left:4px solid var(--accent);display:none;max-width:440px;z-index:99}
   .dirty{background:var(--accent-2)!important;color:var(--ink)!important}
   .box{background:var(--paper);padding:16px;border-left:4px solid var(--accent-2);font-size:.92rem;margin:16px 0}
-  @media(max-width:700px){.fgrid,.stats-ed{grid-template-columns:1fr}.bar .wrap{height:auto;padding:12px 20px;flex-direction:column}}
+  .uploading{position:fixed;inset:0;background:rgba(16,20,28,.5);display:none;place-items:center;z-index:98;color:#fff;font-family:'Kanit';font-size:1.2rem}
+  @media(max-width:900px){
+    .fgrid,.g4,.cat-item{grid-template-columns:1fr}
+    .md-wrap{grid-template-columns:1fr}
+    .toolbar .view{display:block}
+    #mdPreview{display:none;max-height:none;min-height:560px}
+    .md-wrap.preview #mdPreview{display:block}
+    .md-wrap.preview #mdInput{display:none}
+    .bar .wrap{padding:10px 20px;flex-direction:column}
+    table.list .hide-m{display:none}
+  }
 </style>
 </head>
 <body>
 
-<!-- หน้าล็อกอิน -->
 <div class="login" id="loginView">
   <form id="loginForm">
     <div class="kicker" style="color:var(--accent)">Admin</div>
@@ -50,71 +87,115 @@
     <label>รหัสผ่าน<input type="password" id="pw" autocomplete="current-password" required autofocus></label>
     <div class="err" id="loginErr"></div>
     <button class="btn" type="submit" id="loginBtn">เข้าสู่ระบบ</button>
-    <a href="index.html" style="font-size:.9rem;color:var(--muted)">← กลับหน้าเว็บ</a>
+    <a href="./" style="font-size:.9rem;color:var(--muted)">← กลับหน้าเว็บ</a>
   </form>
 </div>
 
-<!-- หน้าจัดการ -->
 <div class="app" id="appView">
   <div class="bar"><div class="wrap">
-    <div class="brand"><span class="mark"></span>จัดการเว็บไซต์</div>
+    <div class="brand"><span class="mark"></span>จัดการคลังความรู้</div>
     <div class="acts">
       <button class="btn" id="saveBtn">บันทึกขึ้น GitHub</button>
       <button class="btn ghost" id="dlBtn">ดาวน์โหลด data.json</button>
-      <a class="btn ghost" href="index.html" target="_blank">ดูหน้าเว็บ</a>
+      <a class="btn ghost" href="./" target="_blank">ดูหน้าเว็บ</a>
       <button class="btn ghost" id="logoutBtn">ออกจากระบบ</button>
     </div>
   </div></div>
 
-  <div class="wrap">
+  <div class="wrap wide">
     <div class="tabs" id="tabs">
-      <button data-t="site" class="on">ข้อมูลร้าน</button>
-      <button data-t="services">บริการ</button>
-      <button data-t="posts">บทความ</button>
+      <button data-t="posts" class="on">บทความ</button>
+      <button data-t="cats">หมวดหมู่</button>
+      <button data-t="site">ข้อมูลเว็บ</button>
       <button data-t="github">ตั้งค่า GitHub</button>
       <button data-t="pass">เปลี่ยนรหัสผ่าน</button>
     </div>
 
-    <div class="pane on" id="p-site">
-      <h2>ข้อมูลร้าน</h2><p class="hint">ข้อความที่แสดงบนหน้าแรก ส่วนติดต่อ และส่วนเกี่ยวกับเรา</p>
+    <!-- บทความ -->
+    <div class="pane on" id="p-posts">
+      <div id="postListView">
+        <div class="row" style="margin-bottom:16px">
+          <div><h2>บทความ</h2><p class="hint" style="margin:0">คลิกชื่อบทความเพื่อแก้ไข · ติ๊ก "ฉบับร่าง" เพื่อซ่อนจากหน้าเว็บ</p></div>
+          <span class="sp"></span>
+          <input id="postSearch" placeholder="ค้นหาในรายการ..." style="max-width:260px">
+          <button class="btn" id="addPost">+ เขียนบทความใหม่</button>
+        </div>
+        <table class="list"><thead><tr><th>หัวข้อ</th><th class="hide-m">หมวด</th><th class="hide-m">วันที่</th><th></th></tr></thead><tbody id="postRows"></tbody></table>
+      </div>
+
+      <div class="editor" id="editorView">
+        <div class="row" style="margin-bottom:18px">
+          <button class="lbtn" id="backBtn">← กลับไปรายการ</button>
+          <span class="sp"></span>
+          <a class="lbtn" id="viewLive" target="_blank">เปิดหน้าบทความจริง ↗</a>
+          <button class="lbtn del" id="delPost">ลบบทความ</button>
+        </div>
+        <div class="fgrid">
+          <label class="full">หัวข้อ<input data-f="title" id="fTitle"></label>
+        </div>
+        <div class="g4" style="margin-top:14px">
+          <label>Slug (ส่วนท้ายของลิงก์ ใช้ a-z 0-9 -)<input data-f="slug" id="fSlug"></label>
+          <label>หมวดหมู่<select data-f="category" id="fCat"></select></label>
+          <label>วันที่<input type="date" data-f="date"></label>
+          <label style="align-content:end"><span class="row" style="font-family:Sarabun;padding:10px 0"><input type="checkbox" data-f="draft" style="width:auto"> ฉบับร่าง (ยังไม่แสดง)</span></label>
+        </div>
+        <div class="fgrid" style="margin-top:14px">
+          <label>แท็ก (คั่นด้วยเครื่องหมายจุลภาค ,)<input data-f="tags" placeholder="เช่น powershell, backup, windows"></label>
+          <label>รูปปก (ไม่บังคับ)
+            <span class="cover-row"><input data-f="cover" placeholder="images/....webp"><button type="button" class="lbtn" id="coverUp">อัปโหลด</button><img id="coverPrev" hidden alt=""></span>
+          </label>
+          <label class="full">ข้อความย่อ (แสดงในการ์ดหน้าแรก)<textarea data-f="excerpt" rows="2"></textarea></label>
+        </div>
+        <label style="margin-top:16px">เนื้อหา (Markdown) — วางรูปด้วย Ctrl+V หรือลากไฟล์รูปมาวางได้</label>
+        <div class="md-wrap" id="mdWrap">
+          <div class="toolbar" id="toolbar">
+            <button data-md="h2" title="หัวข้อใหญ่">H2</button><button data-md="h3" title="หัวข้อย่อย">H3</button>
+            <span class="sep"></span>
+            <button data-md="bold" title="ตัวหนา"><b>B</b></button><button data-md="italic" title="ตัวเอียง"><i>I</i></button><button data-md="code" title="โค้ดในบรรทัด">`code`</button>
+            <span class="sep"></span>
+            <button data-md="ul" title="รายการ">• รายการ</button><button data-md="ol" title="รายการตัวเลข">1. ลำดับ</button><button data-md="task" title="เช็กลิสต์">☑ เช็กลิสต์</button>
+            <span class="sep"></span>
+            <button data-md="block" title="บล็อกโค้ด">{ } บล็อกโค้ด</button><button data-md="table" title="ตาราง">ตาราง</button><button data-md="quote" title="กล่องข้อความ">❝ Tip</button><button data-md="link" title="ลิงก์">ลิงก์</button><button data-md="img" title="แทรกรูป">🖼 รูป</button>
+            <button class="view" data-md="toggle">ดูตัวอย่าง</button>
+          </div>
+          <textarea id="mdInput" spellcheck="false"></textarea>
+          <div id="mdPreview" class="md"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- หมวดหมู่ -->
+    <div class="pane" id="p-cats">
+      <div class="row" style="margin-bottom:16px"><div><h2>หมวดหมู่</h2><p class="hint" style="margin:0">เปลี่ยน ID แล้วบทความในหมวดจะย้ายตามให้อัตโนมัติ · ลบได้เฉพาะหมวดที่ไม่มีบทความ</p></div><span class="sp"></span><button class="btn" id="addCat">+ เพิ่มหมวด</button></div>
+      <div id="catEd"></div>
+    </div>
+
+    <!-- ข้อมูลเว็บ -->
+    <div class="pane" id="p-site">
+      <h2>ข้อมูลเว็บไซต์</h2><p class="hint">ชื่อเว็บ ข้อความหน้าแรก และข้อความท้ายเว็บ</p>
       <div class="fgrid" id="siteForm"></div>
-      <h3 style="margin:26px 0 10px;font-size:1.05rem">ตัวเลขแถบสีส้ม</h3>
-      <div class="stats-ed" id="statsForm"></div>
     </div>
 
-    <div class="pane" id="p-services">
-      <div class="head" style="margin-bottom:16px"><div><h2>บริการ</h2><p class="hint" style="margin:0">เพิ่ม แก้ไข ลบ หรือเลื่อนลำดับบริการ</p></div><button class="btn" id="addService">+ เพิ่มบริการ</button></div>
-      <div id="serviceEd"></div>
-    </div>
-
-    <div class="pane" id="p-posts">
-      <div class="head" style="margin-bottom:16px"><div><h2>บทความ</h2><p class="hint" style="margin:0">บทความเรียงตามวันที่ล่าสุดบนหน้าเว็บโดยอัตโนมัติ</p></div><button class="btn" id="addPost">+ เพิ่มบทความ</button></div>
-      <div id="postEd"></div>
-    </div>
-
+    <!-- GitHub -->
     <div class="pane" id="p-github">
       <h2>ตั้งค่าการบันทึกขึ้น GitHub</h2>
-      <p class="hint">ปุ่ม "บันทึกขึ้น GitHub" จะ commit ไฟล์ data.json เข้า repository โดยตรง แล้ว GitHub Pages จะอัปเดตหน้าเว็บภายในประมาณ 1 นาที</p>
+      <p class="hint">ใช้ทั้งการบันทึก data.json และการอัปโหลดรูปเข้าโฟลเดอร์ images/ ของ repo</p>
       <div class="fgrid">
-        <label>GitHub username / organization<input id="ghOwner" placeholder="เช่น nanthaphop"></label>
-        <label>Repository<input id="ghRepo" placeholder="เช่น garage-site"></label>
+        <label>GitHub username<input id="ghOwner" placeholder="เช่น agonanthaphop"></label>
+        <label>Repository<input id="ghRepo" placeholder="เช่น Site"></label>
         <label>Branch<input id="ghBranch" value="main"></label>
         <label>Path ของไฟล์ข้อมูล<input id="ghPath" value="data.json"></label>
         <label class="full">Personal Access Token (fine-grained)<input id="ghToken" type="password" placeholder="github_pat_..."></label>
-        <label class="full" style="display:flex;gap:10px;align-items:center;font-family:Sarabun"><input type="checkbox" id="ghRemember" style="width:auto"> จำ token ไว้ในเบราว์เซอร์นี้ (ใช้เฉพาะเครื่องส่วนตัวเท่านั้น)</label>
+        <label class="full"><span class="row" style="font-family:Sarabun"><input type="checkbox" id="ghRemember" style="width:auto"> จำ token ไว้ในเบราว์เซอร์นี้ (ใช้เฉพาะเครื่องส่วนตัวเท่านั้น)</span></label>
       </div>
-      <p style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap"><button class="btn dark" id="ghSaveCfg">บันทึกการตั้งค่า</button><button class="btn ghost" style="box-shadow:inset 0 0 0 2px var(--ink);color:var(--ink)" id="ghTest">ทดสอบการเชื่อมต่อ</button></p>
-      <div class="box">
-        <b>วิธีสร้าง token:</b> GitHub → Settings → Developer settings → Personal access tokens → Fine-grained tokens → Generate new token<br>
-        • Repository access: <b>Only select repositories</b> แล้วเลือก repo ของเว็บนี้เท่านั้น<br>
-        • Permissions → Repository permissions → <b>Contents: Read and write</b><br>
-        • ตั้งวันหมดอายุตามความเหมาะสม และอย่าแชร์ token ให้ผู้อื่น
-      </div>
+      <p class="row" style="margin-top:16px"><button class="btn dark" id="ghSaveCfg">บันทึกการตั้งค่า</button><button class="lbtn" id="ghTest">ทดสอบการเชื่อมต่อ</button></p>
+      <div class="box">Token ต้องเลือก repo นี้ และมีสิทธิ์ <b>Contents: Read and write</b> · อย่าใส่ token ลงในไฟล์ใด ๆ ใน repo</div>
     </div>
 
+    <!-- รหัสผ่าน -->
     <div class="pane" id="p-pass">
       <h2>เปลี่ยนรหัสผ่านหน้าจัดการ</h2>
-      <p class="hint">รหัสผ่านถูกเก็บเป็นค่า hash (PBKDF2-SHA256) ใน data.json ไม่เก็บตัวรหัสจริง หลังเปลี่ยนแล้วต้องกด "บันทึกขึ้น GitHub" ด้วย</p>
+      <p class="hint">เก็บเป็นค่า hash (PBKDF2-SHA256) ใน data.json · เปลี่ยนแล้วต้องกด "บันทึกขึ้น GitHub" ด้วย</p>
       <div class="fgrid">
         <label>รหัสผ่านใหม่ (อย่างน้อย 8 ตัวอักษร)<input type="password" id="np1" autocomplete="new-password"></label>
         <label>ยืนยันรหัสผ่านใหม่<input type="password" id="np2" autocomplete="new-password"></label>
@@ -124,42 +205,40 @@
   </div>
 </div>
 
+<input type="file" id="fileIn" accept="image/*" hidden>
+<div class="uploading" id="uploading">กำลังอัปโหลดรูป...</div>
 <div class="toast" id="toast"></div>
 
+<script src="assets/vendor/marked.min.js"></script>
+<script src="assets/vendor/purify.min.js"></script>
+<script src="assets/vendor/highlight.min.js"></script>
+<script src="assets/common.js"></script>
 <script>
 const $ = id => document.getElementById(id);
-const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-let DATA = null, dirty = false;
+let DATA = null, dirty = false, CUR = null;       // CUR = บทความที่กำลังแก้
+const IMG_MAP = {};                                // path → objectURL ให้พรีวิวรูปที่เพิ่งอัปโหลดได้ทันที
 
 function toast(msg, ms = 3500){ const t = $('toast'); t.textContent = msg; t.style.display = 'block'; clearTimeout(t._h); t._h = setTimeout(() => t.style.display = 'none', ms); }
 function markDirty(){ dirty = true; $('saveBtn').classList.add('dirty'); $('saveBtn').textContent = 'บันทึกขึ้น GitHub •'; }
 function clearDirty(){ dirty = false; $('saveBtn').classList.remove('dirty'); $('saveBtn').textContent = 'บันทึกขึ้น GitHub'; }
 window.addEventListener('beforeunload', e => { if (dirty) { e.preventDefault(); e.returnValue = ''; } });
 
-// ---------- รหัสผ่าน (PBKDF2 ผ่าน Web Crypto) ----------
-const hex = buf => [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2,'0')).join('');
+// ================= รหัสผ่าน =================
+const hex = buf => [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
 async function pbkdf2(pw, salt, iter){
   const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(pw), 'PBKDF2', false, ['deriveBits']);
   return hex(await crypto.subtle.deriveBits({name:'PBKDF2', hash:'SHA-256', salt:new TextEncoder().encode(salt), iterations:iter}, key, 256));
 }
-async function loadData(){
-  const r = await fetch('data.json?v=' + Date.now(), {cache:'no-store'});
-  if (!r.ok) throw new Error('โหลด data.json ไม่ได้');
-  return r.json();
-}
-
 $('loginForm').addEventListener('submit', async e => {
   e.preventDefault();
   const lock = +sessionStorage.getItem('lockUntil') || 0;
-  if (Date.now() < lock) { $('loginErr').textContent = `ลองผิดหลายครั้ง กรุณารอ ${Math.ceil((lock-Date.now())/1000)} วินาที`; return; }
+  if (Date.now() < lock) { $('loginErr').textContent = `ลองผิดหลายครั้ง กรุณารอ ${Math.ceil((lock - Date.now()) / 1000)} วินาที`; return; }
   $('loginBtn').disabled = true; $('loginErr').textContent = 'กำลังตรวจสอบ...';
   try {
     DATA = DATA || await loadData();
     const a = DATA.admin;
-    const h = await pbkdf2($('pw').value, a.salt, a.iterations);
-    if (h === a.hash) {
-      sessionStorage.setItem('authed', a.hash); sessionStorage.removeItem('fails');
-      $('pw').value = ''; showApp();
+    if (await pbkdf2($('pw').value, a.salt, a.iterations) === a.hash) {
+      sessionStorage.setItem('authed', a.hash); sessionStorage.removeItem('fails'); $('pw').value = ''; showApp();
     } else {
       const f = (+sessionStorage.getItem('fails') || 0) + 1; sessionStorage.setItem('fails', f);
       if (f >= 5) { sessionStorage.setItem('lockUntil', Date.now() + 60000); sessionStorage.setItem('fails', 0); }
@@ -168,157 +247,296 @@ $('loginForm').addEventListener('submit', async e => {
   } catch (err) { $('loginErr').textContent = err.message + ' (ต้องเปิดผ่านเว็บเซิร์ฟเวอร์)'; }
   $('loginBtn').disabled = false;
 });
-
 $('logoutBtn').onclick = () => {
   if (dirty && !confirm('ยังมีการแก้ไขที่ยังไม่ได้บันทึก ต้องการออกหรือไม่?')) return;
   dirty = false; sessionStorage.removeItem('authed'); sessionStorage.removeItem('ghToken'); location.reload();
 };
-
-// ---------- แท็บ ----------
-$('tabs').onclick = e => {
-  const t = e.target.dataset.t; if (!t) return;
-  document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('on', b.dataset.t === t));
-  document.querySelectorAll('.pane').forEach(p => p.classList.toggle('on', p.id === 'p-' + t));
-};
-
-// ---------- ข้อมูลร้าน ----------
-const SITE_FIELDS = [
-  ['name','ชื่อร้าน'],['tagline','สโลแกน'],['heroTitle','หัวข้อใหญ่หน้าแรก (Enter = ขึ้นบรรทัดใหม่)','ta'],['heroText','ข้อความใต้หัวข้อ','ta'],
-  ['phone','เบอร์โทร'],['line','LINE ID'],['email','อีเมล (รับคำขอนัดหมาย)'],['hours','เวลาทำการ'],
-  ['address','ที่อยู่','ta full'],['mapUrl','ลิงก์ Google Maps','full'],['aboutTitle','หัวข้อ "เกี่ยวกับเรา"','full'],['aboutText','ข้อความ "เกี่ยวกับเรา"','ta full']
-];
-function renderSite(){
-  const s = DATA.site;
-  $('siteForm').innerHTML = SITE_FIELDS.map(([k,l,o='']) => `<label class="${o.includes('full')?'full':''}">${l}${o.includes('ta')
-    ? `<textarea rows="3" data-k="${k}">${esc(s[k])}</textarea>` : `<input data-k="${k}" value="${esc(s[k])}">`}</label>`).join('');
-  $('siteForm').oninput = e => { s[e.target.dataset.k] = e.target.value; markDirty(); };
-  s.stats = s.stats || [];
-  while (s.stats.length < 4) s.stats.push({value:'',label:''});
-  $('statsForm').innerHTML = s.stats.map((x,i) => `<div class="item" style="border-left-color:var(--accent-2)">
-    <input data-i="${i}" data-f="value" value="${esc(x.value)}" placeholder="ตัวเลข"><input data-i="${i}" data-f="label" value="${esc(x.label)}" placeholder="คำอธิบาย"></div>`).join('');
-  $('statsForm').oninput = e => { s.stats[e.target.dataset.i][e.target.dataset.f] = e.target.value; markDirty(); };
-}
-
-// ---------- รายการ (บริการ / บทความ) ----------
-const ICON_OPTS = {wrench:'ประแจ',brake:'เบรก',engine:'เครื่องยนต์',snow:'แอร์',battery:'แบตเตอรี่',tire:'ล้อ/ยาง',car:'รถยนต์'};
-const LISTS = {
-  services: { box:'serviceEd', name:'บริการ', blank:() => ({id:'s'+Date.now(),icon:'wrench',title:'บริการใหม่',desc:'',price:''}),
-    fields: x => `
-      <div class="fgrid">
-        <label>ชื่อบริการ<input data-f="title" value="${esc(x.title)}"></label>
-        <label>ไอคอน<select data-f="icon">${Object.entries(ICON_OPTS).map(([k,v]) => `<option value="${k}" ${x.icon===k?'selected':''}>${v}</option>`).join('')}</select></label>
-        <label class="full">รายละเอียด<textarea rows="2" data-f="desc">${esc(x.desc)}</textarea></label>
-        <label class="full">ราคา<input data-f="price" value="${esc(x.price)}" placeholder="เช่น เริ่มต้น 990 บาท"></label>
-      </div>` },
-  posts: { box:'postEd', name:'บทความ', blank:() => ({id:'p'+Date.now(),date:new Date().toISOString().slice(0,10),title:'บทความใหม่',excerpt:'',body:''}),
-    fields: x => `
-      <div class="fgrid">
-        <label>หัวข้อ<input data-f="title" value="${esc(x.title)}"></label>
-        <label>วันที่<input type="date" data-f="date" value="${esc(x.date)}"></label>
-        <label class="full">ข้อความย่อ<textarea rows="2" data-f="excerpt">${esc(x.excerpt)}</textarea></label>
-        <label class="full">เนื้อหาเต็ม<textarea rows="6" data-f="body">${esc(x.body)}</textarea></label>
-      </div>` }
-};
-function renderList(key){
-  const L = LISTS[key], arr = DATA[key] = DATA[key] || [];
-  const box = $(L.box);
-  box.innerHTML = arr.map((x,i) => `<div class="item" data-i="${i}">
-    <div class="top-row"><b>${i+1}. ${esc(x.title)}</b><span>
-      <button class="mini" data-a="up" ${i===0?'disabled':''}>▲</button><button class="mini" data-a="down" ${i===arr.length-1?'disabled':''}>▼</button>
-      <button class="mini del" data-a="del">ลบ</button></span></div>${L.fields(x)}</div>`).join('') || `<p class="hint">ยังไม่มี${L.name}</p>`;
-  box.oninput = box.onchange = e => {
-    const it = e.target.closest('.item'), f = e.target.dataset.f; if (!it || !f) return;
-    arr[it.dataset.i][f] = e.target.value; markDirty();
-    if (f === 'title') it.querySelector('.top-row b').textContent = `${+it.dataset.i+1}. ${e.target.value}`;
-  };
-  box.onclick = e => {
-    const a = e.target.dataset.a; if (!a) return;
-    const i = +e.target.closest('.item').dataset.i;
-    if (a === 'del') { if (!confirm(`ลบ "${arr[i].title}" ?`)) return; arr.splice(i,1); }
-    if (a === 'up') [arr[i-1],arr[i]] = [arr[i],arr[i-1]];
-    if (a === 'down') [arr[i+1],arr[i]] = [arr[i],arr[i+1]];
-    markDirty(); renderList(key);
-  };
-}
-$('addService').onclick = () => { DATA.services.unshift(LISTS.services.blank()); markDirty(); renderList('services'); };
-$('addPost').onclick = () => { DATA.posts.unshift(LISTS.posts.blank()); markDirty(); renderList('posts'); };
-
-// ---------- GitHub ----------
-const CFG_KEY = 'ghCfg';
-function getCfg(){
-  return { owner:$('ghOwner').value.trim(), repo:$('ghRepo').value.trim(), branch:$('ghBranch').value.trim()||'main',
-           path:$('ghPath').value.trim()||'data.json', token:$('ghToken').value.trim() };
-}
-function loadCfg(){
-  let c = {};
-  try { c = JSON.parse(localStorage.getItem(CFG_KEY) || '{}'); } catch {}
-  // เดาค่าจาก URL ของ GitHub Pages อัตโนมัติ เช่น https://user.github.io/repo/
-  const m = location.hostname.match(/^([^.]+)\.github\.io$/);
-  if (m) { c.owner = c.owner || m[1]; c.repo = c.repo || location.pathname.split('/').filter(Boolean)[0] || `${m[1]}.github.io`; }
-  $('ghOwner').value = c.owner || ''; $('ghRepo').value = c.repo || ''; $('ghBranch').value = c.branch || 'main'; $('ghPath').value = c.path || 'data.json';
-  $('ghToken').value = sessionStorage.getItem('ghToken') || c.token || '';
-  $('ghRemember').checked = !!c.token;
-}
-$('ghSaveCfg').onclick = () => {
-  const c = getCfg();
-  sessionStorage.setItem('ghToken', c.token);
-  if (!$('ghRemember').checked) delete c.token;
-  try { localStorage.setItem(CFG_KEY, JSON.stringify(c)); } catch {}
-  toast('บันทึกการตั้งค่าแล้ว');
-};
-async function gh(c, method, body){
-  const url = `https://api.github.com/repos/${encodeURIComponent(c.owner)}/${encodeURIComponent(c.repo)}/contents/${c.path.split('/').map(encodeURIComponent).join('/')}`
-            + (method === 'GET' ? `?ref=${encodeURIComponent(c.branch)}` : '');
-  const r = await fetch(url, { method, headers:{ Authorization:`Bearer ${c.token}`, Accept:'application/vnd.github+json', 'X-GitHub-Api-Version':'2022-11-28' }, body: body && JSON.stringify(body) });
-  const j = await r.json().catch(() => ({}));
-  if (!r.ok) throw new Error(`GitHub ${r.status}: ${j.message || r.statusText}`);
-  return j;
-}
-$('ghTest').onclick = async () => {
-  const c = getCfg(); if (!c.owner || !c.repo || !c.token) return toast('กรอก username, repository และ token ให้ครบ');
-  try { const f = await gh(c, 'GET'); toast(`เชื่อมต่อสำเร็จ ✓ พบไฟล์ ${f.path}`); } catch (e) { toast('เชื่อมต่อไม่สำเร็จ: ' + e.message, 6000); }
-};
-const b64utf8 = s => { const b = new TextEncoder().encode(s); let bin = ''; for (let i = 0; i < b.length; i += 0x8000) bin += String.fromCharCode(...b.subarray(i, i + 0x8000)); return btoa(bin); };
-
-$('saveBtn').onclick = async () => {
-  const c = getCfg();
-  if (!c.owner || !c.repo || !c.token) { $('tabs').querySelector('[data-t=github]').click(); return toast('ตั้งค่า GitHub ก่อน (หรือใช้ปุ่มดาวน์โหลด data.json แล้วอัปโหลดเอง)', 6000); }
-  $('saveBtn').disabled = true; $('saveBtn').textContent = 'กำลังบันทึก...';
-  try {
-    const cur = await gh(c, 'GET');
-    await gh(c, 'PUT', { message:`Update site content via admin (${new Date().toLocaleString('th-TH')})`, content:b64utf8(JSON.stringify(DATA, null, 2) + '\n'), sha:cur.sha, branch:c.branch });
-    sessionStorage.setItem('ghToken', c.token);
-    clearDirty(); toast('บันทึกสำเร็จ ✓ หน้าเว็บจะอัปเดตภายในประมาณ 1–2 นาที', 6000);
-  } catch (e) { toast('บันทึกไม่สำเร็จ: ' + e.message, 8000); if (dirty) markDirty(); else clearDirty(); }
-  $('saveBtn').disabled = false; if (dirty) $('saveBtn').textContent = 'บันทึกขึ้น GitHub •';
-};
-
-$('dlBtn').onclick = () => {
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([JSON.stringify(DATA, null, 2) + '\n'], {type:'application/json'}));
-  a.download = 'data.json'; a.click(); URL.revokeObjectURL(a.href);
-};
-
-// ---------- เปลี่ยนรหัสผ่าน ----------
 $('changePw').onclick = async () => {
   const p1 = $('np1').value, p2 = $('np2').value;
   if (p1.length < 8) return toast('รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร');
   if (p1 !== p2) return toast('รหัสผ่านทั้งสองช่องไม่ตรงกัน');
   const salt = hex(crypto.getRandomValues(new Uint8Array(16))), iterations = 150000;
-  DATA.admin = { salt, iterations, hash: await pbkdf2(p1, salt, iterations) };
+  DATA.admin = {salt, iterations, hash: await pbkdf2(p1, salt, iterations)};
   sessionStorage.setItem('authed', DATA.admin.hash);
   $('np1').value = $('np2').value = ''; markDirty();
   toast('เปลี่ยนรหัสผ่านแล้ว กด "บันทึกขึ้น GitHub" เพื่อให้มีผล', 6000);
 };
 
-// ---------- เริ่มต้น ----------
+// ================= แท็บ =================
+function openTab(t){
+  document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('on', b.dataset.t === t));
+  document.querySelectorAll('.pane').forEach(p => p.classList.toggle('on', p.id === 'p-' + t));
+  if (t === 'posts' && !CUR) renderPostList();
+  if (t === 'cats') renderCats();
+}
+$('tabs').onclick = e => { if (e.target.dataset.t) openTab(e.target.dataset.t); };
+
+// ================= รายการบทความ =================
+function renderPostList(){
+  const q = $('postSearch').value.trim().toLowerCase();
+  const rows = sortPosts(DATA.posts).filter(p => !q || (p.title + ' ' + (p.tags || []).join(' ')).toLowerCase().includes(q));
+  $('postRows').innerHTML = rows.map(p => `<tr>
+    <td class="t"><a href="#" data-edit="${esc(p.id)}">${esc(p.title)}</a>${p.draft ? '<span class="badge">ฉบับร่าง</span>' : ''}</td>
+    <td class="hide-m">${esc(catOf(DATA, p.category).name)}</td>
+    <td class="hide-m">${esc(thDate(p.date))}</td>
+    <td style="text-align:right;white-space:nowrap"><button class="lbtn" data-edit="${esc(p.id)}">แก้ไข</button></td></tr>`).join('')
+    || '<tr><td colspan="4" style="color:var(--muted)">ยังไม่มีบทความ</td></tr>';
+}
+$('postSearch').oninput = renderPostList;
+$('postRows').onclick = e => { const id = e.target.closest('[data-edit]')?.dataset.edit; if (id) { e.preventDefault(); openEditor(DATA.posts.find(p => p.id === id)); } };
+$('addPost').onclick = () => {
+  const p = {id:'p' + Date.now(), slug:'', title:'', category:(DATA.categories[0] || {}).id || '', tags:[], date:new Date().toISOString().slice(0, 10), cover:'', excerpt:'', body:'## หัวข้อแรก\n\nเขียนเนื้อหาที่นี่...\n', draft:true};
+  DATA.posts.unshift(p); markDirty(); openEditor(p); $('fTitle').focus();
+};
+
+// ================= ตัวแก้ไขบทความ =================
+const slugify = s => String(s).toLowerCase().normalize('NFKD').replace(/[^\w\s-]/g, '').trim().replace(/[\s_]+/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+function uniqueSlug(base, id){
+  let s = base || 'post-' + Date.now().toString(36), n = 2;
+  while (DATA.posts.some(p => p.slug === s && p.id !== id)) s = `${base}-${n++}`;
+  return s;
+}
+function openEditor(p){
+  CUR = p;
+  $('postListView').style.display = 'none'; $('editorView').classList.add('on');
+  $('fCat').innerHTML = DATA.categories.map(c => `<option value="${esc(c.id)}">${esc(c.name)}</option>`).join('');
+  document.querySelectorAll('#editorView [data-f]').forEach(el => {
+    const f = el.dataset.f, v = p[f];
+    if (el.type === 'checkbox') el.checked = !!v;
+    else el.value = f === 'tags' ? (v || []).join(', ') : (v ?? '');
+  });
+  $('mdInput').value = p.body || '';
+  $('fSlug').dataset.auto = p.slug ? '' : '1';
+  updateCoverPrev(); updatePreview(); updateLiveLink();
+  window.scrollTo(0, 0);
+}
+function closeEditor(){
+  if (CUR && !CUR.slug) CUR.slug = uniqueSlug(slugify(CUR.title), CUR.id);
+  CUR = null; $('editorView').classList.remove('on'); $('postListView').style.display = ''; renderPostList();
+}
+$('backBtn').onclick = closeEditor;
+$('delPost').onclick = () => {
+  if (!confirm(`ลบบทความ "${CUR.title || '(ไม่มีชื่อ)'}" ?`)) return;
+  DATA.posts = DATA.posts.filter(p => p !== CUR); CUR = null; markDirty(); closeEditor();
+};
+$('editorView').addEventListener('input', e => {
+  const el = e.target, f = el.dataset.f; if (!CUR || !f) return;
+  if (el.type === 'checkbox') CUR[f] = el.checked;
+  else if (f === 'tags') CUR.tags = el.value.split(',').map(t => t.trim().toLowerCase().replace(/\s+/g, '-')).filter(Boolean);
+  else CUR[f] = el.value;
+  if (f === 'title' && $('fSlug').dataset.auto) { CUR.slug = uniqueSlug(slugify(el.value), CUR.id); $('fSlug').value = CUR.slug; }
+  if (f === 'slug') { $('fSlug').dataset.auto = ''; }
+  if (f === 'cover') updateCoverPrev();
+  if (f === 'slug' || f === 'title') updateLiveLink();
+  markDirty();
+});
+$('fSlug').addEventListener('change', e => { CUR.slug = uniqueSlug(slugify(e.target.value), CUR.id); e.target.value = CUR.slug; updateLiveLink(); });
+function updateLiveLink(){ $('viewLive').href = 'post.html?p=' + encodeURIComponent(CUR.slug || ''); }
+function updateCoverPrev(){ const c = CUR.cover; $('coverPrev').hidden = !c; if (c) $('coverPrev').src = IMG_MAP[c] || c; }
+
+let pt; $('mdInput').addEventListener('input', () => { CUR.body = $('mdInput').value; markDirty(); clearTimeout(pt); pt = setTimeout(updatePreview, 200); });
+function updatePreview(){ $('mdPreview').innerHTML = renderMarkdown(CUR.body, IMG_MAP); enhance($('mdPreview')); }
+
+// แถบเครื่องมือ Markdown
+function wrapSel(before, after = before, placeholder = 'ข้อความ'){
+  const ta = $('mdInput'), s = ta.selectionStart, e = ta.selectionEnd, sel = ta.value.slice(s, e) || placeholder;
+  ta.setRangeText(before + sel + after, s, e, 'end');
+  ta.setSelectionRange(s + before.length, s + before.length + sel.length); ta.focus(); ta.dispatchEvent(new Event('input'));
+}
+function insertBlock(text, selectFrom, selectLen){
+  const ta = $('mdInput'), s = ta.selectionStart, v = ta.value;
+  const pre = s > 0 && v[s - 1] !== '\n' ? '\n\n' : (s > 1 && v[s - 2] !== '\n' ? '\n' : '');
+  ta.setRangeText(pre + text + '\n', s, ta.selectionEnd, 'end');
+  if (selectFrom != null) ta.setSelectionRange(s + pre.length + selectFrom, s + pre.length + selectFrom + selectLen);
+  ta.focus(); ta.dispatchEvent(new Event('input'));
+}
+function prefixLines(prefix){
+  const ta = $('mdInput'), v = ta.value, s = v.lastIndexOf('\n', ta.selectionStart - 1) + 1, e = ta.selectionEnd;
+  const block = v.slice(s, e) || 'รายการ';
+  ta.setRangeText(block.split('\n').map((l, i) => (typeof prefix === 'function' ? prefix(i) : prefix) + l).join('\n'), s, e, 'end');
+  ta.focus(); ta.dispatchEvent(new Event('input'));
+}
+$('toolbar').onclick = e => {
+  const a = e.target.closest('[data-md]')?.dataset.md; if (!a) return;
+  ({
+    h2: () => prefixLines('## '), h3: () => prefixLines('### '),
+    bold: () => wrapSel('**'), italic: () => wrapSel('*'), code: () => wrapSel('`', '`', 'command'),
+    ul: () => prefixLines('- '), ol: () => prefixLines(i => `${i + 1}. `), task: () => prefixLines('- [ ] '),
+    quote: () => prefixLines('> '),
+    block: () => { const lang = prompt('ภาษาของโค้ด (เช่น powershell, sql, bash, cmd, json) เว้นว่างได้', 'powershell'); if (lang === null) return; insertBlock('```' + lang.trim() + '\nวางโค้ดที่นี่\n```', 4 + lang.trim().length, 12); },
+    table: () => insertBlock('| หัวข้อ 1 | หัวข้อ 2 | หัวข้อ 3 |\n|---|---|---|\n| ข้อมูล | ข้อมูล | ข้อมูล |\n| ข้อมูล | ข้อมูล | ข้อมูล |'),
+    link: () => { const url = prompt('URL ของลิงก์', 'https://'); if (url) wrapSel('[', `](${url})`, 'ข้อความลิงก์'); },
+    img: () => pickImage(path => insertImage(path)),
+    toggle: () => { const w = $('mdWrap'); w.classList.toggle('preview'); e.target.textContent = w.classList.contains('preview') ? 'แก้ไข' : 'ดูตัวอย่าง'; }
+  })[a]?.();
+};
+$('mdInput').addEventListener('keydown', e => {
+  if (e.key === 'Tab') { e.preventDefault(); $('mdInput').setRangeText('  ', $('mdInput').selectionStart, $('mdInput').selectionEnd, 'end'); }
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') { e.preventDefault(); wrapSel('**'); }
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') { e.preventDefault(); $('saveBtn').click(); }
+});
+document.addEventListener('keydown', e => { if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's' && e.target.id !== 'mdInput') { e.preventDefault(); $('saveBtn').click(); } });
+
+// ================= รูปภาพ =================
+function insertImage(path, alt = 'รูปประกอบ'){ insertBlock(`![${alt}](${path})`); }
+let pickCb = null;
+function pickImage(cb){ pickCb = cb; $('fileIn').value = ''; $('fileIn').click(); }
+$('fileIn').onchange = async () => { const f = $('fileIn').files[0]; if (f && pickCb) { const p = await uploadImage(f); if (p) pickCb(p); } };
+$('coverUp').onclick = () => pickImage(path => { CUR.cover = path; document.querySelector('[data-f=cover]').value = path; updateCoverPrev(); markDirty(); });
+$('mdInput').addEventListener('paste', async e => {
+  const f = [...(e.clipboardData?.files || [])].find(f => f.type.startsWith('image/'));
+  if (f) { e.preventDefault(); const p = await uploadImage(f); if (p) insertImage(p); }
+});
+$('mdInput').addEventListener('dragover', e => { e.preventDefault(); $('mdInput').classList.add('drag'); });
+$('mdInput').addEventListener('dragleave', () => $('mdInput').classList.remove('drag'));
+$('mdInput').addEventListener('drop', async e => {
+  $('mdInput').classList.remove('drag');
+  const files = [...(e.dataTransfer?.files || [])].filter(f => f.type.startsWith('image/')); if (!files.length) return;
+  e.preventDefault(); for (const f of files) { const p = await uploadImage(f); if (p) insertImage(p); }
+});
+
+// ย่อรูปให้กว้างไม่เกิน 1600px และแปลงเป็น WebP เพื่อให้เว็บโหลดเร็ว (GIF/SVG คงไฟล์เดิม)
+async function compress(file){
+  if (/gif|svg/.test(file.type)) return {blob:file, ext:file.type.includes('svg') ? 'svg' : 'gif'};
+  const bmp = await createImageBitmap(file), scale = Math.min(1, 1600 / bmp.width);
+  const c = document.createElement('canvas'); c.width = Math.round(bmp.width * scale); c.height = Math.round(bmp.height * scale);
+  c.getContext('2d').drawImage(bmp, 0, 0, c.width, c.height);
+  let blob = await new Promise(r => c.toBlob(r, 'image/webp', .85));
+  if (!blob || blob.type !== 'image/webp') blob = await new Promise(r => c.toBlob(r, 'image/jpeg', .85));
+  return {blob, ext: blob.type === 'image/webp' ? 'webp' : 'jpg'};
+}
+async function uploadImage(file){
+  const c = getCfg();
+  if (!c.owner || !c.repo || !c.token) { toast('ต้องตั้งค่า GitHub ก่อนจึงจะอัปโหลดรูปได้ (แท็บ "ตั้งค่า GitHub")', 6000); return null; }
+  if (file.size > 20 * 1024 * 1024) { toast('ไฟล์ใหญ่เกิน 20 MB'); return null; }
+  $('uploading').style.display = 'grid';
+  try {
+    const {blob, ext} = await compress(file);
+    if (blob.size > 10 * 1024 * 1024) throw new Error('รูปหลังย่อยังใหญ่เกิน 10 MB');
+    const d = new Date(), stamp = d.toISOString().slice(0, 10).replace(/-/g, '');
+    const path = `images/${stamp}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+    const b64 = await new Promise(r => { const fr = new FileReader(); fr.onload = () => r(fr.result.split(',')[1]); fr.readAsDataURL(blob); });
+    await gh(c, path, 'PUT', {message:`Upload image ${path}`, content:b64, branch:c.branch});
+    IMG_MAP[path] = URL.createObjectURL(blob);
+    toast(`อัปโหลดรูปแล้ว ✓ (${Math.round(blob.size / 1024)} KB) อย่าลืมกดบันทึกบทความ`, 5000);
+    return path;
+  } catch (e) { toast('อัปโหลดรูปไม่สำเร็จ: ' + e.message, 8000); return null; }
+  finally { $('uploading').style.display = 'none'; }
+}
+
+// ================= หมวดหมู่ =================
+function renderCats(){
+  const opts = k => Object.entries(ICON_NAMES).map(([v, n]) => `<option value="${v}" ${v === k ? 'selected' : ''}>${n}</option>`).join('');
+  $('catEd').innerHTML = DATA.categories.map((c, i) => {
+    const n = DATA.posts.filter(p => p.category === c.id).length;
+    return `<div class="cat-item" data-i="${i}">
+      <label>ID (a-z, 0-9, -)<input data-cf="id" value="${esc(c.id)}"></label>
+      <label>ชื่อหมวด<input data-cf="name" value="${esc(c.name)}"></label>
+      <label>ไอคอน<span class="row" style="flex-wrap:nowrap"><span class="ic">${icon(c.icon)}</span><select data-cf="icon">${opts(c.icon)}</select></span></label>
+      <span class="row" style="flex-wrap:nowrap"><small style="color:var(--muted);white-space:nowrap">${n} บทความ</small>
+        <button class="lbtn" data-ca="up" ${i === 0 ? 'disabled' : ''}>▲</button><button class="lbtn" data-ca="down" ${i === DATA.categories.length - 1 ? 'disabled' : ''}>▼</button>
+        <button class="lbtn del" data-ca="del">ลบ</button></span></div>`;
+  }).join('') || '<p class="hint">ยังไม่มีหมวดหมู่</p>';
+}
+$('catEd').addEventListener('change', e => {
+  const it = e.target.closest('.cat-item'), f = e.target.dataset.cf; if (!it || !f) return;
+  const c = DATA.categories[it.dataset.i];
+  if (f === 'id') {
+    const nid = slugify(e.target.value);
+    if (!nid || DATA.categories.some(x => x !== c && x.id === nid)) { toast('ID ว่างหรือซ้ำกับหมวดอื่น'); e.target.value = c.id; return; }
+    DATA.posts.forEach(p => { if (p.category === c.id) p.category = nid; });
+    c.id = nid; e.target.value = nid;
+  } else c[f] = e.target.value;
+  markDirty(); if (f === 'icon') renderCats();
+});
+$('catEd').addEventListener('input', e => { if (e.target.dataset.cf === 'name') { DATA.categories[e.target.closest('.cat-item').dataset.i].name = e.target.value; markDirty(); } });
+$('catEd').onclick = e => {
+  const a = e.target.dataset.ca; if (!a) return;
+  const i = +e.target.closest('.cat-item').dataset.i, arr = DATA.categories;
+  if (a === 'del') {
+    const n = DATA.posts.filter(p => p.category === arr[i].id).length;
+    if (n) return toast(`ลบไม่ได้: หมวดนี้ยังมี ${n} บทความ ให้ย้ายบทความไปหมวดอื่นก่อน`, 6000);
+    if (!confirm(`ลบหมวด "${arr[i].name}" ?`)) return; arr.splice(i, 1);
+  }
+  if (a === 'up') [arr[i - 1], arr[i]] = [arr[i], arr[i - 1]];
+  if (a === 'down') [arr[i + 1], arr[i]] = [arr[i], arr[i + 1]];
+  markDirty(); renderCats();
+};
+$('addCat').onclick = () => {
+  let id = 'new-category', n = 2; while (DATA.categories.some(c => c.id === id)) id = 'new-category-' + n++;
+  DATA.categories.push({id, name:'หมวดใหม่', icon:'book'}); markDirty(); renderCats();
+  $('catEd').lastElementChild.querySelector('[data-cf=name]').select();
+};
+
+// ================= ข้อมูลเว็บ =================
+const SITE_FIELDS = [['name','ชื่อเว็บ'],['tagline','คำโปรย (ตัวเล็กเหนือหัวข้อ)'],['heroTitle','หัวข้อใหญ่หน้าแรก (Enter = ขึ้นบรรทัดใหม่)','ta'],['heroText','ข้อความใต้หัวข้อ','ta'],['author','ชื่อผู้เขียน'],['aboutText','ข้อความท้ายเว็บ']];
+function renderSite(){
+  const s = DATA.site;
+  $('siteForm').innerHTML = SITE_FIELDS.map(([k, l, t]) => `<label>${l}${t ? `<textarea rows="3" data-k="${k}">${esc(s[k])}</textarea>` : `<input data-k="${k}" value="${esc(s[k])}">`}</label>`).join('');
+  $('siteForm').oninput = e => { s[e.target.dataset.k] = e.target.value; markDirty(); };
+}
+
+// ================= GitHub =================
+const CFG_KEY = 'ghCfg';
+const getCfg = () => ({owner:$('ghOwner').value.trim(), repo:$('ghRepo').value.trim(), branch:$('ghBranch').value.trim() || 'main', path:$('ghPath').value.trim() || 'data.json', token:$('ghToken').value.trim()});
+function loadCfg(){
+  let c = {}; try { c = JSON.parse(localStorage.getItem(CFG_KEY) || '{}'); } catch {}
+  const m = location.hostname.match(/^([^.]+)\.github\.io$/);
+  if (m) { c.owner = c.owner || m[1]; c.repo = c.repo || location.pathname.split('/').filter(Boolean)[0] || `${m[1]}.github.io`; }
+  $('ghOwner').value = c.owner || ''; $('ghRepo').value = c.repo || ''; $('ghBranch').value = c.branch || 'main'; $('ghPath').value = c.path || 'data.json';
+  $('ghToken').value = sessionStorage.getItem('ghToken') || c.token || ''; $('ghRemember').checked = !!c.token;
+}
+$('ghSaveCfg').onclick = () => {
+  const c = getCfg(); sessionStorage.setItem('ghToken', c.token);
+  if (!$('ghRemember').checked) delete c.token;
+  try { localStorage.setItem(CFG_KEY, JSON.stringify(c)); } catch {}
+  toast('บันทึกการตั้งค่าแล้ว');
+};
+async function gh(c, path, method, body){
+  const url = `https://api.github.com/repos/${encodeURIComponent(c.owner)}/${encodeURIComponent(c.repo)}/contents/${path.split('/').map(encodeURIComponent).join('/')}`
+            + (method === 'GET' ? `?ref=${encodeURIComponent(c.branch)}` : '');
+  const r = await fetch(url, {method, headers:{Authorization:`Bearer ${c.token}`, Accept:'application/vnd.github+json', 'X-GitHub-Api-Version':'2022-11-28'}, body: body && JSON.stringify(body)});
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(`GitHub ${r.status}: ${j.message || r.statusText}` + (r.status === 401 ? ' (token ไม่ถูกต้องหรือหมดอายุ)' : r.status === 403 || r.status === 404 ? ' (ตรวจชื่อ repo และสิทธิ์ Contents: Read and write)' : ''));
+  return j;
+}
+$('ghTest').onclick = async () => {
+  const c = getCfg(); if (!c.owner || !c.repo || !c.token) return toast('กรอก username, repository และ token ให้ครบ');
+  try { const f = await gh(c, c.path, 'GET'); toast(`เชื่อมต่อสำเร็จ ✓ พบไฟล์ ${f.path}`); } catch (e) { toast('เชื่อมต่อไม่สำเร็จ: ' + e.message, 7000); }
+};
+const b64utf8 = s => { const b = new TextEncoder().encode(s); let bin = ''; for (let i = 0; i < b.length; i += 0x8000) bin += String.fromCharCode(...b.subarray(i, i + 0x8000)); return btoa(bin); };
+const exportJSON = () => {
+  DATA.posts.forEach(p => { if (!p.slug) p.slug = uniqueSlug(slugify(p.title), p.id); });
+  return JSON.stringify(DATA, null, 2) + '\n';
+};
+$('saveBtn').onclick = async () => {
+  if (CUR && !CUR.title.trim()) return toast('กรุณาใส่หัวข้อบทความก่อนบันทึก');
+  const c = getCfg();
+  if (!c.owner || !c.repo || !c.token) { openTab('github'); return toast('ตั้งค่า GitHub ก่อน (หรือใช้ปุ่มดาวน์โหลด data.json แล้วอัปโหลดเอง)', 6000); }
+  $('saveBtn').disabled = true; $('saveBtn').textContent = 'กำลังบันทึก...';
+  try {
+    const cur = await gh(c, c.path, 'GET');
+    await gh(c, c.path, 'PUT', {message:`Update content via admin (${new Date().toLocaleString('th-TH')})`, content:b64utf8(exportJSON()), sha:cur.sha, branch:c.branch});
+    sessionStorage.setItem('ghToken', c.token);
+    clearDirty(); if (CUR) $('fSlug').value = CUR.slug;
+    toast('บันทึกสำเร็จ ✓ หน้าเว็บจะอัปเดตภายในประมาณ 1–2 นาที', 6000);
+  } catch (e) { toast('บันทึกไม่สำเร็จ: ' + e.message, 9000); markDirty(); }
+  $('saveBtn').disabled = false; if (dirty) $('saveBtn').textContent = 'บันทึกขึ้น GitHub •';
+};
+$('dlBtn').onclick = () => {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([exportJSON()], {type:'application/json'}));
+  a.download = 'data.json'; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+};
+
+// ================= เริ่มต้น =================
 function showApp(){
+  DATA.categories = DATA.categories || []; DATA.posts = DATA.posts || []; DATA.site = DATA.site || {};
   $('loginView').style.display = 'none'; $('appView').style.display = 'block';
-  renderSite(); renderList('services'); renderList('posts'); loadCfg();
+  renderSite(); renderPostList(); loadCfg();
 }
 (async () => {
-  const a = sessionStorage.getItem('authed');
-  if (!a) return;
+  const a = sessionStorage.getItem('authed'); if (!a) return;
   try { DATA = await loadData(); if (DATA.admin.hash === a) showApp(); } catch {}
 })();
 </script>
