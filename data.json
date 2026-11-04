@@ -115,7 +115,7 @@
         "windows-server"
       ],
       "date": "2026-10-02",
-      "cover": "",
+      "cover": "images/20261104-xgaq1w.webp",
       "excerpt": "สคริปต์สั้น ๆ ดึงพื้นที่ว่างทุกไดรฟ์จากหลายเครื่องในครั้งเดียว และไฮไลต์ไดรฟ์ที่เหลือต่ำกว่า 15%",
       "body": "## สคริปต์\n\n```powershell\n$servers = 'SRV-APP01','SRV-DB01','SRV-FILE01'\n\nGet-CimInstance Win32_LogicalDisk -ComputerName $servers -Filter 'DriveType=3' |\n  Select-Object PSComputerName, DeviceID,\n    @{n='SizeGB';e={[math]::Round($_.Size/1GB,1)}},\n    @{n='FreeGB';e={[math]::Round($_.FreeSpace/1GB,1)}},\n    @{n='Free%'; e={[math]::Round($_.FreeSpace/$_.Size*100,1)}} |\n  Sort-Object 'Free%' |\n  Format-Table -AutoSize\n```\n\n## ส่งออกเป็น CSV\n\n```powershell\n... | Export-Csv C:\\Reports\\disk.csv -NoTypeInformation -Encoding UTF8\n```\n\n### ข้อควรรู้\n1. ต้องเปิด WinRM บนเครื่องปลายทาง (`Enable-PSRemoting`)\n2. รันด้วยบัญชีที่มีสิทธิ์ admin บนทุกเครื่อง"
     },
