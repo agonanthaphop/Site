@@ -134,6 +134,31 @@ article.content{background:var(--card);padding:40px 44px;min-width:0}
 .md img{display:block;margin:1.2em auto;box-shadow:0 6px 20px rgba(0,0,0,.12)}
 .md hr{border:0;height:3px;background:repeating-linear-gradient(90deg,var(--accent) 0 18px,transparent 18px 26px);margin:2em 0}
 
+/* cover images (หน้าแรก + แบนเนอร์บทความ) */
+.hero.has-cover,.post-hero.has-cover{background-color:var(--ink-2);background-size:cover;background-position:center}
+.hero.has-cover::before,.post-hero.has-cover::before{opacity:.18}
+.hero.has-cover{padding:110px 0 150px}
+.post-hero.has-cover{padding:120px 0 80px;min-height:380px;display:flex;align-items:flex-end}
+.post-hero.has-cover .wrap{width:100%}
+.post-hero.has-cover h1,.hero.has-cover h1{text-shadow:0 2px 18px rgba(0,0,0,.45)}
+
+/* PDF */
+.md .pdf-card{border:1px solid var(--line);border-left:4px solid var(--accent);background:#faf9f6}
+.pdf-head{display:flex;align-items:center;gap:14px;padding:14px 16px;flex-wrap:wrap}
+.pdf-ic{flex:0 0 auto;width:44px;height:52px;background:#c62828;color:#fff;font-family:'Kanit';font-weight:800;font-size:.78rem;display:grid;place-items:end center;padding-bottom:8px;clip-path:polygon(0 0,70% 0,100% 22%,100% 100%,0 100%)}
+.pdf-name{flex:1;min-width:160px;display:grid;line-height:1.35}
+.pdf-name b{font-family:'Kanit';font-weight:600;overflow-wrap:anywhere}
+.pdf-name small{color:var(--muted)}
+.pdf-acts{display:flex;gap:8px;flex-wrap:wrap}
+.md .pdf-btn{font-family:'Kanit';font-size:.88rem;text-decoration:none;color:var(--text);border:1px solid var(--line);background:#fff;padding:7px 14px}
+.md .pdf-btn:hover{border-color:var(--accent);color:var(--accent)}
+.md .pdf-btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+.md .pdf-btn.pri:hover{background:#e84a12;color:#fff}
+.pdf-frame{display:block;width:100%;height:75vh;min-height:480px;border:0;border-top:1px solid var(--line);background:#525659}
+.md .pdf-note{margin:0;padding:0 16px 14px;color:var(--muted);font-size:.9rem}
+.pcard .pdf-tag{font-family:'Kanit';font-size:.75rem;background:#c62828;color:#fff;padding:1px 7px}
+@media print{.pdf-frame,.pdf-acts{display:none}}
+
 footer{background:var(--ink);color:#8a93a6;padding:30px 0;font-size:.9rem}
 footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
 footer a{color:#8a93a6}

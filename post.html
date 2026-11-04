@@ -57,7 +57,7 @@
   $('crumbCat').textContent = c.name; $('crumbCat').href = './?cat=' + encodeURIComponent(c.id);
   $('meta').innerHTML = `<a class="cat" href="./?cat=${encodeURIComponent(c.id)}">${esc(c.name)}</a><span>${esc(thDate(p.date))}</span>`
     + (p.tags || []).map(t => `<a class="chip" href="./?tag=${encodeURIComponent(t)}">#${esc(t)}</a>`).join('');
-  if (p.cover) $('cover').innerHTML = `<div class="cover"><img src="${esc(p.cover)}" alt=""></div>`;
+  setCoverBg(document.querySelector('.post-hero'), p.cover);
   $('body').innerHTML = renderMarkdown(p.body);
   enhance($('body'));
 

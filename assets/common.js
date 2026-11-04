@@ -26,16 +26,55 @@ const catOf = (data, id) => (data.categories || []).find(c => c.id === id) || {i
 const sortPosts = posts => [...(posts || [])].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
 const plainText = md => String(md || '').replace(/```[\s\S]*?```/g, ' ').replace(/[#>*_`|\-\[\]()!]/g, ' ');
 
-// Markdown → HTML ที่ผ่านการกรองความปลอดภัยแล้ว (imgMap ใช้แสดงรูปที่เพิ่งอัปโหลดในหน้า admin)
-function renderMarkdown(md, imgMap){
-  let html = marked.parse(String(md || ''), {gfm: true, breaks: false});
-  html = DOMPurify.sanitize(html, {ADD_ATTR: ['target']});
-  if (imgMap) html = html.replace(/src="([^"]+)"/g, (m, src) => imgMap[src] ? `src="${imgMap[src]}"` : m);
-  return html;
+// Markdown → HTML ที่ผ่านการกรองความปลอดภัยแล้ว
+function renderMarkdown(md){
+  const html = marked.parse(String(md || ''), {gfm: true, breaks: false});
+  return DOMPurify.sanitize(html, {ADD_ATTR: ['target']});
 }
 
-// เพิ่มไฮไลต์สีโค้ด ปุ่มคัดลอก id หัวข้อ และให้ลิงก์ภายนอกเปิดแท็บใหม่
-function enhance(root){
+const isPdf = href => /\.pdf($|[?#])/i.test(href || '');
+const isLocalFile = href => !!href && !/^[a-z][a-z0-9+.-]*:/i.test(href) && !href.startsWith('//');
+// มือถือ (Android/iPhone) แสดง PDF ในกรอบไม่ได้ จึงให้กดเปิดเต็มจอแทน
+const canEmbedPdf = () => !/Android|iPhone|iPod|Mobi/i.test(navigator.userAgent) && matchMedia('(min-width: 768px)').matches;
+
+// ลิงก์ไปไฟล์ PDF ในเว็บที่อยู่บรรทัดเดี่ยว ๆ → กล่อง PDF พร้อมตัวอ่านและปุ่มดาวน์โหลด
+function pdfCards(root, fileMap){
+  root.querySelectorAll('p > a[href]').forEach(a => {
+    const p = a.parentElement, href = a.getAttribute('href');
+    if (p.childNodes.length !== 1 || !isPdf(href) || !isLocalFile(href)) return;
+    const url = (fileMap && fileMap[href]) || href;
+    const name = a.textContent.replace(/^📄\s*/, '').trim() || href.split('/').pop();
+    const size = a.getAttribute('title') || '';
+    const box = document.createElement('div');
+    box.className = 'pdf-card';
+    box.innerHTML = `<div class="pdf-head">
+        <span class="pdf-ic">PDF</span>
+        <span class="pdf-name"><b></b><small></small></span>
+        <span class="pdf-acts"><a class="pdf-btn" target="_blank" rel="noopener">เปิดเต็มจอ ↗</a><a class="pdf-btn pri">ดาวน์โหลด</a></span>
+      </div>`;
+    box.querySelector('b').textContent = name;
+    box.querySelector('small').textContent = size ? `ไฟล์ PDF · ${size}` : 'ไฟล์ PDF';
+    const [open, dl] = box.querySelectorAll('.pdf-btn');
+    open.href = url; dl.href = url; dl.setAttribute('download', name.toLowerCase().endsWith('.pdf') ? name : name + '.pdf');
+    if (canEmbedPdf()) {
+      const f = document.createElement('iframe');
+      f.className = 'pdf-frame'; f.title = name; f.loading = 'lazy'; f.src = url + '#view=FitH';
+      box.appendChild(f);
+    } else {
+      box.insertAdjacentHTML('beforeend', '<p class="pdf-note">บนมือถือ กด "เปิดเต็มจอ" เพื่ออ่านไฟล์</p>');
+    }
+    p.replaceWith(box);
+  });
+}
+
+// เพิ่มไฮไลต์สีโค้ด ปุ่มคัดลอก id หัวข้อ กล่อง PDF และให้ลิงก์ภายนอกเปิดแท็บใหม่
+// fileMap (เฉพาะหน้า admin): path → objectURL ให้พรีวิวรูป/PDF ที่เพิ่งอัปโหลดได้ทันที
+function enhance(root, fileMap){
+  pdfCards(root, fileMap);
+  if (fileMap) root.querySelectorAll('img[src], a[href]').forEach(el => {
+    const attr = el.tagName === 'IMG' ? 'src' : 'href', v = el.getAttribute(attr);
+    if (fileMap[v]) el.setAttribute(attr, fileMap[v]);
+  });
   root.querySelectorAll('pre > code').forEach(code => {
     if (window.hljs) { try { hljs.highlightElement(code); } catch {} }
     const pre = code.parentElement;
@@ -57,9 +96,16 @@ function enhance(root){
     used[id] = (used[id] || 0) + 1; if (used[id] > 1) id += '-' + used[id];
     h.id = id;
   });
-  root.querySelectorAll('a[href^="http"]').forEach(a => { a.target = '_blank'; a.rel = 'noopener'; });
+  root.querySelectorAll('a[href^="http"], a[href$=".pdf"]').forEach(a => { if (!a.hasAttribute('download')) { a.target = '_blank'; a.rel = 'noopener'; } });
   root.querySelectorAll('table').forEach(t => { if (!t.parentElement.classList.contains('tbl')) { const w = document.createElement('div'); w.className = 'tbl'; t.before(w); w.appendChild(t); } });
   root.querySelectorAll('img').forEach(img => { img.loading = 'lazy'; });
+}
+
+// ใส่รูปเป็นพื้นหลังพร้อมชั้นสีเข้มให้อ่านตัวหนังสือออก
+function setCoverBg(el, url){
+  if (!url) { el.classList.remove('has-cover'); el.style.backgroundImage = ''; return; }
+  el.classList.add('has-cover');
+  el.style.backgroundImage = `linear-gradient(100deg, rgba(16,20,28,.92) 0%, rgba(16,20,28,.72) 45%, rgba(16,20,28,.35) 100%), url("${String(url).replace(/["\\\n]/g, encodeURIComponent)}")`;
 }
 
 function fillSite(data){

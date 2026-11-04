@@ -45,7 +45,7 @@ function render(){
     return `<a class="pcard" href="post.html?p=${encodeURIComponent(p.slug)}">
       <div class="thumb ${p.cover ? '' : 'gen'}">${p.cover ? `<img src="${esc(p.cover)}" alt="" loading="lazy">` : icon(c.icon)}</div>
       <div class="in">
-        <div class="meta"><span class="cat">${esc(c.name)}</span><span>${esc(thDate(p.date))}</span></div>
+        <div class="meta"><span class="cat">${esc(c.name)}</span><span>${esc(thDate(p.date))}</span>${/\]\([^)\s]+\.pdf[\s)"]/i.test(p.body || '') ? '<span class="pdf-tag">PDF</span>' : ''}</div>
         <h3>${hl(p.title, q)}</h3>
         <p>${hl(p.excerpt, q)}</p>
         <div class="tags">${(p.tags || []).map(t => `<span>#${hl(t, q)}</span>`).join(' ')}</div>
@@ -56,6 +56,7 @@ function render(){
 (async () => {
   try { DATA = await loadData(); } catch { return showLoadError(); }
   fillSite(DATA);
+  setCoverBg(document.querySelector('.hero'), DATA.site.heroImage);
   document.title = `${DATA.site.name} | ${DATA.site.tagline}`;
   POSTS = sortPosts(DATA.posts).filter(p => !p.draft).map(p => ({...p,
     _search: [p.title, p.excerpt, (p.tags || []).join(' '), catOf(DATA, p.category).name, plainText(p.body)].join(' ').toLowerCase()}));

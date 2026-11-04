@@ -60,6 +60,9 @@
   .lbtn{white-space:nowrap}
   .cover-row{display:flex;gap:10px;align-items:end}
   .cover-row img{height:60px;width:100px;object-fit:cover;border:1px solid var(--line)}
+  .hero-ed{display:grid;grid-template-columns:minmax(0,1.2fr) 1fr;gap:22px;align-items:center;margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--line)}
+  .hero-prev{aspect-ratio:16/6;background:var(--ink-2);color:#aab3c5;display:grid;place-items:center;text-align:center;font-family:'Kanit';background-size:cover;background-position:center}
+  .hero-prev.has-cover span{display:none}
   .cat-item{display:grid;grid-template-columns:1fr 1.4fr 1fr auto;gap:10px;align-items:end;padding:14px;border:1px solid var(--line);border-left:4px solid var(--accent);margin-bottom:10px;background:#fbfaf8}
   .cat-item .ic{width:22px;height:22px;color:var(--accent)}
   .toast{position:fixed;right:20px;bottom:20px;background:var(--ink);color:#fff;padding:14px 20px;border-left:4px solid var(--accent);display:none;max-width:440px;z-index:99}
@@ -67,7 +70,7 @@
   .box{background:var(--paper);padding:16px;border-left:4px solid var(--accent-2);font-size:.92rem;margin:16px 0}
   .uploading{position:fixed;inset:0;background:rgba(16,20,28,.5);display:none;place-items:center;z-index:98;color:#fff;font-family:'Kanit';font-size:1.2rem}
   @media(max-width:900px){
-    .fgrid,.g4,.cat-item{grid-template-columns:1fr}
+    .fgrid,.g4,.cat-item,.hero-ed{grid-template-columns:1fr}
     .md-wrap{grid-template-columns:1fr}
     .toolbar .view{display:block}
     #mdPreview{display:none;max-height:none;min-height:560px}
@@ -141,12 +144,13 @@
         </div>
         <div class="fgrid" style="margin-top:14px">
           <label>แท็ก (คั่นด้วยเครื่องหมายจุลภาค ,)<input data-f="tags" placeholder="เช่น powershell, backup, windows"></label>
-          <label>รูปปก (ไม่บังคับ)
-            <span class="cover-row"><input data-f="cover" placeholder="images/....webp"><button type="button" class="lbtn" id="coverUp">อัปโหลด</button><img id="coverPrev" hidden alt=""></span>
+          <label>รูปปก — แสดงในการ์ดหน้าแรก และเป็นแบนเนอร์บนหน้าบทความ
+            <span class="cover-row"><input data-f="cover" placeholder="images/....webp"><button type="button" class="lbtn" id="coverUp">อัปโหลด</button><button type="button" class="lbtn del" id="coverDel" hidden>ลบ</button><img id="coverPrev" hidden alt=""></span>
           </label>
           <label class="full">ข้อความย่อ (แสดงในการ์ดหน้าแรก)<textarea data-f="excerpt" rows="2"></textarea></label>
         </div>
-        <label style="margin-top:16px">เนื้อหา (Markdown) — วางรูปด้วย Ctrl+V หรือลากไฟล์รูปมาวางได้</label>
+        <label style="margin-top:16px">เนื้อหา (Markdown) — วางรูปด้วย Ctrl+V หรือลากไฟล์รูป / PDF มาวางได้</label>
+        <div class="box" id="fenceWarn" hidden style="margin:6px 0;border-left-color:#c62828">⚠️ มีบล็อกโค้ดที่เปิด ``` แต่ยังไม่ได้ปิด เนื้อหาส่วนท้ายทั้งหมดจะกลายเป็นโค้ด ให้เพิ่ม ``` ปิดท้ายบล็อก</div>
         <div class="md-wrap" id="mdWrap">
           <div class="toolbar" id="toolbar">
             <button data-md="h2" title="หัวข้อใหญ่">H2</button><button data-md="h3" title="หัวข้อย่อย">H3</button>
@@ -155,7 +159,7 @@
             <span class="sep"></span>
             <button data-md="ul" title="รายการ">• รายการ</button><button data-md="ol" title="รายการตัวเลข">1. ลำดับ</button><button data-md="task" title="เช็กลิสต์">☑ เช็กลิสต์</button>
             <span class="sep"></span>
-            <button data-md="block" title="บล็อกโค้ด">{ } บล็อกโค้ด</button><button data-md="table" title="ตาราง">ตาราง</button><button data-md="quote" title="กล่องข้อความ">❝ Tip</button><button data-md="link" title="ลิงก์">ลิงก์</button><button data-md="img" title="แทรกรูป">🖼 รูป</button>
+            <button data-md="block" title="บล็อกโค้ด">{ } บล็อกโค้ด</button><button data-md="table" title="ตาราง">ตาราง</button><button data-md="quote" title="กล่องข้อความ">❝ Tip</button><button data-md="link" title="ลิงก์">ลิงก์</button><button data-md="img" title="แทรกรูป">🖼 รูป</button><button data-md="pdf" title="แนบไฟล์ PDF">📄 PDF</button>
             <button class="view" data-md="toggle">ดูตัวอย่าง</button>
           </div>
           <textarea id="mdInput" spellcheck="false"></textarea>
@@ -173,6 +177,13 @@
     <!-- ข้อมูลเว็บ -->
     <div class="pane" id="p-site">
       <h2>ข้อมูลเว็บไซต์</h2><p class="hint">ชื่อเว็บ ข้อความหน้าแรก และข้อความท้ายเว็บ</p>
+      <div class="hero-ed">
+        <div class="hero-prev" id="heroPrev"><span>ยังไม่มีรูปหน้าปก<br><small>ใช้พื้นหลังลายเรขาคณิตแบบเดิม</small></span></div>
+        <div><h3 style="font-size:1.05rem">รูปหน้าปก (พื้นหลังหน้าแรก)</h3>
+          <p class="hint" style="margin:4px 0 12px">แนะนำรูปแนวนอน กว้างอย่างน้อย 1600px · ระบบจะปรับให้ตัวหนังสืออ่านง่ายด้วยชั้นสีเข้มอัตโนมัติ</p>
+          <div class="row"><button class="lbtn pri" type="button" id="heroUp">อัปโหลดรูปหน้าปก</button><button class="lbtn del" type="button" id="heroDel" hidden>ลบรูปหน้าปก</button></div>
+          <input id="heroPath" placeholder="images/....webp" style="margin-top:10px"></div>
+      </div>
       <div class="fgrid" id="siteForm"></div>
     </div>
 
@@ -205,8 +216,8 @@
   </div>
 </div>
 
-<input type="file" id="fileIn" accept="image/*" hidden>
-<div class="uploading" id="uploading">กำลังอัปโหลดรูป...</div>
+<input type="file" id="fileIn" hidden>
+<div class="uploading" id="uploading">กำลังอัปโหลด...</div>
 <div class="toast" id="toast"></div>
 
 <script src="assets/vendor/marked.min.js"></script>
@@ -216,7 +227,7 @@
 <script>
 const $ = id => document.getElementById(id);
 let DATA = null, dirty = false, CUR = null;       // CUR = บทความที่กำลังแก้
-const IMG_MAP = {};                                // path → objectURL ให้พรีวิวรูปที่เพิ่งอัปโหลดได้ทันที
+const IMG_MAP = {};                                // path → objectURL ให้พรีวิวรูป/PDF ที่เพิ่งอัปโหลดได้ทันที
 
 function toast(msg, ms = 3500){ const t = $('toast'); t.textContent = msg; t.style.display = 'block'; clearTimeout(t._h); t._h = setTimeout(() => t.style.display = 'none', ms); }
 function markDirty(){ dirty = true; $('saveBtn').classList.add('dirty'); $('saveBtn').textContent = 'บันทึกขึ้น GitHub •'; }
@@ -332,10 +343,14 @@ $('editorView').addEventListener('input', e => {
 });
 $('fSlug').addEventListener('change', e => { CUR.slug = uniqueSlug(slugify(e.target.value), CUR.id); e.target.value = CUR.slug; updateLiveLink(); });
 function updateLiveLink(){ $('viewLive').href = 'post.html?p=' + encodeURIComponent(CUR.slug || ''); }
-function updateCoverPrev(){ const c = CUR.cover; $('coverPrev').hidden = !c; if (c) $('coverPrev').src = IMG_MAP[c] || c; }
+function updateCoverPrev(){ const c = CUR.cover; $('coverPrev').hidden = $('coverDel').hidden = !c; if (c) $('coverPrev').src = IMG_MAP[c] || c; }
 
 let pt; $('mdInput').addEventListener('input', () => { CUR.body = $('mdInput').value; markDirty(); clearTimeout(pt); pt = setTimeout(updatePreview, 200); });
-function updatePreview(){ $('mdPreview').innerHTML = renderMarkdown(CUR.body, IMG_MAP); enhance($('mdPreview')); }
+function updatePreview(){
+  $('mdPreview').innerHTML = renderMarkdown(CUR.body); enhance($('mdPreview'), IMG_MAP);
+  const fences = (String(CUR.body || '').match(/^\s*(```|~~~)/gm) || []).length;
+  $('fenceWarn').hidden = fences % 2 === 0;
+}
 
 // แถบเครื่องมือ Markdown
 function wrapSel(before, after = before, placeholder = 'ข้อความ'){
@@ -367,6 +382,7 @@ $('toolbar').onclick = e => {
     table: () => insertBlock('| หัวข้อ 1 | หัวข้อ 2 | หัวข้อ 3 |\n|---|---|---|\n| ข้อมูล | ข้อมูล | ข้อมูล |\n| ข้อมูล | ข้อมูล | ข้อมูล |'),
     link: () => { const url = prompt('URL ของลิงก์', 'https://'); if (url) wrapSel('[', `](${url})`, 'ข้อความลิงก์'); },
     img: () => pickImage(path => insertImage(path)),
+    pdf: () => pickPdf(),
     toggle: () => { const w = $('mdWrap'); w.classList.toggle('preview'); e.target.textContent = w.classList.contains('preview') ? 'แก้ไข' : 'ดูตัวอย่าง'; }
   })[a]?.();
 };
@@ -377,51 +393,86 @@ $('mdInput').addEventListener('keydown', e => {
 });
 document.addEventListener('keydown', e => { if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's' && e.target.id !== 'mdInput') { e.preventDefault(); $('saveBtn').click(); } });
 
-// ================= รูปภาพ =================
+// ================= รูปภาพ / PDF =================
 function insertImage(path, alt = 'รูปประกอบ'){ insertBlock(`![${alt}](${path})`); }
+function insertPdf(f){ insertBlock(`[📄 ${f.name.replace(/[\[\]]/g, '')}](${f.path} "${f.size}")`); }
+const fmtSize = n => n >= 1048576 ? (n / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(n / 1024)) + ' KB';
+const isPdfFile = f => f.type === 'application/pdf' || /\.pdf$/i.test(f.name);
 let pickCb = null;
-function pickImage(cb){ pickCb = cb; $('fileIn').value = ''; $('fileIn').click(); }
-$('fileIn').onchange = async () => { const f = $('fileIn').files[0]; if (f && pickCb) { const p = await uploadImage(f); if (p) pickCb(p); } };
+function pickFile(accept, cb){ pickCb = cb; $('fileIn').accept = accept; $('fileIn').value = ''; $('fileIn').click(); }
+const pickImage = (cb, maxW) => pickFile('image/*', async f => { const p = await uploadImage(f, maxW); if (p) cb(p); });
+const pickPdf = () => pickFile('application/pdf,.pdf', async f => { const r = await uploadPdf(f); if (r) insertPdf(r); });
+$('fileIn').onchange = () => { const f = $('fileIn').files[0]; if (f && pickCb) pickCb(f); };
 $('coverUp').onclick = () => pickImage(path => { CUR.cover = path; document.querySelector('[data-f=cover]').value = path; updateCoverPrev(); markDirty(); });
-$('mdInput').addEventListener('paste', async e => {
-  const f = [...(e.clipboardData?.files || [])].find(f => f.type.startsWith('image/'));
-  if (f) { e.preventDefault(); const p = await uploadImage(f); if (p) insertImage(p); }
-});
+$('coverDel').onclick = () => { CUR.cover = ''; document.querySelector('[data-f=cover]').value = ''; updateCoverPrev(); markDirty(); };
+
+async function handleFiles(files){
+  for (const f of files) {
+    if (isPdfFile(f)) { const r = await uploadPdf(f); if (r) insertPdf(r); }
+    else if (f.type.startsWith('image/')) { const p = await uploadImage(f); if (p) insertImage(p); }
+  }
+}
+const usable = list => [...(list || [])].filter(f => isPdfFile(f) || f.type.startsWith('image/'));
+$('mdInput').addEventListener('paste', e => { const fs = usable(e.clipboardData?.files); if (fs.length) { e.preventDefault(); handleFiles(fs); } });
 $('mdInput').addEventListener('dragover', e => { e.preventDefault(); $('mdInput').classList.add('drag'); });
 $('mdInput').addEventListener('dragleave', () => $('mdInput').classList.remove('drag'));
-$('mdInput').addEventListener('drop', async e => {
+$('mdInput').addEventListener('drop', e => {
   $('mdInput').classList.remove('drag');
-  const files = [...(e.dataTransfer?.files || [])].filter(f => f.type.startsWith('image/')); if (!files.length) return;
-  e.preventDefault(); for (const f of files) { const p = await uploadImage(f); if (p) insertImage(p); }
+  const fs = usable(e.dataTransfer?.files); if (!fs.length) return;
+  e.preventDefault(); handleFiles(fs);
 });
 
-// ย่อรูปให้กว้างไม่เกิน 1600px และแปลงเป็น WebP เพื่อให้เว็บโหลดเร็ว (GIF/SVG คงไฟล์เดิม)
-async function compress(file){
+// ย่อรูปให้กว้างไม่เกิน maxW และแปลงเป็น WebP เพื่อให้เว็บโหลดเร็ว (GIF/SVG คงไฟล์เดิม)
+async function compress(file, maxW = 1600){
   if (/gif|svg/.test(file.type)) return {blob:file, ext:file.type.includes('svg') ? 'svg' : 'gif'};
-  const bmp = await createImageBitmap(file), scale = Math.min(1, 1600 / bmp.width);
+  const bmp = await createImageBitmap(file), scale = Math.min(1, maxW / bmp.width);
   const c = document.createElement('canvas'); c.width = Math.round(bmp.width * scale); c.height = Math.round(bmp.height * scale);
   c.getContext('2d').drawImage(bmp, 0, 0, c.width, c.height);
   let blob = await new Promise(r => c.toBlob(r, 'image/webp', .85));
   if (!blob || blob.type !== 'image/webp') blob = await new Promise(r => c.toBlob(r, 'image/jpeg', .85));
   return {blob, ext: blob.type === 'image/webp' ? 'webp' : 'jpg'};
 }
-async function uploadImage(file){
+const stamp = () => new Date().toISOString().slice(0, 10).replace(/-/g, '') + '-' + Math.random().toString(36).slice(2, 8);
+const toB64 = blob => new Promise((res, rej) => { const fr = new FileReader(); fr.onload = () => res(fr.result.split(',')[1]); fr.onerror = rej; fr.readAsDataURL(blob); });
+function needCfg(){
   const c = getCfg();
-  if (!c.owner || !c.repo || !c.token) { toast('ต้องตั้งค่า GitHub ก่อนจึงจะอัปโหลดรูปได้ (แท็บ "ตั้งค่า GitHub")', 6000); return null; }
-  if (file.size > 20 * 1024 * 1024) { toast('ไฟล์ใหญ่เกิน 20 MB'); return null; }
-  $('uploading').style.display = 'grid';
+  if (!c.owner || !c.repo || !c.token) { toast('ต้องตั้งค่า GitHub ก่อนจึงจะอัปโหลดไฟล์ได้ (แท็บ "ตั้งค่า GitHub")', 6000); return null; }
+  return c;
+}
+async function putFile(c, path, blob, label){
+  $('uploading').textContent = `กำลังอัปโหลด${label} (${fmtSize(blob.size)})...`; $('uploading').style.display = 'grid';
   try {
-    const {blob, ext} = await compress(file);
-    if (blob.size > 10 * 1024 * 1024) throw new Error('รูปหลังย่อยังใหญ่เกิน 10 MB');
-    const d = new Date(), stamp = d.toISOString().slice(0, 10).replace(/-/g, '');
-    const path = `images/${stamp}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
-    const b64 = await new Promise(r => { const fr = new FileReader(); fr.onload = () => r(fr.result.split(',')[1]); fr.readAsDataURL(blob); });
-    await gh(c, path, 'PUT', {message:`Upload image ${path}`, content:b64, branch:c.branch});
+    await gh(c, path, 'PUT', {message:`Upload ${path}`, content:await toB64(blob), branch:c.branch});
     IMG_MAP[path] = URL.createObjectURL(blob);
-    toast(`อัปโหลดรูปแล้ว ✓ (${Math.round(blob.size / 1024)} KB) อย่าลืมกดบันทึกบทความ`, 5000);
+    return true;
+  } finally { $('uploading').style.display = 'none'; }
+}
+async function uploadImage(file, maxW = 1600){
+  const c = needCfg(); if (!c) return null;
+  if (file.size > 20 * 1024 * 1024) { toast('ไฟล์รูปใหญ่เกิน 20 MB'); return null; }
+  try {
+    const {blob, ext} = await compress(file, maxW);
+    if (blob.size > 10 * 1024 * 1024) throw new Error('รูปหลังย่อยังใหญ่เกิน 10 MB');
+    const path = `images/${stamp()}.${ext}`;
+    await putFile(c, path, blob, 'รูป');
+    toast(`อัปโหลดรูปแล้ว ✓ (${fmtSize(blob.size)}) อย่าลืมกดบันทึกขึ้น GitHub`, 5000);
     return path;
   } catch (e) { toast('อัปโหลดรูปไม่สำเร็จ: ' + e.message, 8000); return null; }
-  finally { $('uploading').style.display = 'none'; }
+}
+// PDF เก็บไฟล์จริงไว้ในโฟลเดอร์ files/ (ไม่บีบอัด) จำกัด 25 MB ต่อไฟล์
+async function uploadPdf(file){
+  const c = needCfg(); if (!c) return null;
+  if (!isPdfFile(file)) { toast('รองรับเฉพาะไฟล์ .pdf'); return null; }
+  if (file.size > 25 * 1024 * 1024) { toast(`ไฟล์ใหญ่ ${fmtSize(file.size)} เกินขีดจำกัด 25 MB ให้บีบอัด PDF ก่อน`, 7000); return null; }
+  try {
+    const head = new Uint8Array(await file.slice(0, 5).arrayBuffer());
+    if (String.fromCharCode(...head) !== '%PDF-') throw new Error('ไฟล์นี้ไม่ใช่ PDF ที่ถูกต้อง');
+    const base = slugify(file.name.replace(/\.pdf$/i, '')).slice(0, 50);
+    const path = `files/${stamp()}${base ? '-' + base : ''}.pdf`;
+    await putFile(c, path, new Blob([file], {type:'application/pdf'}), ' PDF');
+    toast(`อัปโหลด PDF แล้ว ✓ (${fmtSize(file.size)}) อย่าลืมกดบันทึกขึ้น GitHub`, 5000);
+    return {path, name:file.name, size:fmtSize(file.size)};
+  } catch (e) { toast('อัปโหลด PDF ไม่สำเร็จ: ' + e.message, 8000); return null; }
 }
 
 // ================= หมวดหมู่ =================
@@ -474,7 +525,16 @@ function renderSite(){
   const s = DATA.site;
   $('siteForm').innerHTML = SITE_FIELDS.map(([k, l, t]) => `<label>${l}${t ? `<textarea rows="3" data-k="${k}">${esc(s[k])}</textarea>` : `<input data-k="${k}" value="${esc(s[k])}">`}</label>`).join('');
   $('siteForm').oninput = e => { s[e.target.dataset.k] = e.target.value; markDirty(); };
+  renderHero();
 }
+function renderHero(){
+  const v = DATA.site.heroImage || '';
+  $('heroPath').value = v; $('heroDel').hidden = !v;
+  setCoverBg($('heroPrev'), v && (IMG_MAP[v] || v));
+}
+$('heroUp').onclick = () => pickImage(path => { DATA.site.heroImage = path; markDirty(); renderHero(); }, 2000);
+$('heroDel').onclick = () => { DATA.site.heroImage = ''; markDirty(); renderHero(); };
+$('heroPath').onchange = e => { DATA.site.heroImage = e.target.value.trim(); markDirty(); renderHero(); };
 
 // ================= GitHub =================
 const CFG_KEY = 'ghCfg';
