@@ -84,7 +84,7 @@
         "troubleshooting"
       ],
       "date": "2026-10-28",
-      "cover": "",
+      "cover": "images/20261104-zjwxky.webp",
       "excerpt": "ชุดคำสั่งพื้นฐานไล่ปัญหาเน็ตใช้ไม่ได้ ตั้งแต่ IP, DNS, Gateway จนถึงพอร์ตปลายทาง",
       "body": "## ไล่ปัญหาตามลำดับชั้น\n\nเริ่มจากเครื่องตัวเองออกไปหาปลายทาง จะช่วยตัดสาเหตุได้เร็วที่สุด\n\n| ขั้น | ตรวจอะไร | คำสั่ง |\n|---|---|---|\n| 1 | IP / Gateway | `ipconfig /all` |\n| 2 | ต่อ Gateway ได้ไหม | `ping 192.168.1.1` |\n| 3 | DNS | `nslookup google.com` |\n| 4 | เส้นทาง | `tracert 8.8.8.8` |\n| 5 | พอร์ตปลายทาง | `Test-NetConnection` |\n\n## คำสั่งที่ใช้บ่อย\n\n```cmd\nipconfig /all\nipconfig /flushdns\nipconfig /release && ipconfig /renew\nnetstat -ano | findstr :443\n```\n\n## ทดสอบพอร์ตด้วย PowerShell\n\n```powershell\nTest-NetConnection -ComputerName 10.0.0.20 -Port 1433\n# ดูเฉพาะผลลัพธ์ว่าเชื่อมต่อได้หรือไม่\n(Test-NetConnection 10.0.0.20 -Port 3389).TcpTestSucceeded\n```\n\n> **Tip:** ถ้า `ping` ไม่ผ่านแต่ `Test-NetConnection` ผ่าน แปลว่าปลายทางบล็อก ICMP ไม่ได้แปลว่าเครื่องดับ"
     },
