@@ -296,7 +296,7 @@ function renderPostList(){
 $('postSearch').oninput = renderPostList;
 $('postRows').onclick = e => { const id = e.target.closest('[data-edit]')?.dataset.edit; if (id) { e.preventDefault(); openEditor(DATA.posts.find(p => p.id === id)); } };
 $('addPost').onclick = () => {
-  const p = {id:'p' + Date.now(), slug:'', title:'', category:(DATA.categories[0] || {}).id || '', tags:[], date:new Date().toISOString().slice(0, 10), cover:'', excerpt:'', body:'## หัวข้อแรก\n\nเขียนเนื้อหาที่นี่...\n', draft:true};
+  const p = {id:'p' + Date.now(), slug:'', title:'', category:(DATA.categories[0] || {}).id || '', tags:[], date:new Date().toISOString().slice(0, 10), cover:'', excerpt:'', body:NEW_BODY, draft:true};
   DATA.posts.unshift(p); markDirty(); openEditor(p); $('fTitle').focus();
 };
 
@@ -321,7 +321,11 @@ function openEditor(p){
   updateCoverPrev(); updatePreview(); updateLiveLink();
   window.scrollTo(0, 0);
 }
+const NEW_BODY = '## หัวข้อแรก\n\nเขียนเนื้อหาที่นี่...\n';
+// บทความใหม่ที่ยังไม่ได้เขียนอะไรเลย = ถูกทิ้ง ลบออกให้อัตโนมัติ
+const isBlankPost = p => !p.title.trim() && !p.cover && !(p.excerpt || '').trim() && (!(p.body || '').trim() || p.body === NEW_BODY);
 function closeEditor(){
+  if (CUR && isBlankPost(CUR)) DATA.posts = DATA.posts.filter(p => p !== CUR);
   if (CUR && !CUR.slug) CUR.slug = uniqueSlug(slugify(CUR.title), CUR.id);
   CUR = null; $('editorView').classList.remove('on'); $('postListView').style.display = ''; renderPostList();
 }
@@ -570,7 +574,16 @@ const exportJSON = () => {
   return JSON.stringify(DATA, null, 2) + '\n';
 };
 $('saveBtn').onclick = async () => {
-  if (CUR && !CUR.title.trim()) return toast('กรุณาใส่หัวข้อบทความก่อนบันทึก');
+  DATA.posts = DATA.posts.filter(p => p === CUR || !isBlankPost(p));
+  const untitled = DATA.posts.find(p => !(p.title || '').trim());
+  if (untitled) {
+    if (untitled === CUR && isBlankPost(CUR)) { closeEditor(); }
+    else {
+      openTab('posts'); if (CUR !== untitled) openEditor(untitled);
+      $('fTitle').focus(); $('fTitle').scrollIntoView({block:'center'});
+      return toast('มีบทความที่ยังไม่มีหัวข้อ (เปิดให้แล้ว) ใส่หัวข้อ หรือกด "ลบบทความ" ถ้าไม่ต้องการ แล้วกดบันทึกอีกครั้ง', 8000);
+    }
+  }
   const c = getCfg();
   if (!c.owner || !c.repo || !c.token) { openTab('github'); return toast('ตั้งค่า GitHub ก่อน (หรือใช้ปุ่มดาวน์โหลด data.json แล้วอัปโหลดเอง)', 6000); }
   $('saveBtn').disabled = true; $('saveBtn').textContent = 'กำลังบันทึก...';
