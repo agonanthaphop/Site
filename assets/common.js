@@ -108,8 +108,33 @@ function setCoverBg(el, url){
   el.style.backgroundImage = `linear-gradient(180deg, rgba(9,9,11,.25) 0%, rgba(9,9,11,.55) 50%, rgba(9,9,11,.88) 100%), linear-gradient(90deg, rgba(9,9,11,.55) 0%, rgba(9,9,11,0) 70%), url("${String(url).replace(/["\\\n]/g, encodeURIComponent)}")`;
 }
 
+// ไอคอนเว็บ: รูปที่อัปโหลด > ตัวอักษร/อีโมจิ + สี > ไอคอนเริ่มต้น (ใช้ทั้งโลโก้บนหัวเว็บและ favicon)
+const DEFAULT_LOGO_COLOR = '#f97316';
+function logoSvg(s){
+  const txt = (s.logoText || '').trim(), color = s.logoColor || DEFAULT_LOGO_COLOR;
+  const inner = txt
+    ? `<rect width="64" height="64" rx="16" fill="${color}"/><text x="32" y="33" font-family="system-ui,'Segoe UI Emoji',sans-serif" font-size="${[...txt].length > 1 ? 26 : 36}" font-weight="700" fill="#fff" text-anchor="middle" dominant-baseline="central">${esc(txt)}</text>`
+    : `<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${color}"/><stop offset="1" stop-color="#fbbf24"/></linearGradient></defs><rect width="64" height="64" rx="16" fill="url(#g)"/>`;
+  return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">${inner}</svg>`);
+}
+function applyBrand(s, fileMap){
+  s = s || {};
+  const src = s.logo ? ((fileMap && fileMap[s.logo]) || s.logo) : logoSvg(s);
+  document.querySelectorAll('.brand .mark').forEach(m => {
+    const img = document.createElement('img');
+    img.className = 'mark'; img.alt = ''; img.src = src; img.decoding = 'async';
+    m.replaceWith(img);
+  });
+  let link = document.querySelector('link[rel=icon]');
+  if (!link) { link = document.createElement('link'); link.rel = 'icon'; document.head.appendChild(link); }
+  link.href = src;
+  let apple = document.querySelector('link[rel=apple-touch-icon]');
+  if (s.logo) { if (!apple) { apple = document.createElement('link'); apple.rel = 'apple-touch-icon'; document.head.appendChild(apple); } apple.href = src; }
+}
+
 function fillSite(data){
   const s = data.site || {};
+  applyBrand(s);
   document.querySelectorAll('[data-site]').forEach(el => el.textContent = s[el.dataset.site] ?? '');
   const yr = document.getElementById('yr'); if (yr) yr.textContent = new Date().getFullYear();
 }

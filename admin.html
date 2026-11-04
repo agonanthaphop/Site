@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Crect width=%2264%22 height=%2264%22 rx=%2216%22 fill=%22%23f97316%22/%3E%3C/svg%3E">
 <meta name="robots" content="noindex,nofollow">
 <title>ระบบจัดการคลังความรู้</title>
 <script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
@@ -72,7 +73,20 @@
   .cover-row{display:flex;gap:8px;align-items:center}
   .cover-row img{height:40px;width:64px;object-fit:cover;border:1px solid var(--line);border-radius:6px}
   .hero-ed{display:grid;grid-template-columns:minmax(0,1.2fr) 1fr;gap:24px;align-items:center;margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--line)}
-  .hero-ed h3{color:var(--text)}
+  .hero-ed h3,.icon-ed h3{color:var(--text)}
+  .icon-ed{display:grid;grid-template-columns:minmax(0,1.2fr) 1fr;gap:24px;align-items:center;margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--line)}
+  .icon-prev{display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;gap:12px 18px;align-items:center;background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+  #iconBig{width:88px;height:88px;border-radius:22px;grid-row:1/3;object-fit:cover;box-shadow:var(--shadow)}
+  .icon-bar{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-sm);padding:10px 14px;font-weight:700;color:var(--text);min-width:0}
+  .icon-bar img{width:24px;height:24px;border-radius:7px;object-fit:cover}
+  .icon-bar b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .icon-tab{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:10px 10px 0 0;padding:7px 12px;font-size:.8rem;color:var(--soft);max-width:240px;min-width:0}
+  .icon-tab img{width:16px;height:16px;border-radius:4px;object-fit:cover}
+  .icon-tab span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .icon-tab i{font-style:normal;color:var(--muted)}
+  .swatches{display:flex;gap:6px;flex-wrap:wrap}
+  .swatches button{width:26px;height:26px;border-radius:50%;border:2px solid var(--surface);box-shadow:0 0 0 1px var(--line);cursor:pointer}
+  .swatches button.on{box-shadow:0 0 0 2px var(--text)}
   .hero-prev{aspect-ratio:16/6;background:var(--surface-2);border:1px dashed var(--line-strong);border-radius:var(--r);color:var(--muted);display:grid;place-items:center;text-align:center;background-size:cover;background-position:center;font-size:.92rem}
   .hero-prev.has-cover{border-style:solid}
   .hero-prev.has-cover span{display:none}
@@ -84,7 +98,7 @@
   #fenceWarn{background:color-mix(in srgb,#dc2626 8%,var(--surface));border-color:color-mix(in srgb,#dc2626 35%,var(--line));color:var(--text)}
   .uploading{position:fixed;inset:0;background:color-mix(in srgb,var(--bg) 60%,transparent);backdrop-filter:blur(4px);display:none;place-items:center;z-index:98;color:var(--text);font-size:1.05rem;font-weight:500}
   @media(max-width:900px){
-    .fgrid,.g4,.cat-item,.hero-ed{grid-template-columns:1fr}
+    .fgrid,.g4,.cat-item,.hero-ed,.icon-ed{grid-template-columns:1fr}
     .md-wrap{grid-template-columns:1fr}
     .toolbar .view{display:block}
     #mdPreview{display:none;max-height:none;min-height:560px}
@@ -199,6 +213,22 @@
           <p class="hint" style="margin:4px 0 12px">แนะนำรูปแนวนอน กว้างอย่างน้อย 1600px · ระบบจะปรับให้ตัวหนังสืออ่านง่ายด้วยชั้นสีเข้มอัตโนมัติ</p>
           <div class="row"><button class="lbtn pri" type="button" id="heroUp">อัปโหลดรูปหน้าปก</button><button class="lbtn del" type="button" id="heroDel" hidden>ลบรูปหน้าปก</button></div>
           <input id="heroPath" placeholder="images/....webp" style="margin-top:10px"></div>
+      </div>
+      <div class="icon-ed">
+        <div class="icon-prev">
+          <img id="iconBig" alt="">
+          <div class="icon-bar"><img id="iconSmall" alt=""><b id="iconName"></b></div>
+          <div class="icon-tab"><img id="iconFav" alt=""><span id="iconTabName"></span><i>×</i></div>
+        </div>
+        <div>
+          <h3 style="font-size:1.05rem">ไอคอนเว็บ (โลโก้บนหัวเว็บ + favicon บนแท็บเบราว์เซอร์)</h3>
+          <p class="hint" style="margin:4px 0 14px">เลือกได้ 2 แบบ: อัปโหลดรูป (ระบบตัดเป็นสี่เหลี่ยมจัตุรัสให้) หรือใช้ตัวอักษร / อีโมจิ บนพื้นสี</p>
+          <div class="row"><button class="lbtn pri" type="button" id="iconUp">อัปโหลดรูปไอคอน</button><button class="lbtn del" type="button" id="iconDel" hidden>ลบรูป ใช้ตัวอักษรแทน</button></div>
+          <div class="fgrid" style="margin-top:14px" id="iconTextEd">
+            <label>ตัวอักษร / อีโมจิ (ไม่เกิน 2 ตัว · เว้นว่าง = ไอคอนเริ่มต้น)<input id="iconText" maxlength="4" placeholder="เช่น IT, A, 💻, ⚡"></label>
+            <label>สีพื้น<span class="row" style="flex-wrap:nowrap"><input type="color" id="iconColor" style="width:46px;height:40px;padding:3px;flex:0 0 auto"><span class="swatches" id="swatches"></span></span></label>
+          </div>
+        </div>
       </div>
       <div class="fgrid" id="siteForm"></div>
     </div>
@@ -544,8 +574,8 @@ const SITE_FIELDS = [['name','ชื่อเว็บ'],['tagline','คำโ�
 function renderSite(){
   const s = DATA.site;
   $('siteForm').innerHTML = SITE_FIELDS.map(([k, l, t]) => `<label>${l}${t ? `<textarea rows="3" data-k="${k}">${esc(s[k])}</textarea>` : `<input data-k="${k}" value="${esc(s[k])}">`}</label>`).join('');
-  $('siteForm').oninput = e => { s[e.target.dataset.k] = e.target.value; markDirty(); };
-  renderHero();
+  $('siteForm').oninput = e => { s[e.target.dataset.k] = e.target.value; markDirty(); if (e.target.dataset.k === 'name') renderIcon(); };
+  renderHero(); renderIcon();
 }
 function renderHero(){
   const v = DATA.site.heroImage || '';
@@ -555,6 +585,42 @@ function renderHero(){
 $('heroUp').onclick = () => pickImage(path => { DATA.site.heroImage = path; markDirty(); renderHero(); }, 2000);
 $('heroDel').onclick = () => { DATA.site.heroImage = ''; markDirty(); renderHero(); };
 $('heroPath').onchange = e => { DATA.site.heroImage = e.target.value.trim(); markDirty(); renderHero(); };
+
+// ---------- ไอคอนเว็บ ----------
+const SWATCHES = ['#f97316','#ef4444','#ec4899','#8b5cf6','#3b82f6','#0ea5e9','#10b981','#84cc16','#eab308','#18181b'];
+function renderIcon(){
+  const s = DATA.site, src = s.logo ? (IMG_MAP[s.logo] || s.logo) : logoSvg(s);
+  ['iconBig','iconSmall','iconFav'].forEach(id => $(id).src = src);
+  $('iconName').textContent = $('iconTabName').textContent = s.name || 'IT NOTEBOOK';
+  $('iconDel').hidden = !s.logo;
+  $('iconTextEd').style.opacity = s.logo ? .45 : 1;
+  $('iconText').value = s.logoText || ''; $('iconColor').value = s.logoColor || DEFAULT_LOGO_COLOR;
+  $('swatches').innerHTML = SWATCHES.map(c => `<button type="button" data-c="${c}" title="${c}" style="background:${c}" class="${(s.logoColor || DEFAULT_LOGO_COLOR) === c ? 'on' : ''}"></button>`).join('');
+  document.querySelectorAll('.bar .brand .mark').forEach(m => m.src = src);
+}
+// ตัดรูปตรงกลางเป็นสี่เหลี่ยมจัตุรัส 256px แล้วบันทึกเป็น PNG (SVG คงไฟล์เดิม)
+async function uploadIcon(file){
+  const c = needCfg(); if (!c) return null;
+  if (!file.type.startsWith('image/')) { toast('รองรับเฉพาะไฟล์รูป'); return null; }
+  try {
+    let blob = file, ext = 'svg';
+    if (!file.type.includes('svg')) {
+      const bmp = await createImageBitmap(file), side = Math.min(bmp.width, bmp.height), out = Math.min(256, side);
+      const cv = document.createElement('canvas'); cv.width = cv.height = out;
+      cv.getContext('2d').drawImage(bmp, (bmp.width - side) / 2, (bmp.height - side) / 2, side, side, 0, 0, out, out);
+      blob = await new Promise(r => cv.toBlob(r, 'image/png')); ext = 'png';
+    }
+    const path = `images/icon-${stamp()}.${ext}`;
+    await putFile(c, path, blob, 'ไอคอน');
+    toast('อัปโหลดไอคอนแล้ว ✓ อย่าลืมกดบันทึกขึ้น GitHub', 5000);
+    return path;
+  } catch (e) { toast('อัปโหลดไอคอนไม่สำเร็จ: ' + e.message, 8000); return null; }
+}
+$('iconUp').onclick = () => pickFile('image/*', async f => { const p = await uploadIcon(f); if (p) { DATA.site.logo = p; markDirty(); renderIcon(); } });
+$('iconDel').onclick = () => { DATA.site.logo = ''; markDirty(); renderIcon(); };
+$('iconText').oninput = e => { DATA.site.logoText = [...e.target.value.trim()].slice(0, 2).join(''); markDirty(); const v = e.target.value; renderIcon(); e.target.value = v; };
+$('iconColor').oninput = e => { DATA.site.logoColor = e.target.value; markDirty(); renderIcon(); };
+$('swatches').onclick = e => { const c = e.target.dataset.c; if (c) { DATA.site.logoColor = c; markDirty(); renderIcon(); } };
 
 // ================= GitHub =================
 const CFG_KEY = 'ghCfg';
@@ -622,7 +688,7 @@ $('dlBtn').onclick = () => {
 function showApp(){
   DATA.categories = DATA.categories || []; DATA.posts = DATA.posts || []; DATA.site = DATA.site || {};
   $('loginView').style.display = 'none'; $('appView').style.display = 'block';
-  renderSite(); renderPostList(); loadCfg();
+  applyBrand(DATA.site); renderSite(); renderPostList(); loadCfg();
 }
 (async () => {
   const a = sessionStorage.getItem('authed'); if (!a) return;
