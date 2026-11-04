@@ -100,7 +100,7 @@
         "dr"
       ],
       "date": "2026-10-15",
-      "cover": "",
+      "cover": "images/20261104-lx15pw.webp",
       "excerpt": "สคริปต์สำรองข้อมูลแบบ Full และ Differential พร้อมวิธีทดสอบ Restore ไปเป็นฐานข้อมูลใหม่",
       "body": "## Full Backup\n\n```sql\nBACKUP DATABASE [MyDB]\nTO DISK = N'D:\\Backup\\MyDB_FULL.bak'\nWITH COMPRESSION, CHECKSUM, STATS = 10;\n```\n\n## Differential Backup\n\n```sql\nBACKUP DATABASE [MyDB]\nTO DISK = N'D:\\Backup\\MyDB_DIFF.bak'\nWITH DIFFERENTIAL, COMPRESSION, CHECKSUM;\n```\n\n## ตรวจไฟล์ก่อน Restore\n\n```sql\nRESTORE VERIFYONLY FROM DISK = N'D:\\Backup\\MyDB_FULL.bak' WITH CHECKSUM;\nRESTORE FILELISTONLY FROM DISK = N'D:\\Backup\\MyDB_FULL.bak';\n```\n\n## Restore เป็นฐานข้อมูลทดสอบ\n\n```sql\nRESTORE DATABASE [MyDB_Test]\nFROM DISK = N'D:\\Backup\\MyDB_FULL.bak'\nWITH MOVE 'MyDB' TO N'D:\\Data\\MyDB_Test.mdf',\n     MOVE 'MyDB_log' TO N'D:\\Data\\MyDB_Test_log.ldf',\n     RECOVERY, STATS = 10;\n```\n\n- ชื่อ logical file (`MyDB`, `MyDB_log`) ดูได้จากผล `FILELISTONLY`\n- Backup ที่ไม่เคยทดสอบ Restore เท่ากับยังไม่มี Backup"
     },
