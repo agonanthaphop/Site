@@ -5,70 +5,84 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
 <title>ระบบจัดการคลังความรู้</title>
+<script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
 <link rel="stylesheet" href="assets/vendor/hljs.css">
 <link rel="stylesheet" href="assets/style.css">
 <style>
-  body{background:#e9e6e0}
-  .login{min-height:100vh;display:grid;place-items:center;background:var(--ink-2);position:relative;overflow:hidden}
-  .login::before{content:"";position:absolute;right:-10%;top:-20%;width:55%;height:140%;background:var(--steel);transform:skewX(-18deg)}
-  .login form{position:relative;background:#fff;padding:40px;width:min(380px,92vw);display:grid;gap:14px;clip-path:polygon(0 0,100% 0,100% 90%,90% 100%,0 100%)}
-  .login h1{font-size:1.5rem}
-  .err{color:#c62828;font-size:.9rem;min-height:1.2em}
+  body{background:var(--bg)}
+  .login{min-height:100vh;display:grid;place-items:center;position:relative;overflow:hidden;padding:24px}
+  .login::before{content:"";position:absolute;inset:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:44px 44px;mask-image:radial-gradient(ellipse 60% 60% at 50% 40%,#000 20%,transparent 75%);-webkit-mask-image:radial-gradient(ellipse 60% 60% at 50% 40%,#000 20%,transparent 75%)}
+  .login form{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow-lg);padding:36px;width:min(400px,100%);display:grid;gap:16px}
+  .login h1{font-size:1.45rem}
+  .login .kicker{margin-bottom:0;justify-self:start}
+  .err{color:#dc2626;font-size:.88rem;min-height:1.2em}
   .app{display:none}
-  .bar{background:var(--ink);color:#fff;position:sticky;top:0;z-index:20}
-  .bar .wrap{display:flex;align-items:center;justify-content:space-between;min-height:62px;gap:10px;max-width:1400px}
-  .bar .acts{display:flex;gap:8px;flex-wrap:wrap}
-  .bar .btn{padding:8px 16px;font-size:.9rem}
+  .bar{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:saturate(180%) blur(12px);-webkit-backdrop-filter:saturate(180%) blur(12px);border-bottom:1px solid var(--line)}
+  .bar .wrap{display:flex;align-items:center;justify-content:space-between;min-height:60px;gap:10px;max-width:1400px}
+  .bar .acts{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .bar .btn{padding:7px 14px;font-size:.88rem}
   .wide{max-width:1400px}
-  .tabs{display:flex;gap:4px;margin:22px 0 0;flex-wrap:wrap}
-  .tabs button{font-family:'Kanit';border:0;background:#d6d2ca;padding:10px 18px;cursor:pointer;font-size:.95rem}
-  .tabs button.on{background:#fff;color:var(--accent)}
-  .pane{display:none;background:#fff;padding:28px;margin-bottom:40px}
+  .tabs{display:inline-flex;gap:2px;margin:24px 0 16px;flex-wrap:wrap;background:var(--surface-2);border:1px solid var(--line);padding:4px;border-radius:var(--r)}
+  .tabs button{border:0;background:transparent;padding:7px 16px;cursor:pointer;font-size:.9rem;color:var(--soft);border-radius:var(--r-sm);transition:all .15s}
+  .tabs button:hover{color:var(--text)}
+  .tabs button.on{background:var(--surface);color:var(--text);font-weight:600;box-shadow:var(--shadow-sm),0 0 0 1px var(--line)}
+  .pane{display:none;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:28px;margin-bottom:48px;box-shadow:var(--shadow-sm)}
   .pane.on{display:block}
-  .pane h2{font-size:1.3rem;margin-bottom:4px}
-  .hint{color:var(--muted);font-size:.9rem;margin-bottom:18px}
-  .fgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .pane h2{font-size:1.25rem;margin-bottom:2px}
+  .hint{color:var(--muted);font-size:.88rem;margin-bottom:18px}
+  .fgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
   .fgrid .full{grid-column:1/-1}
-  .g4{display:grid;grid-template-columns:2fr 1.4fr 1fr 1fr;gap:14px}
-  label{display:grid;gap:5px;font-family:'Kanit';font-size:.9rem}
-  input,select,textarea{width:100%;padding:10px 12px;border:1px solid var(--line);background:var(--paper);font:inherit;font-family:'Sarabun';font-size:.98rem;border-radius:3px}
-  input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);border-color:transparent}
+  .g4{display:grid;grid-template-columns:2fr 1.4fr 1fr 1fr;gap:16px}
+  label{display:grid;gap:6px;font-size:.86rem;font-weight:500;color:var(--soft)}
+  input,select,textarea{width:100%;padding:9px 12px;border:1px solid var(--line);background:var(--surface);color:var(--text);font:inherit;font-size:.95rem;font-weight:400;border-radius:var(--r-sm);transition:border-color .15s,box-shadow .15s}
+  input:hover,select:hover,textarea:hover{border-color:var(--line-strong)}
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+  input[type=checkbox]{accent-color:var(--accent);width:16px;height:16px;box-shadow:none}
   .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .row input[type=checkbox] + *,.row:has(> input[type=checkbox]){font-weight:400;color:var(--text)}
   .sp{flex:1}
-  .lbtn{font-family:'Kanit';border:1px solid var(--line);background:var(--paper);padding:7px 14px;cursor:pointer;font-size:.9rem;color:var(--text)}
-  .lbtn:hover{border-color:var(--accent);color:var(--accent)}
-  .lbtn.del{color:#c62828}
-  .lbtn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
-  table.list{width:100%;border-collapse:collapse;font-size:.95rem}
-  table.list th,table.list td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
-  table.list th{font-family:'Kanit';font-weight:600;color:var(--muted);font-size:.85rem}
-  table.list tr:hover td{background:#faf9f6}
-  table.list td.t{font-weight:600}
-  .badge{font-size:.75rem;padding:2px 8px;background:var(--accent-2);color:var(--ink);font-family:'Kanit';margin-left:6px}
+  .lbtn{border:1px solid var(--line);background:var(--surface);padding:6px 13px;cursor:pointer;font-size:.86rem;color:var(--text);border-radius:var(--r-sm);text-decoration:none;white-space:nowrap;transition:all .15s;display:inline-flex;align-items:center;gap:6px}
+  .lbtn:hover{border-color:var(--line-strong);background:var(--surface-2)}
+  .lbtn:disabled{opacity:.4;cursor:default}
+  .lbtn.del{color:#dc2626}
+  .lbtn.del:hover{border-color:#fca5a5;background:color-mix(in srgb,#dc2626 8%,var(--surface))}
+  .lbtn.pri{background:var(--text);border-color:var(--text);color:var(--bg)}
+  .lbtn.pri:hover{opacity:.88;background:var(--text)}
+  table.list{width:100%;border-collapse:separate;border-spacing:0;font-size:.93rem;border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+  table.list th,table.list td{padding:11px 14px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+  table.list tr:last-child td{border-bottom:0}
+  table.list th{font-weight:600;color:var(--muted);font-size:.78rem;letter-spacing:.04em;text-transform:uppercase;background:var(--surface-2)}
+  table.list tr:hover td{background:var(--surface-2)}
+  table.list td.t{font-weight:500}
+  table.list td.t a{text-decoration:none}
+  table.list td.t a:hover{color:var(--accent-ink)}
+  .badge{font-size:.72rem;font-weight:600;padding:2px 8px;background:var(--accent-soft);color:var(--accent-ink);margin-left:8px;border-radius:999px;vertical-align:1px}
   .editor{display:none}
   .editor.on{display:block}
-  .md-wrap{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line);margin-top:6px}
-  .toolbar{grid-column:1/-1;display:flex;gap:2px;flex-wrap:wrap;background:var(--ink);padding:6px}
-  .toolbar button{background:transparent;border:0;color:#dfe3ea;font-family:'Kanit';font-size:.86rem;padding:6px 10px;cursor:pointer;min-width:34px}
-  .toolbar button:hover{background:var(--steel);color:var(--accent-2)}
-  .toolbar .sep{width:1px;background:#3a4357;margin:4px 6px}
+  .md-wrap{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);margin-top:6px;border-radius:var(--r);overflow:hidden}
+  .toolbar{grid-column:1/-1;display:flex;gap:2px;flex-wrap:wrap;background:var(--surface-2);padding:6px;border-bottom:1px solid var(--line)}
+  .toolbar button{background:transparent;border:0;color:var(--soft);font-size:.84rem;padding:5px 10px;cursor:pointer;min-width:32px;border-radius:6px;transition:all .12s}
+  .toolbar button:hover{background:var(--surface);color:var(--text);box-shadow:var(--shadow-sm),0 0 0 1px var(--line)}
+  .toolbar .sep{width:1px;background:var(--line-strong);margin:5px 6px}
   .toolbar .view{margin-left:auto;display:none}
-  #mdInput{border:0;border-radius:0;min-height:560px;resize:vertical;font-family:'JetBrains Mono',monospace;font-size:.9rem;line-height:1.65;background:#fbfaf8;border-right:1px solid var(--line)}
-  #mdInput.drag{outline:3px dashed var(--accent);outline-offset:-8px}
-  #mdPreview{padding:22px 26px;max-height:640px;overflow:auto;background:#fff}
-  #mdPreview.md h2::before{display:none}
-  .lbtn{white-space:nowrap}
-  .cover-row{display:flex;gap:10px;align-items:end}
-  .cover-row img{height:60px;width:100px;object-fit:cover;border:1px solid var(--line)}
-  .hero-ed{display:grid;grid-template-columns:minmax(0,1.2fr) 1fr;gap:22px;align-items:center;margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--line)}
-  .hero-prev{aspect-ratio:16/6;background:var(--ink-2);color:#aab3c5;display:grid;place-items:center;text-align:center;font-family:'Kanit';background-size:cover;background-position:center}
+  #mdInput{border:0;border-radius:0;min-height:560px;resize:vertical;font-family:var(--mono);font-size:.86rem;line-height:1.7;background:var(--surface);border-right:1px solid var(--line);box-shadow:none}
+  #mdInput:focus{box-shadow:none}
+  #mdInput.drag{outline:2px dashed var(--accent);outline-offset:-10px;background:var(--accent-soft)}
+  #mdPreview{padding:24px 28px;max-height:640px;overflow:auto;background:var(--bg)}
+  .cover-row{display:flex;gap:8px;align-items:center}
+  .cover-row img{height:40px;width:64px;object-fit:cover;border:1px solid var(--line);border-radius:6px}
+  .hero-ed{display:grid;grid-template-columns:minmax(0,1.2fr) 1fr;gap:24px;align-items:center;margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--line)}
+  .hero-ed h3{color:var(--text)}
+  .hero-prev{aspect-ratio:16/6;background:var(--surface-2);border:1px dashed var(--line-strong);border-radius:var(--r);color:var(--muted);display:grid;place-items:center;text-align:center;background-size:cover;background-position:center;font-size:.92rem}
+  .hero-prev.has-cover{border-style:solid}
   .hero-prev.has-cover span{display:none}
-  .cat-item{display:grid;grid-template-columns:1fr 1.4fr 1fr auto;gap:10px;align-items:end;padding:14px;border:1px solid var(--line);border-left:4px solid var(--accent);margin-bottom:10px;background:#fbfaf8}
-  .cat-item .ic{width:22px;height:22px;color:var(--accent)}
-  .toast{position:fixed;right:20px;bottom:20px;background:var(--ink);color:#fff;padding:14px 20px;border-left:4px solid var(--accent);display:none;max-width:440px;z-index:99}
-  .dirty{background:var(--accent-2)!important;color:var(--ink)!important}
-  .box{background:var(--paper);padding:16px;border-left:4px solid var(--accent-2);font-size:.92rem;margin:16px 0}
-  .uploading{position:fixed;inset:0;background:rgba(16,20,28,.5);display:none;place-items:center;z-index:98;color:#fff;font-family:'Kanit';font-size:1.2rem}
+  .cat-item{display:grid;grid-template-columns:1fr 1.4fr 1fr auto;gap:12px;align-items:end;padding:16px;border:1px solid var(--line);border-radius:var(--r);margin-bottom:10px;background:var(--surface)}
+  .cat-item .ic{width:20px;height:20px;color:var(--accent);flex:0 0 auto}
+  .toast{position:fixed;right:20px;bottom:20px;background:var(--text);color:var(--bg);padding:12px 18px;border-radius:var(--r);box-shadow:var(--shadow-lg);display:none;max-width:440px;z-index:99;font-size:.92rem}
+  .dirty{background:var(--accent)!important;border-color:var(--accent)!important;color:#fff!important}
+  .box{background:var(--surface-2);border:1px solid var(--line);padding:14px 16px;border-radius:var(--r);font-size:.9rem;margin:16px 0;color:var(--soft)}
+  #fenceWarn{background:color-mix(in srgb,#dc2626 8%,var(--surface));border-color:color-mix(in srgb,#dc2626 35%,var(--line));color:var(--text)}
+  .uploading{position:fixed;inset:0;background:color-mix(in srgb,var(--bg) 60%,transparent);backdrop-filter:blur(4px);display:none;place-items:center;z-index:98;color:var(--text);font-size:1.05rem;font-weight:500}
   @media(max-width:900px){
     .fgrid,.g4,.cat-item,.hero-ed{grid-template-columns:1fr}
     .md-wrap{grid-template-columns:1fr}
@@ -76,7 +90,8 @@
     #mdPreview{display:none;max-height:none;min-height:560px}
     .md-wrap.preview #mdPreview{display:block}
     .md-wrap.preview #mdInput{display:none}
-    .bar .wrap{padding:10px 20px;flex-direction:column}
+    .bar .wrap{padding:10px 16px;flex-direction:column;align-items:stretch}
+    .pane{padding:20px}
     table.list .hide-m{display:none}
   }
 </style>
@@ -85,12 +100,12 @@
 
 <div class="login" id="loginView">
   <form id="loginForm">
-    <div class="kicker" style="color:var(--accent)">Admin</div>
+    <div class="kicker">Admin</div>
     <h1>เข้าสู่ระบบจัดการ</h1>
     <label>รหัสผ่าน<input type="password" id="pw" autocomplete="current-password" required autofocus></label>
     <div class="err" id="loginErr"></div>
-    <button class="btn" type="submit" id="loginBtn">เข้าสู่ระบบ</button>
-    <a href="./" style="font-size:.9rem;color:var(--muted)">← กลับหน้าเว็บ</a>
+    <button class="btn accent" type="submit" id="loginBtn" style="width:100%">เข้าสู่ระบบ</button>
+    <a href="./" style="font-size:.88rem;color:var(--muted);text-decoration:none;justify-self:center">← กลับหน้าเว็บ</a>
   </form>
 </div>
 
@@ -98,21 +113,22 @@
   <div class="bar"><div class="wrap">
     <div class="brand"><span class="mark"></span>จัดการคลังความรู้</div>
     <div class="acts">
-      <button class="btn" id="saveBtn">บันทึกขึ้น GitHub</button>
+      <button class="btn accent" id="saveBtn">บันทึกขึ้น GitHub</button>
       <button class="btn ghost" id="dlBtn">ดาวน์โหลด data.json</button>
-      <a class="btn ghost" href="./" target="_blank">ดูหน้าเว็บ</a>
+      <a class="btn ghost" href="./" target="_blank">ดูหน้าเว็บ ↗</a>
       <button class="btn ghost" id="logoutBtn">ออกจากระบบ</button>
+      <button class="icon-btn" id="themeBtn" type="button" aria-label="สลับโหมดสว่าง/มืด" title="สลับโหมดสว่าง/มืด"><svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
     </div>
   </div></div>
 
   <div class="wrap wide">
-    <div class="tabs" id="tabs">
+    <div><div class="tabs" id="tabs">
       <button data-t="posts" class="on">บทความ</button>
       <button data-t="cats">หมวดหมู่</button>
       <button data-t="site">ข้อมูลเว็บ</button>
       <button data-t="github">ตั้งค่า GitHub</button>
       <button data-t="pass">เปลี่ยนรหัสผ่าน</button>
-    </div>
+    </div></div>
 
     <!-- บทความ -->
     <div class="pane on" id="p-posts">
@@ -140,7 +156,7 @@
           <label>Slug (ส่วนท้ายของลิงก์ ใช้ a-z 0-9 -)<input data-f="slug" id="fSlug"></label>
           <label>หมวดหมู่<select data-f="category" id="fCat"></select></label>
           <label>วันที่<input type="date" data-f="date"></label>
-          <label style="align-content:end"><span class="row" style="font-family:Sarabun;padding:10px 0"><input type="checkbox" data-f="draft" style="width:auto"> ฉบับร่าง (ยังไม่แสดง)</span></label>
+          <label style="align-content:end"><span class="row" style="padding:10px 0"><input type="checkbox" data-f="draft" style="width:auto"> ฉบับร่าง (ยังไม่แสดง)</span></label>
         </div>
         <div class="fgrid" style="margin-top:14px">
           <label>แท็ก (คั่นด้วยเครื่องหมายจุลภาค ,)<input data-f="tags" placeholder="เช่น powershell, backup, windows"></label>
@@ -150,7 +166,7 @@
           <label class="full">ข้อความย่อ (แสดงในการ์ดหน้าแรก)<textarea data-f="excerpt" rows="2"></textarea></label>
         </div>
         <label style="margin-top:16px">เนื้อหา (Markdown) — วางรูปด้วย Ctrl+V หรือลากไฟล์รูป / PDF มาวางได้</label>
-        <div class="box" id="fenceWarn" hidden style="margin:6px 0;border-left-color:#c62828">⚠️ มีบล็อกโค้ดที่เปิด ``` แต่ยังไม่ได้ปิด เนื้อหาส่วนท้ายทั้งหมดจะกลายเป็นโค้ด ให้เพิ่ม ``` ปิดท้ายบล็อก</div>
+        <div class="box" id="fenceWarn" hidden style="margin:8px 0">⚠️ มีบล็อกโค้ดที่เปิด ``` แต่ยังไม่ได้ปิด เนื้อหาส่วนท้ายทั้งหมดจะกลายเป็นโค้ด ให้เพิ่ม ``` ปิดท้ายบล็อก</div>
         <div class="md-wrap" id="mdWrap">
           <div class="toolbar" id="toolbar">
             <button data-md="h2" title="หัวข้อใหญ่">H2</button><button data-md="h3" title="หัวข้อย่อย">H3</button>
@@ -197,7 +213,7 @@
         <label>Branch<input id="ghBranch" value="main"></label>
         <label>Path ของไฟล์ข้อมูล<input id="ghPath" value="data.json"></label>
         <label class="full">Personal Access Token (fine-grained)<input id="ghToken" type="password" placeholder="github_pat_..."></label>
-        <label class="full"><span class="row" style="font-family:Sarabun"><input type="checkbox" id="ghRemember" style="width:auto"> จำ token ไว้ในเบราว์เซอร์นี้ (ใช้เฉพาะเครื่องส่วนตัวเท่านั้น)</span></label>
+        <label class="full"><span class="row"><input type="checkbox" id="ghRemember" style="width:auto"> จำ token ไว้ในเบราว์เซอร์นี้ (ใช้เฉพาะเครื่องส่วนตัวเท่านั้น)</span></label>
       </div>
       <p class="row" style="margin-top:16px"><button class="btn dark" id="ghSaveCfg">บันทึกการตั้งค่า</button><button class="lbtn" id="ghTest">ทดสอบการเชื่อมต่อ</button></p>
       <div class="box">Token ต้องเลือก repo นี้ และมีสิทธิ์ <b>Contents: Read and write</b> · อย่าใส่ token ลงในไฟล์ใด ๆ ใน repo</div>

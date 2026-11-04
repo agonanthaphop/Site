@@ -66,5 +66,9 @@ function render(){
   $('tags').onclick = e => { const b = e.target.closest('[data-tag]'); if (b) setState({tag: b.dataset.tag === state().tag ? '' : b.dataset.tag}); };
   $('clearBtn').onclick = () => setState({cat:'', tag:'', q:''});
   let t; $('q').oninput = e => { clearTimeout(t); t = setTimeout(() => setState({q: e.target.value.trim()}), 150); };
-  document.addEventListener('keydown', e => { if (e.key === '/' && document.activeElement.tagName !== 'INPUT') { e.preventDefault(); $('q').focus(); } });
+  document.addEventListener('keydown', e => {
+    const typing = /INPUT|TEXTAREA/.test(document.activeElement.tagName);
+    if ((e.key === '/' && !typing) || ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k')) { e.preventDefault(); $('q').focus(); $('q').select(); }
+    if (e.key === 'Escape' && document.activeElement === $('q')) $('q').blur();
+  });
 })();

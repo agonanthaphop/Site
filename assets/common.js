@@ -105,7 +105,7 @@ function enhance(root, fileMap){
 function setCoverBg(el, url){
   if (!url) { el.classList.remove('has-cover'); el.style.backgroundImage = ''; return; }
   el.classList.add('has-cover');
-  el.style.backgroundImage = `linear-gradient(100deg, rgba(16,20,28,.92) 0%, rgba(16,20,28,.72) 45%, rgba(16,20,28,.35) 100%), url("${String(url).replace(/["\\\n]/g, encodeURIComponent)}")`;
+  el.style.backgroundImage = `linear-gradient(180deg, rgba(9,9,11,.25) 0%, rgba(9,9,11,.55) 50%, rgba(9,9,11,.88) 100%), linear-gradient(90deg, rgba(9,9,11,.55) 0%, rgba(9,9,11,0) 70%), url("${String(url).replace(/["\\\n]/g, encodeURIComponent)}")`;
 }
 
 function fillSite(data){
@@ -116,3 +116,17 @@ function fillSite(data){
 function showLoadError(){
   document.body.insertAdjacentHTML('afterbegin', '<p style="padding:16px 20px;background:#fdecea;color:#8a1c12;font-family:sans-serif">โหลด data.json ไม่ได้ ต้องเปิดผ่านเว็บเซิร์ฟเวอร์ (เช่น GitHub Pages) ไม่ใช่ดับเบิลคลิกไฟล์</p>');
 }
+
+// ปุ่มสลับโหมดสว่าง/มืด (จำค่าไว้ในเบราว์เซอร์นี้)
+(function(){
+  const root = document.documentElement;
+  const current = () => root.dataset.theme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  const paint = () => { const m = document.querySelector('meta[name=theme-color]'); if (m) m.content = current() === 'dark' ? '#09090b' : '#fafafa'; };
+  document.addEventListener('click', e => {
+    if (!e.target.closest('#themeBtn')) return;
+    root.dataset.theme = current() === 'dark' ? 'light' : 'dark';
+    try { localStorage.setItem('theme', root.dataset.theme); } catch {}
+    paint();
+  });
+  paint();
+})();
